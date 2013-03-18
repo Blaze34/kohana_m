@@ -2,22 +2,22 @@
 -- version 3.4.10.1deb1
 -- http://www.phpmyadmin.net
 --
--- Хост: localhost
--- Время создания: Мар 14 2013 г., 16:25
--- Версия сервера: 5.5.29
--- Версия PHP: 5.3.10-1ubuntu3.6
+-- Host: localhost
+-- Generation Time: Mar 18, 2013 at 02:22 PM
+-- Server version: 5.5.29
+-- PHP Version: 5.3.10-1ubuntu3.6
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 --
--- База данных: `chat`
+-- Database: `mmatica`
 --
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `flashes`
+-- Table structure for table `flashes`
 --
 
 CREATE TABLE IF NOT EXISTS `flashes` (
@@ -27,21 +27,22 @@ CREATE TABLE IF NOT EXISTS `flashes` (
   `date` int(15) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Stores system info' AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Stores system info' AUTO_INCREMENT=5 ;
 
 --
--- Дамп данных таблицы `flashes`
+-- Dumping data for table `flashes`
 --
 
 INSERT INTO `flashes` (`id`, `user_id`, `data`, `date`) VALUES
 (1, 1, 'a:1:{s:6:"errors";a:1:{i:0;s:72:"Невозможно отправить письмо на этот Email";}}', 1363187127),
 (2, 1, 'a:1:{s:7:"success";a:1:{i:0;s:67:"Пароль удачно изменен и выслан на Email";}}', 1363187141),
-(3, 1, 'a:1:{s:7:"success";a:1:{i:0;s:67:"Пароль удачно изменен и выслан на Email";}}', 1363187250);
+(3, 1, 'a:1:{s:7:"success";a:1:{i:0;s:67:"Пароль удачно изменен и выслан на Email";}}', 1363187250),
+(4, 9, 'a:1:{s:6:"errors";a:1:{i:0;s:90:"Изображение не удалось сохранить, попробуйте еще";}}', 1363272435);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `loginza`
+-- Table structure for table `loginza`
 --
 
 CREATE TABLE IF NOT EXISTS `loginza` (
@@ -51,10 +52,19 @@ CREATE TABLE IF NOT EXISTS `loginza` (
   `dt_create` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
--- Структура таблицы `messages`
+-- Dumping data for table `loginza`
+--
+
+INSERT INTO `loginza` (`id`, `identity`, `provider`, `dt_create`, `user_id`) VALUES
+(3, 'http://vk.com/id9774650', 'http://vk.com/', 1363272435, 9);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messages`
 --
 
 CREATE TABLE IF NOT EXISTS `messages` (
@@ -65,12 +75,30 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `receiver_id` int(11) DEFAULT NULL,
   `read` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=67 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `storage`
+-- Table structure for table `statics`
+--
+
+CREATE TABLE IF NOT EXISTS `statics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `alias` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `body` text NOT NULL,
+  `time_create` int(11) NOT NULL,
+  `time_update` int(11) DEFAULT NULL,
+  `active` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `alias` (`alias`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `storage`
 --
 
 CREATE TABLE IF NOT EXISTS `storage` (
@@ -79,8 +107,10 @@ CREATE TABLE IF NOT EXISTS `storage` (
   PRIMARY KEY (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
 --
--- Структура таблицы `tasks`
+-- Table structure for table `tasks`
 --
 
 CREATE TABLE IF NOT EXISTS `tasks` (
@@ -96,8 +126,10 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4035 ;
 
+-- --------------------------------------------------------
+
 --
--- Структура таблицы `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE IF NOT EXISTS `users` (
@@ -129,24 +161,21 @@ CREATE TABLE IF NOT EXISTS `users` (
   `hash` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
--- Дамп данных таблицы `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `firstname`, `lastname`, `avatar`, `city`, `birthday`, `whatdo`, `mobile`, `email`, `model`, `os`, `pay`, `ym_purse`, `wm_purse`, `qiwi_purse`, `vk_page`, `operator_name`, `card_number`, `expiration_mon`, `expiration_year`, `role`, `is_loginza`, `deleted`, `hash`) VALUES
 (1, 'admin', '160477360fdd0f2b5825a2ef039d37fe79be91e6e29d2e77a561242b07103358', 'Имя', 'Фами', NULL, '', '0000-01-24', '', '', '', '', '', '', '', '', '', '', '', '', 0, 0, 'admin', 1, 0, ''),
-(5, 'user5', '918fd9b0784233f265c13c6e057b622f81fcc41ad2605addc4e0d7a7016f8a91', 'Мое Имя', 'Моя Фамилия', NULL, 'Город', '', '', '', '30aveny-blaze@mail.ru', '', '', 'wm', '', '', '', '', '', '', 0, 0, 'login', 0, 0, ''),
-(4, 'TyG', '161b11abbbe7f73d8e17f95ca2f0137d81d8e66834bf21f34a0d4a2b3f2fedc6', 'Имямоё', 'Фами', NULL, '', '01-02-1988', 'work', '', 'user10@user.uu', 'айфон', '', 'ym', '123123123', '', '', 'https://vk.com/123123', '', '', 0, 0, 'login', 0, 0, '689f1fcd64abf9c745e920eb1996e6f5bc371dd6'),
-(6, 'user6', '76e567341c856a22004a00f56c0510d7d52716e3d329111430d79b6794036947', 'Name', 'Surname', NULL, 'City', '01-02-1977', 'work', '', 'user100@user.uu', 'nokia', '', 'wm', '', '12312312', '', '', '', '', NULL, NULL, 'login', 0, 0, ''),
-(7, 'qwe', '918fd9b0784233f265c13c6e057b622f81fcc41ad2605addc4e0d7a7016f8a91', 'aaa', 'bbb', NULL, '', '', '', '', 'test@m.ru', '', '', 'wm', '', '', '', '', '', '', 0, 0, 'admin', 0, 0, ''),
-(8, '[Bl@ze_aka_Amadeo]', '918fd9b0784233f265c13c6e057b622f81fcc41ad2605addc4e0d7a7016f8a91', 'Виктор', 'Гулый', 1, '', '1988-09-18', '', '', '30avenyamadeo@gmail.com', '', '', '', '', '', '', '', '', '', 0, 0, 'login', 1, 0, '');
+(10, 'user10', '747cd227be2c7cdb80f76b241d9230b56f98ff3e81932074640d92517eb73404', 'Sergey', '', 1, '', '18-01-1990', 'work', '', 'truller@mail.ru', '', '', 'mobile', '', '', '', '', '', '', 0, 0, 'login', 0, 0, ''),
+(9, 'user9', NULL, 'Sergey', 'Moroko', 1, '', '1990-01-18', '', '', 'morokosv@gmail.com', '', '', '', '', '', '', '', '', '', 0, 0, 'admin', 1, 0, '');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `user_tokens`
+-- Table structure for table `user_tokens`
 --
 
 CREATE TABLE IF NOT EXISTS `user_tokens` (
@@ -160,13 +189,14 @@ CREATE TABLE IF NOT EXISTS `user_tokens` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_token` (`token`),
   KEY `fk_user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=42 ;
 
 --
--- Дамп данных таблицы `user_tokens`
+-- Dumping data for table `user_tokens`
 --
 
 INSERT INTO `user_tokens` (`id`, `user_id`, `user_agent`, `token`, `type`, `created`, `expires`) VALUES
 (21, 1, 'd38981f9d908b607038777e8f0ba65deadabc3b6', 'de3a34aff3c009aea75d34ed4628676955400bb8', '', 1362670015, 1363879615),
 (23, 4, '3436bcb34c7fd95b33a5800388906d53c89d82bf', '8bd60658cc61652d389a8471774ee7750f29d301', '', 1363187267, 1364396867),
-(24, 7, '43eed23922a4bff99d7076f69755271510a6d714', '32ab2edc6bc3d1ca9e0f6e98612ea6f44e9688b7', '', 1363256210, 1364465810);
+(24, 7, '43eed23922a4bff99d7076f69755271510a6d714', '32ab2edc6bc3d1ca9e0f6e98612ea6f44e9688b7', '', 1363256210, 1364465810),
+(41, 10, '43eed23922a4bff99d7076f69755271510a6d714', '30d01230cca85ad44a255db4d9e347fb08f65123', '', 1363609020, 1364818620);

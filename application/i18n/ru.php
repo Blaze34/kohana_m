@@ -35,6 +35,7 @@ return array(
 	'menu.blog' => 'Блог',
 	'menu.about' => 'О нас',
 	'menu.contacts' => 'Контакты',
+	'menu.adm' => 'Админка',
 
 	'menu.main.page' => 'Личные данные',
 
