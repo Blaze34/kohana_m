@@ -8,6 +8,7 @@
  */
 $application = 'application';
 
+
 /**
  * The directory in which your modules are located.
  *
