@@ -1,0 +1,27 @@
+
+.providers_sprite {background-position:0 0;background-repeat:no-repeat;background-image:url(../img/providers_sprite.png);display:inline-block;width:90px;height:25px;}
+.google {background-position:0 0}
+.yandex {background-position:0 -25px}
+.mailruapi {background-position:0 -50px}
+
+.vkontakte {background-position:0 -75px}
+.facebook {background-position:0 -100px}
+.twitter {background-position:0 -125px}
+
+.loginza {background-position:0 -150px}
+.myopenid {background-position:0 -175px}
+.webmoney {background-position:0 -200px}
+
+.rambler {background-position:0 -225px}
+.flickr {background-position:0 -250px}
+.lastfm {background-position:0 -275px}
+
+.openid {background-position:0 -300px}
+.verisign {background-position:0 -325px}
+.aol {background-position:0 -350px}
+
+.mailru {background-position:0 -375px}
+.steam {background-position:0 -400px}
+.livejournal {background-position:0 -425px}
+.odnoklassniki {background-position:0 -450px}
+.linkedin {background-position:0 -475px}

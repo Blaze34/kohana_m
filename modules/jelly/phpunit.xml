@@ -1,0 +1,12 @@
+<phpunit colors="true" bootstrap="../unittest/bootstrap.php">
+	<testsuites>
+		<testsuite name="Jelly Tests">
+			<file>../unittest/tests.php</file>
+		</testsuite>
+	</testsuites>
+	<groups>
+	  <include>
+		<group>jelly</group>
+	  </include>
+	</groups>
+</phpunit>

@@ -1,0 +1,3 @@
+<?=$errors?>
+<?=$success?>
+<?=$content?>

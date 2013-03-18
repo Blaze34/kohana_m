@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <table name="test_authors">
+        <column>id</column>
+        <column>name</column>
+        <column>email</column>
+		<column>password</column>
+		<column>test_role_id</column>
+        <row>
+            <value>1</value>
+            <value>Jonathan Geiger</value>
+			<value></value>
+			<value>jonathan@jonathan-geiger.com</value>
+            <value>1</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>Paul Banks</value>
+			<value></value>
+			<value>paul@banks.com</value>
+            <value>0</value>
+        </row>
+		<row>
+            <value>3</value>
+            <value>Bobby Tables</value>
+			<value></value>
+			<value>bobby@sql-injection.com</value>
+            <value>2</value>
+        </row>
+    </table>
+	<table name="test_roles">
+        <column>id</column>
+        <column>name</column>
+        <row>
+            <value>1</value>
+            <value>Staff</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>Freelancer</value>
+        </row>
+    </table>
+	<table name="test_categories">
+        <column>id</column>
+        <column>name</column>
+		<column>parent_id</column>
+        <row>
+            <value>1</value>
+            <value>Category One</value>
+			<value>0</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>Category Two</value>
+			<value>0</value>
+        </row>
+		<row>
+            <value>3</value>
+            <value>Category Three</value>
+			<value>1</value>
+        </row>
+    </table>
+	<table name="test_posts">
+        <column>id</column>
+        <column>name</column>
+        <column>slug</column>
+		<column>status</column>
+		<column>created</column>
+		<column>updated</column>
+		<column>published</column>
+		<column>test_author_id</column>
+		<column>approved_by</column>
+        <row>
+            <value>1</value>
+            <value>First Post</value>
+			<value>first-post</value>
+			<value>draft</value>
+            <value>1264985737</value>
+			<value>1264985737</value>
+			<value>1264985737</value>
+			<value>1</value>
+			<null />
+        </row>
+        <row>
+            <value>2</value>
+            <value>Second Post</value>
+			<value>second-post</value>
+			<value>review</value>
+            <value>1264985737</value>
+			<value>1264985737</value>
+			<value>1264985737</value>
+			<value>1</value>
+			<value>1</value>
+        </row>
+    </table>
+	<table name="test_categories_test_posts">
+        <column>test_category_id</column>
+        <column>test_post_id</column>
+        <row>
+            <value>1</value>
+			<value>1</value>
+        </row>
+        <row>
+            <value>2</value>
+			<value>1</value>
+        </row>
+		<row>
+            <value>3</value>
+			<value>1</value>
+        </row>
+		<row>
+            <value>2</value>
+			<value>2</value>
+        </row>
+		<row>
+            <value>1</value>
+			<value>3</value>
+        </row>
+		<row>
+            <value>2</value>
+			<value>3</value>
+        </row>
+    </table>
+</dataset>
