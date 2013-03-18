@@ -131,7 +131,8 @@ Kohana::modules(array(
     'pagination'    => MODPATH.'pagination',
     'utils'         => MODPATH.'utils',
     'email'         => MODPATH.'email',
-    'static'        => MODPATH.'static'
+    'static'        => MODPATH.'static',
+    'youtube-video' => MODPATH.'youtube-video',
 ));
 
 /**
