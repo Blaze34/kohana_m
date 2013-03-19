@@ -18,9 +18,8 @@ class Model_Category extends Jelly_Model implements Acl_Resource_Interface {
 				'default' => 1
 			)),
 
-			'parent' => Jelly::field('belongsto', array(
-				'label' => 'category.field.parent',
-				'foreign' => 'category'
+			'parent_id' => Jelly::field('integer', array(
+				'label' => 'category.field.parent'
 			)),
 
 			'children' => Jelly::field('hasmany', array(
