@@ -1,8 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 return array(
-	'global.title' => 'Chat',
-
+	'global.title' => 'mmatica',
 	'global.sign_in' => 'Вход',
 	'global.logout' => 'Выход',
 	'global.registration' => 'Регистрация',
@@ -30,14 +29,21 @@ return array(
 	'title.user.register' => 'Регистрация',
 	'title.user.edit' => 'Редактирование профиля',
 	'title.user.recover' => 'Восстановление пароля',
+	'title.admin.users' => 'Пользователи',
+	'title.static.index' => 'Публикации',
+	'title.static.add' => 'Добавление публикаций',
 
 	'menu.user.list' => 'Список пользователей',
 	'menu.blog' => 'Блог',
 	'menu.about' => 'О нас',
 	'menu.contacts' => 'Контакты',
 	'menu.adm' => 'Админка',
-
 	'menu.main.page' => 'Личные данные',
+
+    'adm.users' => 'Пользователи',
+    'adm.comments' => 'Комментарии',
+    'adm.publications' => 'Публикации',
+    'adm.statics' => 'Страницы',
 
 	'user.field.username' => 'Логин',
 	'user.field.email' => 'Email',
@@ -46,12 +52,17 @@ return array(
 	'user.field.firstname' => 'Имя',
 	'user.field.lastname' => 'Фамилия',
 	'user.field.birthday' => 'Дата рождения',
-
 	'user.button.delete' => 'Удалить профиль',
 
 	'user.delete.confirm.title' => 'Удалить профиль?',
 	'user.delete.confirm.text' => 'Вся Ваша информация будет удалена и Вы не сможете больше воспользоваться ресурсом',
 	'admin.delete.confirm.text' => 'Вся информация о данном пользователе будет удалена и он не сможет воспользоваться ресурсом',
+
+    'static.title' => 'Название публикации',
+    'static.alias' => 'alias публикации',
+    'static.active' => 'Отображать',
+    'static.body' => 'Контент публикации',
+    'static.create' => 'Создать',
 
 	'auth.sign_in' => 'Авторизация',
 	'auth.login.username' => 'Логин или Email',
