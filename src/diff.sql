@@ -1,6 +1,4 @@
-DROP TABLE `messages`;
-
-CREATE TABLE IF NOT EXISTS `category` (
+CREATE TABLE IF NOT EXISTS `categories` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   `sort` int(11) NOT NULL,
@@ -12,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `category` (
 -- Дамп данных таблицы `category`
 --
 
-INSERT INTO `category` (`id`, `name`, `sort`, `parent_id`) VALUES
+INSERT INTO `categories` (`id`, `name`, `sort`, `parent_id`) VALUES
 (1, 'Категория 1', 1, NULL),
 (2, 'Категория 2', 2, NULL),
 (3, 'Категория 3', 3, NULL),
