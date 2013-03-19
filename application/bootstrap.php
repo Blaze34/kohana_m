@@ -140,10 +140,15 @@ Kohana::modules(array(
  * defaults for the URI.
  */
 
+Route::set('admin', 'admin(/<action>(/<id>))')
+    ->defaults(array(
+        'controller' => 'admin',
+        'action' => 'index'
+    ));
+
 Route::set('user', 'user(/<action>)', array( 'action' => '(login|logout|recover|register)' ))
     ->defaults(array(
-    'controller' => 'user',
-	'action' => 'index'
+    'controller' => 'user'
 ));
 
 Route::set('default', '(<controller>(/<action>(/<id>)))')

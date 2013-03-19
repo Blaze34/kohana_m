@@ -15,17 +15,15 @@
                     <li class="dropdown">
                         <a href="<?=Route::url('user', array('action' => 'edit'))?>" class="dropdown-toggle" data-toggle="dropdown"><?=$user->email ? $user->email : __('global.my_profile')?><b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                            <li>
+                                <a href="<?=Route::url('default', array('controller' => 'user', 'action' => 'edit'))?>"><?=__('menu.main.page')?></a>
+                            </li>
                             <?if ( $user->is_admin()):?>
 
                                 <li>
-                                    <a href="<?=Route::url('default', array('controller' => 'user'))?>"><?=__('menu.adm')?></a>
-                                </li>
-                            <?else : ?>
-                                <li>
-                                    <a href="<?=Route::url('default', array('controller' => 'user'))?>"><?=__('menu.main.page')?></a>
+                                    <a href="<?=Route::url('admin', array('controller' => 'admin'))?>"><?=__('menu.adm')?></a>
                                 </li>
                             <?endif;?>
-
                         </ul>
                     </li>
                     <li><a href="<?=Route::url('user', array('action' => 'logout'))?>"><?=__('global.logout')?></a></li>

@@ -8,11 +8,6 @@ return array(
 			'type' => 'text',
 			'suffix' => '%'
 		),
-		'mobile' => array(
-			'condition' => 'LIKE',
-			'type' => 'text',
-			'suffix' => '%'
-		),
 		'firstname' => array(
 			'condition' => 'LIKE',
 			'type' => 'text',

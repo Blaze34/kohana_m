@@ -162,3 +162,6 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 
 .loginza {display: block; background: url("../img/providers_sprite.png") 0 -150px no-repeat; width: 90px; height: 24px; margin: 15px auto 10px}
 .register .form-signin{width: 100% !important; max-width: 100%;}
+.post_add .form-horizontal input[type="text"]{width: 85%}
+.post_add .form-horizontal textarea{max-width: 85%; width: 85%; height: 300px}
+.adm_btn{margin: 10px 0}

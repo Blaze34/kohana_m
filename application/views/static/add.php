@@ -1,12 +1,35 @@
-<?php
-foreach ($errors as $error)
-{
-	echo $error.'<br />';
-}
-echo Form::open();
-echo __('static.Title').' '.Form::input('title', Arr::get($_POST, 'title', '')).'<br />';
-echo __('static.Alias').' '.Form::input('alias', Arr::get($_POST, 'alias', '')).'<br />';
-echo __('static.Active').' '.Form::checkbox('active', Arr::get($_POST, 'active', 1)).'<br />';
-echo __('static.Body').' '.Form::textarea('body', Arr::get($_POST, 'body', '')).'<br />';
-echo Form::submit('submit', __('static.Create'));
-echo Form::close();
+<div class="post_add">
+    <?=Form::open(NULL, array('class' => 'form-horizontal'))?>
+    <div class="control-group">
+        <label class="control-label"><?=__('static.title')?></label>
+        <div class="controls">
+            <input type="text" name="title" value="<?=Arr::get($_POST, 'title')?>">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label"><?=__('static.alias')?></label>
+        <div class="controls">
+            <input type="text" name="alias" value="<?=Arr::get($_POST, 'alias')?>">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label"><?=__('static.body')?></label>
+        <div class="controls">
+            <textarea name="body"><?=Arr::get($_POST, 'body', '')?></textarea >
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label"><?=__('static.active')?></label>
+        <div class="controls">
+            <input type="checkbox" name="active">
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" class="btn"><?=__('static.create')?></button>
+        </div>
+    </div>
+
+    <?=Form::close()?>
+</div>
+

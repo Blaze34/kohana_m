@@ -44,9 +44,21 @@ return array(
     ),
 
     'auth' => array(
-        'parent' => 'default',
         'layout' => array(
-            'main' => 'auth'
+            'main' => 'auth',
+            'nested' => 'nested',
+            'ajax' => 'ajax',
+            'print' => 'print'
+        ),
+        'title' => __('global.title'),
+        'dir' => 'layouts/',
+
+        'css' => array(
+            'path'   => 'web/css/'
+        ),
+
+        'js' => array(
+            'path'   => 'web/js/'
         ),
 	    'load' => array(
 		    'main' => array(
@@ -62,6 +74,13 @@ return array(
 			    )
 		    )
 	    )
+    ),
+
+    'admin' => array(
+        'parent' => 'default',
+        'layout' => array(
+            'main' => 'admin'
+        )
     ),
 
 );

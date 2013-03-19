@@ -8,7 +8,6 @@
 		        <th><?=__('user.field.email')?></th>
 		        <th><?=__('user.field.firstname')?></th>
 		        <th><?=__('user.field.lastname')?></th>
-		        <th><?=__('user.field.mobile')?></th>
 		        <th>&nbsp;</th>
 		    </tr>
 	    </thead>
@@ -19,10 +18,9 @@
 		        <td><a href="<?=Route::url('default', array('controller' => 'user', 'action' => 'edit', 'id' => $u->id()));?>"><?=$u->email ? $u->email : __('global.edit')?></a></td>
 		        <td><?=$u->firstname?></td>
 		        <td><?=$u->lastname?></td>
-		        <td><?=$u->mobile?></td>
-                <td>
+                <td style="text-align: center">
 				    <? if ($u->deleted OR $u->is_me()):?>
-	                    &nbsp;
+	                    admin
 				    <?else:?>
                         <a class="delete_user" href="javascript:;" data-href="<?=Route::url('default', array('controller' => 'user', 'action' => 'delete', 'id' => $u->id()))?>">
 	                        <i class="icon-remove"></i>
