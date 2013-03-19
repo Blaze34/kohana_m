@@ -23,6 +23,13 @@ return array(
 	'global.close' => 'Закрыть',
 	'global.go_back' => 'Вернуться',
 	'global.edit' => 'Редактировать',
+	'global.no_params' => 'Параметры не заданы',
+	'global.no_exist' => 'Такой записи не существует',
+	'global.no_permissons' => 'У Вас недостаточно прав для совершения этого действия',
+	'global.added' => 'Запись успешно добавлена',
+	'global.updated' => 'Запись успешно обновлена',
+	'global.deleted' => 'Запись успешно удалена',
+	'global.anonymous' => 'Аноним',
 
 	'title.user.login' => 'Авторизация',
 	'title.user.index' => 'Список пользователей',
@@ -32,6 +39,8 @@ return array(
 	'title.admin.users' => 'Пользователи',
 	'title.static.index' => 'Публикации',
 	'title.static.add' => 'Добавление публикаций',
+
+	'title.material.add_video' => 'Добавить видео',
 
 	'menu.user.list' => 'Список пользователей',
 	'menu.blog' => 'Блог',
@@ -114,5 +123,10 @@ return array(
 	'user.avatar.upload.too_big' => 'Загруженное изображение слишком большое',
 	'user.avatar.upload.not_allowed_type' => 'Недопустимый формат загруженного файла',
 	'user.avatar.upload.not_uploaded' => 'Возникли проблемы при загрузке изображения',
-	'user.avatar.delete' => 'Удалить аватар'
+	'user.avatar.delete' => 'Удалить аватар',
+
+	'material.field.title' => 'Заголовок',
+	'material.field.description' => 'Описание',
+	'material.field.category' => 'Категория',
+	'material.field.user' => 'Автор',
 );

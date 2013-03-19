@@ -23,7 +23,6 @@ return array(
             'main' => array(
                 'js' => array(
                     'jquery/1.8.3.min.js',
-	                'jquery/tmpl.min.js',
 	                'bootstrap.min.js',
 	                'bootstrap-datepicker.js',
 	                'bootstrap-datepicker.ru.js',
@@ -31,11 +30,11 @@ return array(
 	                'jquery/noty/noty.js',
 	                'jquery/noty/layouts/center.js',
 	                'jquery/noty/themes/default.js',
+	                'swfobject.js',
                 ),
                 'css' => array(
                     'normalize.css',
                     'bootstrap.css',
-                    'bootstrap-responsive.css',
                     'datepicker.css',
                     'style.css',
                 )
