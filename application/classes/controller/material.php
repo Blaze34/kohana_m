@@ -58,6 +58,8 @@ class Controller_Material extends Controller_Web {
 
 					if ($material->saved())
 					{
+						Tags::add($material);
+
 						if ($thumb)
 						{
 							if ($_tmp = $this->save_tmp_file($thumb, $material))
@@ -70,7 +72,7 @@ class Controller_Material extends Controller_Web {
 							}
 						}
 
-						$this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
+//						$this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
 					}
 				}
 

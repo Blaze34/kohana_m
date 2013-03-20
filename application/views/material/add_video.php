@@ -54,7 +54,7 @@
 						<div class="control-group">
 							<label class="control-label">Теги</label>
 							<div class="controls">
-								<input name="tags" type="text" placeholder="Теги через запятую">
+								<?=Tags::field($material)?>
 								<div class="help-block">Введите теги через запятую</div>
 							</div>
 						</div>

@@ -1,0 +1,1 @@
+<input name="tags" type="text" placeholder="Теги через запятую" value="<?=$tags?>">

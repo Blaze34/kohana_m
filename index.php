@@ -118,7 +118,7 @@ catch (Exception $e)
 	if (Kohana::$environment !== Kohana::PRODUCTION)
 	{
 		//Just re-throw the exception
-//		throw $e;
+		throw $e;
 	}
 
 	// Log the error
