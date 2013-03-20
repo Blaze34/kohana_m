@@ -4,12 +4,22 @@ class Controller_Admin extends Controller_Web {
 
     public function before()
     {
-        $this->layout = 'admin';
+        if (in_array($this->request->action(), array('index')))
+        {
+            $this->layout = 'admin';
+        }
         return parent::before();
     }
 
 	public function action_index()
 	{
-		$this->view();
+		if($this->allowed())
+		{
+			$this->view();
+		}
+		else
+		{
+			$this->redirect();
+		}
 	}
 } // End Welcome

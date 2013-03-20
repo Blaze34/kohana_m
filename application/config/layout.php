@@ -25,18 +25,21 @@ return array(
                     'jquery/1.8.3.min.js',
 	                'jquery/tmpl.min.js',
 	                'bootstrap.min.js',
+	                'html5shiv.js',
 	                'bootstrap-datepicker.js',
 	                'bootstrap-datepicker.ru.js',
 	                'global.js',
 	                'jquery/noty/noty.js',
 	                'jquery/noty/layouts/center.js',
 	                'jquery/noty/themes/default.js',
+                    'jquery/jquery.bxslider.min.js',
                 ),
                 'css' => array(
                     'normalize.css',
                     'bootstrap.css',
                     'bootstrap-responsive.css',
                     'datepicker.css',
+                    'jquery.bxslider.css',
                     'style.css',
                 )
             )
@@ -75,12 +78,10 @@ return array(
 		    )
 	    )
     ),
-
     'admin' => array(
         'parent' => 'default',
         'layout' => array(
             'main' => 'admin'
         )
     ),
-
 );

@@ -2,6 +2,17 @@
 
 class Controller_Static extends Controller_Web {
 
+    public function before()
+    {
+        if (in_array($this->request->action(), array('add', 'edit', 'index')))
+        {
+            $this->layout = 'admin';
+        }
+
+        return parent::before();
+
+    }
+
     public function action_index()
     {
         if ($this->allowed())
@@ -27,22 +38,6 @@ class Controller_Static extends Controller_Web {
             $this->redirect();
         }
     }
-
-    public function action_get()
-    {
-        if (Request::instance() != Request::current())
-        {
-            $alias = $this->request->param('alias');
-            $static = Jelly::query('static')->where('alias', '=', $alias)->with_body()->load();
-            if ($static->loaded() AND sizeof($static->langs) AND $static->active)
-            {
-                $body = $static->body->loaded() ? $static->body : $static->get('bodies')->load();
-                $this->view()->static = $static;
-                $this->view()->body = $body;
-            }
-        }
-    }
-
 
 
     public function action_add()

@@ -6,8 +6,13 @@
 <body>
 <div id="wrap">
     <div class="container">
-        <?=View::factory('layouts/_alerts')->set(array('errors' => $errors, 'success' => $success))->render()?>
         <?=View::factory('layouts/_header')->render()?>
+
+        <?=View::factory('layouts/top_form')->render()?>
+
+        <?=Request::factory(Route::url('default', array('controller' => 'category', 'action' => 'slider')))->execute()?>
+
+        <?=View::factory('layouts/_alerts')->set(array('errors' => $errors, 'success' => $success))->render()?>
         <?=$content?>
     </div><!-- /container -->
     <div id="push"></div>

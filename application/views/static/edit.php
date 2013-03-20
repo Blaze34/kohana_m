@@ -1,5 +1,5 @@
 <a class="btn btn-info adm_btn" href="<?=Route::url('static')?>"><?=__('global.go_back')?></a>
-<div class="post_add">
+<div class="form_add">
     <?=Form::open(NULL, array('class' => 'form-horizontal'))?>
 <div class="control-group">
     <label class="control-label"><?=__('static.title')?></label>
@@ -10,7 +10,11 @@
 <div class="control-group">
     <label class="control-label"><?=__('static.alias')?></label>
     <div class="controls">
-        <input type="text" name="alias" value="<?=$static->alies?>">
+        <div class="alias_label input-prepend input-append">
+            <span class="add-on"><?=URL::site('', TRUE)?></span>
+            <input class="span2" type="text" name="alias" value="<?=Arr::get($_POST, 'alias')?>">
+            <span class="add-on">.html</span>
+        </div>
     </div>
 </div>
 <div class="control-group">
@@ -27,7 +31,7 @@
 </div>
 <div class="control-group">
     <div class="controls">
-        <button type="submit" class="btn"><?=__('static.create')?></button>
+        <button type="submit" class="btn"><?=__('static.save')?></button>
     </div>
 </div>
 

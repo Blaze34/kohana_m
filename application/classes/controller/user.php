@@ -8,40 +8,36 @@ class Controller_User extends Controller_Web {
 		{
 			$this->layout = 'auth';
 		}
+        elseif($this->request->action() == 'index')
+        {
+            $this->layout = 'admin';
+        }
 		return parent::before();
 	}
 
 	public function action_index()
 	{
-		if ($this->user)
+		if ($this->allowed())
 		{
-			if ($this->allowed())
+			$user = Jelly::query('user');
+			$filters = Kohana::$config->load('user.filter');
+
+			foreach ($filters as $name => $param)
 			{
-				$user = Jelly::query('user');
-
-				$filters = Kohana::$config->load('user.filter');
-
-				foreach ($filters as $name => $param)
+				if ($val = trim(Arr::get($_GET, $name)))
 				{
-					if ($val = trim(Arr::get($_GET, $name)))
-					{
-						$val = $val.Arr::get($param, 'suffix', '');
-						$user->where($name, Arr::get($param, 'condition', '='), $val);
-					}
+					$val = $val.Arr::get($param, 'suffix', '');
+					$user->where($name, Arr::get($param, 'condition', '='), $val);
 				}
-
-				$user = $user->order_by('id', 'ASC')->pagination('list')->select();
-
-				$this->view()->users = $user;
 			}
-			else
-			{
-				$this->redirect(Route::url('user', array('action' => 'edit')));
-			}
+
+			$user = $user->order_by('id', 'ASC')->pagination('list')->select();
+
+			$this->view()->users = $user;
 		}
 		else
 		{
-			$this->redirect(Route::url('user', array('action' => 'login')));
+			$this->redirect(Route::url('user', array('action' => 'edit')));
 		}
 	}
 
@@ -197,7 +193,7 @@ class Controller_User extends Controller_Web {
 				        {
 					        if (Auth_Jelly::instance()->login($user, $_POST['password'], (bool) Arr::get($_POST, 'remember')))
 					        {
-						        $this->redirect(Route::url('user', array('action' => 'edit')));
+                                $this->redirect(Route::url('user', array('action' => 'edit')));
 					        }
 					        else
 					        {
