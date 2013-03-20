@@ -106,7 +106,30 @@ require APPPATH.'bootstrap'.EXT;
  * Execute the main request. A source of the URI can be passed, eg: $_SERVER['PATH_INFO'].
  * If no source is specified, the URI will be automatically detected.
  */
-echo Request::factory()
-	->execute()
-	->send_headers()
-	->body();
+try
+{
+	echo Request::factory()
+		->execute()
+		->send_headers()
+		->body();
+}
+catch (Exception $e)
+{
+	if (Kohana::$environment !== Kohana::PRODUCTION)
+	{
+		//Just re-throw the exception
+//		throw $e;
+	}
+
+	// Log the error
+//	Kohana::$log->add(Kohana::ERROR, Kohana::exception_text($e));
+
+	$layout = Layout::instance('error', 'error');
+	$layout->title(__('page_error'));
+	$layout->view('/errors/404');
+
+	$response = new Response;
+	$response->status(404);
+
+	echo $response->body($layout->render())->send_headers()->body();
+}

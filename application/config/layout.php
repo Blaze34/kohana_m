@@ -82,4 +82,34 @@ return array(
         )
     ),
 
+	'error' => array(
+		'layout' => array(
+			'main' => 'error',
+			'nested' => 'nested',
+			'ajax' => 'ajax',
+			'print' => 'print'
+		),
+		'title' => __('global.title'),
+		'dir' => 'layouts/',
+
+		'css' => array(
+			'path'   => 'web/css/'
+		),
+
+		'js' => array(
+			'path'   => 'web/js/'
+		),
+		'load' => array(
+			'main' => array(
+				'js' => array(
+					'jquery/1.8.3.min.js',
+					'bootstrap.min.js',
+				),
+				'css' => array(
+					'bootstrap.min.css',
+					'style.css'
+				)
+			)
+		)
+	)
 );

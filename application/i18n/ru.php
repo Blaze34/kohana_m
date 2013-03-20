@@ -129,4 +129,6 @@ return array(
 	'material.field.description' => 'Описание',
 	'material.field.category' => 'Категория',
 	'material.field.user' => 'Автор',
+
+	'page_error' => 'Ошибка',
 );
