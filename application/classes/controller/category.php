@@ -127,7 +127,7 @@ class Controller_Category extends Controller_Web {
                 $this->title($category->name, FALSE);
 
                 $materials = Jelly::query('material')->where('category', '=', $category->id())->select_all();
-                $this->view('material/list')->materials = $materials;
+                $this->view('/material/list')->materials = $materials;
             }
             else
             {

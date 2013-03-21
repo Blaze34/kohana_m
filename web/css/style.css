@@ -175,3 +175,5 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 .form_add .form-horizontal .alias_label {width: 75%}
 .bg-white{background: #ffffff; color: #2d2d2d}
 .categories .main_section{font-size: .7em}
+.guest_name{width: 160px}
+.i-captcha{width: 80px}

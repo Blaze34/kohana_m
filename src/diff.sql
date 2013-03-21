@@ -1,24 +1,13 @@
-ALTER TABLE  `materials` CHANGE  `start`  `start` FLOAT UNSIGNED NULL DEFAULT NULL;
-
-ALTER TABLE  `materials` CHANGE  `end`  `end` FLOAT UNSIGNED NULL DEFAULT NULL;
-
-CREATE TABLE IF NOT EXISTS `materials_tags` (
-  `material_id` bigint(20) unsigned NOT NULL,
-  `tag_id` bigint(20) unsigned NOT NULL,
-  KEY `material_id` (`material_id`),
-  KEY `tag_id` (`tag_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+ALTER TABLE  `materials` ADD  `date` INT NOT NULL AFTER  `rating`
 
 --
--- Структура таблицы `tags`
+-- Table structure for table `comments`
 --
 
-CREATE TABLE IF NOT EXISTS `tags` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `checked` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UQ_tags_name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+CREATE TABLE IF NOT EXISTS `comments` (
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`user_id` int(11) DEFAULT NULL,
+`text` text NOT NULL,
+`date` int(11) NOT NULL,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

@@ -45,7 +45,12 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 				'label' => 'material.field.url'
 			)),
 
-			'tags' => Jelly::field('manytomany')
+			'tags' => Jelly::field('manytomany'),
+            'date' => Jelly::field('timestamp', array(
+                'auto_now_create' => TRUE,
+                'auto_now_update' => TRUE
+            )),
+            'comments' => Jelly::field('hasmany'),
 		));
 	}
 

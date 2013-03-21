@@ -45,7 +45,7 @@ return array(
     'title.category.add' => 'Добавление категории',
 	'title.category.edit' => 'Редактирование категории',
 	'title.category.show' => 'Раздел',
-
+	'title.category.show' => 'Раздел',
 	'title.material.add_video' => 'Добавить видео',
 
 	'menu.user.list' => 'Список пользователей',
@@ -62,6 +62,10 @@ return array(
     'adm.category' => 'Категории',
     'adm.category.add' => 'Добавление категории',
     'adm.category.edit' => 'Редактирование категории',
+
+    'material.field.title' => 'Название',
+    'comments.title' => 'Все коментарии:',
+    'comments.field.guest' => 'Ваше имя',
 
     'category.field.id' => 'ID',
     'category.field.name' => 'Название',
@@ -139,5 +143,7 @@ return array(
 	'user.avatar.upload.too_big' => 'Загруженное изображение слишком большое',
 	'user.avatar.upload.not_allowed_type' => 'Недопустимый формат загруженного файла',
 	'user.avatar.upload.not_uploaded' => 'Возникли проблемы при загрузке изображения',
-	'user.avatar.delete' => 'Удалить аватар'
+	'user.avatar.delete' => 'Удалить аватар',
+
+    'error.captcha' => 'Неправильно введена капча'
 );

@@ -56,8 +56,8 @@ return array(
 			'thumb' => array(
 				'prefix' => 't',
 				'postfix' => '',
-				'width' => 50,
-				'height' => 50,
+				'width' => 48,
+				'height' => 48,
 				'quality' => 100,
 				'do' => 'crop'
 			),

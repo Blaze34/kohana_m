@@ -133,6 +133,7 @@ Kohana::modules(array(
     'email'         => MODPATH.'email',
     'static'        => MODPATH.'static',
     'youtube-video' => MODPATH.'youtube-video',
+    'kohana-captcha' => MODPATH.'kohana-captcha',
 ));
 
 /**

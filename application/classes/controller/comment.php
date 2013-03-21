@@ -2,11 +2,6 @@
 
 class Controller_Comment extends Controller_Web {
 
-	public function action_index()
-	{
-
-	}
-
     public function action_last()
     {
         $show_count = Kohana::$config->load('comment.last');

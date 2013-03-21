@@ -4,6 +4,8 @@ class Controller_Material extends Controller_Web {
 
 	public function action_index()
 	{
+//        $materials = Jelly::query('material')->with('user')->with('category')->pagination()->select_all();
+
 
 	}
 
@@ -81,12 +83,12 @@ class Controller_Material extends Controller_Web {
 			}
 			else
 			{
-				$this->error('material.parse.error')->redirect('/');
+				$this->errors('material.parse.error')->redirect('/');
 			}
 		}
 		else
 		{
-			$this->error('material.parse.error')->redirect('/');
+			$this->errors('material.parse.error')->redirect('/');
 		}
 	}
 
@@ -101,11 +103,11 @@ class Controller_Material extends Controller_Web {
 
 				if ($video_id = Arr::get($match, 1))
 				{
-					$this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'add', 'id' => $video_id)));
+					$this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'add_video', 'id' => $video_id)));
 				}
 			}
 		}
-		$this->error('material.parse.error')->redirect();
+		$this->errors('material.parse.error')->redirect();
 	}
 
 	public function action_add_gif()
@@ -243,18 +245,65 @@ class Controller_Material extends Controller_Web {
 
 			if ($material->loaded())
 			{
-				$this->title($material->title, FALSE);
+                if($_POST)
+                {
 
-				$this->view()->material = $material;
+                    $comment = Jelly::factory('comment');
+
+                    $extra_validation = NULL;
+
+                    if($this->user OR Captcha::valid(Arr::get($_POST,'captcha')))
+                    {
+                        if($this->user)
+                        {
+                            $comment->user = $this->user;
+                        }
+                        else
+                        {
+                            $comment->guest_name = Arr::get($_POST, 'guest_name');
+                            $extra_validation = Validation::factory($_POST)
+                                ->rule('guest_name', 'not_empty')
+                                ->rule('guest_name', 'min_length', array(':value', 3))->labels(array('guest_name' => 'comments.field.guest'));
+                        }
+
+                        try
+                        {
+                            $comment->set(array(
+                                'material' => $material->id(),
+                                'text' => html_entity_decode(Arr::get($_POST, 'text', ''), ENT_QUOTES),
+                            ))->save($extra_validation);
+
+                            if($comment->saved())
+                            {
+                                $this->redirect();
+                            }
+                        }
+                        catch (Jelly_Validation_Exception $e)
+                        {
+                            $this->errors($e->errors('errors'));
+                        }
+                    }
+                    else
+                    {
+
+                        $this->errors(__('error.captcha'));
+                    }
+                }
+
+                $this->title($material->title, FALSE);
+                $comments = $material->get('comments')->with('user')->order_by('date', 'DESC')->pagination('comments')->select_all();
+
+                $this->view()->material = $material;
+                $this->view()->comments = $comments;
 			}
 			else
 			{
-				$this->error('global.no_exist')->redirect('/');
+				$this->errors('global.no_exist')->redirect('/');
 			}
 		}
 		else
 		{
-			$this->error('global.no_params')->redirect('/');
+			$this->errors('global.no_params')->redirect('/');
 		}
 	}
 

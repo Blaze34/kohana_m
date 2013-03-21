@@ -16,7 +16,7 @@ return array(
 		'auto_hide'      => TRUE,
 	),
 
-    'task_list' => array(
+    'comments' => array(
 		'current_page'   => array('source' => 'query_string', 'key' => 'p'), // source: "query_string" or "route"
 		'items_per_page' => 10,
 		'view'           => 'pagination/twitter_bootstrap',
