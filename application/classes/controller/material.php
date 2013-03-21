@@ -127,88 +127,22 @@ class Controller_Material extends Controller_Web {
 				'user' => $this->user ? $this->user->id() : NULL
 			));
 
-			if ($file AND Upload::not_empty($file) AND Upload::valid($file) AND  Upload::type($file, $config['extensions']))
+			$tmp_file = NULL;
+
+			if ($file AND Upload::not_empty($file) AND Upload::valid($file))
 			{
-				$this->save_gif_from_file($material, $file, $config);
-			}
-			elseif($url)
-			{
-				$this->save_gif_from_url($material, $url, $config);
-			}
-		}
-
-		$this->view(array('category_options' => $category_options, 'material' => $material));
-	}
-
-	protected function save_gif_from_url($material, $url, $config)
-	{
-		if(in_array(pathinfo($url, PATHINFO_EXTENSION), $config['extensions']))
-		{
-			stream_context_create(array('http'=>array('method'=>'HEAD', 'max_redirects'=>1, 'timeout'=>10)));
-			$header = @get_headers($url, 1);
-
-			echo Debug::vars($header);
-
-			if(strpos(Arr::get($header, 0, ''), '200 OK') !== FALSE)
-			{
-				if( intval(Arr::get($header, 'Content-Length')) <= Num::bytes($config['size']))
+				if ($tmp_file = $this->save_gif_from_file($file, $config))
 				{
-					if($tmp_gif = $this->save_tmp_file($url))
-					{
-
-						die();
-
-						if( in_array(Arr::get($header, 'Content-Type'), $config['mimes']))
-						{
-							try
-							{
-								$material->set(array('file' => $material->get_filename('gif'), 'url' => $url))->save();
-							}
-							catch(Jelly_Validation_Exception $e)
-							{
-								$this->errors($e->errors('errors'));
-							}
-
-							if ($material->saved())
-							{
-
-									$material->save_thumb($tmp_gif);
-
-	//								Tags::add($material);
-							}
-						}
-						else
-						{
-							$this->errors(__('material.upload.error'));
-						}
-					}
-					else
-					{
-						$material->delete();
-						$this->errors(__('material.upload.error'));
-					}
-				}
-				else
-				{
-					$this->errors(__('material.upload.too_big'));
+					$url = '';
 				}
 			}
-			else
-			{
-				$this->errors(__('material.upload.error'));
-			}
-		}
-		else
-		{
-			$this->errors(__('material.upload.not_allowed'));
-		}
-	}
 
-	protected function save_gif_from_file($material, $file, $config)
-	{
-		if (Upload::size($file, $config['size']))
-		{
-			if ($_tmp = $this->save_tmp_file($file))
+			if($url)
+			{
+				$tmp_file = $this->save_gif_from_url($url, $config);
+			}
+
+			if ($tmp_file)
 			{
 				try
 				{
@@ -229,30 +163,76 @@ class Controller_Material extends Controller_Web {
 
 					$material->set('file', $material->get_filename('gif'))->save();
 
-					if (copy($_tmp, $dir.$material->file))
+					if (copy($tmp_file, $dir.$material->file))
 					{
 						Tags::add($material);
 
-						$material->save_thumb($_tmp);
+						$material->save_thumb($tmp_file);
 					}
 					else
 					{
 						$material->delete();
-						$this->errors(__('material.upload.error'));
 					}
 				}
-				unlink($_tmp);
+				unlink($tmp_file);
 
 				if ($material->saved())
 				{
 					$this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
 				}
+				else
+				{
+					$this->errors(__('material.upload.error'));
+				}
 			}
 		}
-		else
+
+		$this->view(array('category_options' => $category_options, 'material' => $material));
+	}
+
+	protected function save_gif_from_url($url, $config)
+	{
+		if(in_array(pathinfo($url, PATHINFO_EXTENSION), $config['extensions']))
 		{
-			$this->errors(__('material.upload.too_big'));
+			stream_context_create(array('http'=>array('method'=>'HEAD', 'max_redirects'=>1, 'timeout'=>10)));
+			$header = @get_headers($url, 1);
+
+			if(strpos(Arr::get($header, 0, ''), '200 OK') !== FALSE)
+			{
+				if( intval(Arr::get($header, 'Content-Length')) <= Num::bytes($config['size']))
+				{
+					if($tmp_gif = $this->save_tmp_file($url))
+					{
+						if( in_array(Arr::get($header, 'Content-Type'), $config['mimes']))
+						{
+							return $tmp_gif;
+						}
+						unlink($tmp_gif);
+					}
+				}
+			}
 		}
+
+		return FALSE;
+	}
+
+	protected function save_gif_from_file($file, $config)
+	{
+		if (Upload::size($file, $config['size']) AND Upload::type($file, $config['extensions']))
+		{
+			if ($info = getimagesize($file['tmp_name']))
+			{
+				if( in_array(Arr::get($info, 'mime'), $config['mimes']))
+				{
+					if ($_tmp = $this->save_tmp_file($file))
+					{
+						return $_tmp;
+					}
+				}
+			}
+		}
+
+		return FALSE;
 	}
 
 	public function action_show()
