@@ -172,9 +172,9 @@ class Tags {
 		}
 	}
 
-	public static function field($material, $attributes = array())
+	public static function field($material = NULL, $attributes = array())
 	{
-		$tags = self::get($material);
+		$tags = $material ? self::get($material) : array();
 
 		return View::factory('tag/field')->set(array(
 			'tags' => Arr::get($_POST, 'tags', implode(',', $tags)),

@@ -187,7 +187,7 @@ class Controller_Material extends Controller_Web {
 			}
 		}
 
-		$this->view(array('category_options' => $category_options, 'material' => $material));
+		$this->view()->category_options = $category_options;
 	}
 
 	protected function save_gif_from_url($url, $config)

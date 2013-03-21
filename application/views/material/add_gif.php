@@ -22,7 +22,7 @@
 						<div class="control-group">
 							<label class="control-label"><?=__('material.field.title')?> <sup>*</sup></label>
 							<div class="controls">
-								<input name="title" type="text" placeholder="Заголовок" value="<?=$material->title?>">
+								<input name="title" type="text" placeholder="Заголовок" value="<?=Arr::get($_POST, 'title')?>">
 							</div>
 						</div>
 						<div class="control-group">
@@ -34,7 +34,7 @@
 						<div class="control-group">
 							<label class="control-label">Добавить описание</label>
 							<div class="controls">
-								<textarea name="description" rows="3"><?=$material->description?></textarea>
+								<textarea name="description" rows="3"><?=Arr::get($_post, 'description')?></textarea>
 							</div>
 						</div>
 						<div class="control-group">
