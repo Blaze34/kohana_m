@@ -24,10 +24,6 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 				'label' => 'material.field.description'
 			)),
 
-			'duration' => Jelly::field('integer', array(
-				'in_db' => FALSE
-			)),
-
 			'start' => Jelly::field('float', array(
 				'default' => NULL
 			)),
@@ -45,6 +41,9 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 
 			'video' => Jelly::field('string'),
 			'file' => Jelly::field('string'),
+			'url' => Jelly::field('string', array(
+				'label' => 'material.field.url'
+			)),
 
 			'tags' => Jelly::field('manytomany')
 		));
@@ -55,12 +54,12 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
         return 'material';
     }
 
-	public function thumb_dir()
+	public function dir($group)
 	{
 		if ( ! $this->id())
 			return NULL;
 
-		$_config = Kohana::$config->load('material.thumb');
+		$_config = Kohana::$config->load('material.'.$group);
 
 		return $_config['dir'].floor($this->id()/$_config['split']).'/';
 	}
@@ -69,9 +68,9 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 	{
 		$_config = Kohana::$config->load('material.thumb');
 
-		$_dir = $this->thumb_dir();
+		$_dir = $this->dir('thumb');
 
-		$thumb = $_dir.implode('.', array(hash($_config['hash'], $this->id().$_config['salt']),$_config['as']));
+		$thumb = $_dir.$this->get_filename('thumb');
 
 		if (file_exists($thumb))
 			return $thumb;
@@ -79,14 +78,25 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 		return $with_default ? $_config['default'] : NULL;
 	}
 
+	public function get_filename($group)
+	{
+		$_config = Kohana::$config->load('material.'.$group);
+		return implode('.', array(hash($_config['hash'], $this->id().$_config['salt']),$_config['as']));
+	}
+
 	public function save_thumb($_tmp)
 	{
 		if ($this->id())
 		{
 			$_config = Kohana::$config->load('material.thumb');
-			$_dir = $this->thumb_dir();
+			$_dir = $this->dir('thumb');
 
-			$image = Image::factory($_dir.$_tmp);
+			if ( ! is_dir($_dir))
+			{
+				mkdir($_dir);
+			}
+
+			$image = Image::factory($_tmp);
 			$image->render($_config['as']);
 
 			$ratio = $_config['width'] / $_config['height'];
@@ -124,7 +134,7 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 			$image->crop($_w, $_h, $coords[0],$coords[1]);
 			$image->resize($_config['width'], $_config['height']);
 
-			$_valid = $image->save($_dir.implode('.', array($_config['prefix'].hash($_config['hash'], $this->id().$_config['salt']).$_config['postfix'],$_config['as'])), $_config['quality']);
+			$_valid = $image->save($_dir.$this->get_filename('thumb'), $_config['quality']);
 
 			if ($_valid)
 			{
@@ -139,7 +149,7 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 		if ($this->id())
 		{
 			$_config = Kohana::$config->load('material.thumb');
-			$_dir = $this->thumb_dir();
+			$_dir = $this->dir('thumb');
 
 			$_fn = $_dir.implode('.', array($_config['prefix'].hash($_config['hash'], $this->id().$_config['salt']).$_config['postfix'],$_config['as']));
 				if (file_exists($_fn))
