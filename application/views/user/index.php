@@ -1,5 +1,5 @@
+<h3><?=__('title.user.index')?></h3>
 <?=View::factory('user/index/filter');?>
-
 <?if (sizeof($users)):?>
 	<table class="table table-hover">
 	    <thead>
@@ -19,8 +19,9 @@
 		        <td><?=$u->firstname?></td>
 		        <td><?=$u->lastname?></td>
                 <td style="text-align: center">
+
 				    <? if ($u->deleted OR $u->is_me()):?>
-	                    admin
+                        &nbsp;
 				    <?else:?>
                         <a class="delete_user" href="javascript:;" data-href="<?=Route::url('default', array('controller' => 'user', 'action' => 'delete', 'id' => $u->id()))?>">
 	                        <i class="icon-remove"></i>

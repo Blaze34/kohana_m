@@ -30,15 +30,21 @@ return array(
 	'global.updated' => 'Запись успешно обновлена',
 	'global.deleted' => 'Запись успешно удалена',
 	'global.anonymous' => 'Аноним',
+	'global.delete' => 'Удалить',
 
 	'title.user.login' => 'Авторизация',
 	'title.user.index' => 'Список пользователей',
 	'title.user.register' => 'Регистрация',
 	'title.user.edit' => 'Редактирование профиля',
 	'title.user.recover' => 'Восстановление пароля',
-	'title.admin.users' => 'Пользователи',
-	'title.static.index' => 'Публикации',
-	'title.static.add' => 'Добавление публикаций',
+	'title.admin.index' => 'Админка',
+    'title.static.index' => 'Публикации',
+    'title.static.edit' => 'Редактирование страницы',
+    'title.static.add' => 'Добавление страницы',
+    'title.category.index' => 'Категории',
+    'title.category.add' => 'Добавление категории',
+	'title.category.edit' => 'Редактирование категории',
+	'title.category.show' => 'Раздел',
 
 	'title.material.add_video' => 'Добавить видео',
 
@@ -53,6 +59,16 @@ return array(
     'adm.comments' => 'Комментарии',
     'adm.publications' => 'Публикации',
     'adm.statics' => 'Страницы',
+    'adm.category' => 'Категории',
+    'adm.category.add' => 'Добавление категории',
+    'adm.category.edit' => 'Редактирование категории',
+
+    'category.field.id' => 'ID',
+    'category.field.name' => 'Название',
+    'category.field.sort' => 'Сортировка',
+    'category.field.parent' => 'Родитель',
+    'category.field.subcategory' => 'Подкатегория',
+    'category.error.has_children' => 'Удаление невозможно, у раздела есть категории',
 
 	'user.field.username' => 'Логин',
 	'user.field.email' => 'Email',
@@ -68,7 +84,7 @@ return array(
 	'admin.delete.confirm.text' => 'Вся информация о данном пользователе будет удалена и он не сможет воспользоваться ресурсом',
 
     'static.title' => 'Название публикации',
-    'static.alias' => 'alias публикации',
+    'static.alias' => 'URL публикации',
     'static.active' => 'Отображать',
     'static.body' => 'Контент публикации',
     'static.create' => 'Создать',
@@ -123,13 +139,5 @@ return array(
 	'user.avatar.upload.too_big' => 'Загруженное изображение слишком большое',
 	'user.avatar.upload.not_allowed_type' => 'Недопустимый формат загруженного файла',
 	'user.avatar.upload.not_uploaded' => 'Возникли проблемы при загрузке изображения',
-	'user.avatar.delete' => 'Удалить аватар',
-
-	'material.field.title' => 'Заголовок',
-	'material.field.description' => 'Описание',
-	'material.field.category' => 'Категория',
-	'material.field.user' => 'Автор',
-	'material.field.url' => 'URL',
-
-	'page_error' => 'Ошибка',
+	'user.avatar.delete' => 'Удалить аватар'
 );

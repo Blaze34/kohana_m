@@ -6,7 +6,8 @@
 <body>
 <div id="wrap">
     <div class="container">
-        <?=View::factory('layouts/_header')->set(array('errors' => $errors, 'success' => $success))->render()?>
+        <?=View::factory('layouts/_header')->render()?>
+        <?=View::factory('layouts/_alerts')->set(array('errors' => $errors, 'success' => $success))->render()?>
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span3">

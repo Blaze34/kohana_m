@@ -24,6 +24,7 @@ return array(
                 'js' => array(
                     'jquery/1.8.3.min.js',
 	                'bootstrap.min.js',
+	                'html5shiv.js',
 	                'bootstrap-datepicker.js',
 	                'bootstrap-datepicker.ru.js',
 	                'global.js',
@@ -31,11 +32,13 @@ return array(
 	                'jquery/noty/layouts/center.js',
 	                'jquery/noty/themes/default.js',
 	                'swfobject.js',
+                    'jquery/jquery.bxslider.min.js',
                 ),
                 'css' => array(
                     'normalize.css',
                     'bootstrap.css',
                     'datepicker.css',
+                    'jquery.bxslider.css',
                     'style.css',
                 )
             )
