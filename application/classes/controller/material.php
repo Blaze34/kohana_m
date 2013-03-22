@@ -88,7 +88,7 @@ class Controller_Material extends Controller_Web {
 		}
 		else
 		{
-			$this->errors('material.parse.error')->redirect('/');
+			$this->errors('global.no_params')->redirect('/');
 		}
 	}
 

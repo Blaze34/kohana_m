@@ -67,6 +67,8 @@ return array(
     'adm.category.edit' => 'Редактирование категории',
 
     'material.field.title' => 'Название',
+    'material.parse.error' => 'Ошибка, видео не найдено',
+
     'comments.title' => 'Все коментарии:',
     'comments.last.title' => 'Коментарии:',
     'comments.last.empty' => 'Список комментариев пуст',
@@ -84,9 +86,7 @@ return array(
 	'user.field.email' => 'Email',
 	'user.field.password' => 'Пароль',
 	'user.field.password_confirm' => 'Подтверждение пароля',
-	'user.field.firstname' => 'Имя',
-	'user.field.lastname' => 'Фамилия',
-	'user.field.birthday' => 'Дата рождения',
+	'user.field.firstname' => 'Ник',
 	'user.button.delete' => 'Удалить профиль',
 
 	'user.delete.confirm.title' => 'Удалить профиль?',

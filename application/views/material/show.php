@@ -18,6 +18,7 @@
 <div class="headline">
     <h2><?=$material->title?></h2>
 </div>
+<?$user = A2::instance()->get_user();?>
 <div class="span8">
     <div class="player">
         <div id="player"></div>
@@ -40,7 +41,7 @@
     <div class="user_header">
         <div class="pull-left">
             <i class="icon-user"></i>
-            <a href="#"><?=$material->user->email?></a>
+            <a href="<?=Route::url('default', array('controller' => 'material', 'action' => 'user', 'id' => $user->id()))?>"><?=$material->user->firstname?></a>
         </div>
         <div class="pull-right"><?=date('d.m.y', $material->date)?></div>
     </div>
@@ -55,9 +56,7 @@
         <div class="share42init pull-right"></div>
     </div>
     <?
-    $user = A2::instance()->get_user();
-    if($user AND $user->is_admin()) $admin = TRUE;;
-    ?>
+    if($user AND $user->is_admin()) $admin = TRUE;?>
     <div class="comments">
         <h4><?=__('comments.title')?></h4>
         <form class="form-horizontal" method="post" action="">
@@ -71,11 +70,7 @@
                     <input type="text" class="guest_name" name="guest_name" placeholder="Ваше имя" value="<?=Arr::get($_POST, 'guest_name')?>"/>
                     <input type="text" class="i-captcha" name="captcha" placeholder="Каптча"/>
                     <?=Captcha::instance('default')->render();?>
-
-
                 <?endif;?>
-
-
                 <button type="submit" class="btn btn-mini btn-primary pull-right">Отправить</button>
                 <button type="reset" class="btn btn-mini pull-right">Очистить</button>
                 <div class="clearfix"></div>
@@ -107,7 +102,7 @@
                 </div>
                 <div class="msg">
                     <div class="msg_topic">
-                        <?=($c->user->email?'<a class="cmnt_author" href="'.Route::url('default', array('controller' => 'material', 'action' => 'user', 'id' => $c->user->id)).'"><strong>'.$c->user->email.'</strong></a>': '<span class="cmnt_author"><strong>'.$c->guest_name.'</strong></span>')?>
+                        <?=($c->user->email?'<a class="cmnt_author" href="'.Route::url('default', array('controller' => 'material', 'action' => 'user', 'id' => $c->user->id)).'"><strong>'.$c->user->firstname.'</strong></a>': '<span class="cmnt_author"><strong>'.$c->guest_name.'</strong></span>')?>
                         <small class="pull-right"><?=date('d.m.y', $c->date)?></small>
                     </div>
                     <div class="msg_txt">

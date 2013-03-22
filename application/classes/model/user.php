@@ -33,23 +33,13 @@ class Model_User extends Model_Auth_User implements Acl_Role_Interface, Acl_Reso
 			)),
 			'firstname' => Jelly::field('string', array(
 				'rules' => array(
-					array('max_length', array(':value', 250)),
+                    array('not_empty'),
+                    array('max_length', array(':value', 250)),
 				),
+                'unique' => TRUE,
 				'label' => 'user.field.firstname'
 			)),
-			'lastname' => Jelly::field('string', array(
-				'rules' => array(
-					array('max_length', array(':value', 250)),
-				),
-				'label' => 'user.field.lastname'
-			)),
 
-			'birthday' => Jelly::field('string', array(
-				'rules' => array(
-					array('max_length', array(':value', 50)),
-				),
-				'label' => 'user.field.birthday'
-			)),
 			'role' => Jelly::field('enum', array(
 				'default' => 'login',
 				'choices' => array('login', 'admin')
