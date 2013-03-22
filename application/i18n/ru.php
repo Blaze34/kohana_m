@@ -32,6 +32,9 @@ return array(
 	'global.anonymous' => 'Аноним',
 	'global.delete' => 'Удалить',
 
+    'error.captcha' => 'Неправильно введена капча',
+    'error.delete' => 'Ошибка при удалении',
+
 	'title.user.login' => 'Авторизация',
 	'title.user.index' => 'Список пользователей',
 	'title.user.register' => 'Регистрация',
@@ -143,7 +146,5 @@ return array(
 	'user.avatar.upload.too_big' => 'Загруженное изображение слишком большое',
 	'user.avatar.upload.not_allowed_type' => 'Недопустимый формат загруженного файла',
 	'user.avatar.upload.not_uploaded' => 'Возникли проблемы при загрузке изображения',
-	'user.avatar.delete' => 'Удалить аватар',
-
-    'error.captcha' => 'Неправильно введена капча'
+	'user.avatar.delete' => 'Удалить аватар'
 );
