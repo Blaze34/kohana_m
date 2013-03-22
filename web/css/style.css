@@ -41,6 +41,7 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 .bxslider li ul{margin-left: 10px;}
 .bx-viewport{padding-left: 0px;}
 .bxslider .more{text-decoration: underline}
+.last_comments{margin: 0;}
 .block_title{font-size: 1.5em; color: #444444; border-bottom: 1px dotted #059ccc; margin-bottom: 15px; padding-bottom: 8px;}
 .popular .well{width: 143px;}
 /*.popular .thumbnails{margin-right: -10px;}*/

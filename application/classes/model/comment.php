@@ -12,10 +12,13 @@ class Model_Comment extends Jelly_Model implements Acl_Resource_Interface {
 					array('min_length', array(':value', 3)),
 					array('max_length', array(':value', 850))
 				),
+                'label' => 'comment.field.text'
 			)),
 
 			'user' => Jelly::field('belongsto'),
-            'guest_name' => Jelly::field('string'),
+            'guest_name' => Jelly::field('string', array(
+                'label' => 'comment.field.guest_name'
+            )),
 
             'material' => Jelly::field('belongsto'),
 

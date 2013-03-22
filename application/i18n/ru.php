@@ -68,7 +68,10 @@ return array(
 
     'material.field.title' => 'Название',
     'comments.title' => 'Все коментарии:',
-    'comments.field.guest' => 'Ваше имя',
+    'comments.last.title' => 'Коментарии:',
+    'comments.last.empty' => 'Список комментариев пуст',
+    'comment.field.guest_name' => 'Ваше имя',
+    'comment.field.text' => 'Комментарий',
 
     'category.field.id' => 'ID',
     'category.field.name' => 'Название',

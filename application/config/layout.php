@@ -35,6 +35,7 @@ return array(
                     'jquery/jquery.bxslider.min.js',
                 ),
                 'css' => array(
+                    'http://fonts.googleapis.com/css?family=Open+Sans:400,700,800&subset=latin,cyrillic-ext',
                     'normalize.css',
                     'bootstrap.css',
                     'datepicker.css',

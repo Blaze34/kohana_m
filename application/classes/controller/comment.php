@@ -4,14 +4,18 @@ class Controller_Comment extends Controller_Web {
 
     public function action_last()
     {
-        $show_count = Kohana::$config->load('comment.last');
-
-        $comments = array_fill(0, $show_count, 'comment');
-
-        $this->view()->comments = $comments;
+        if (Request::current()->is_initial())
+        {
+            $this->redirect('/');
+        }
+        else
+        {
+            $count = Kohana::$config->load('comment.last.count');
+            $this->view()->comments = Jelly::query('comment')->with('material')->with('user')->order_by('date', 'DESC')->limit($count)->execute();
+        }
     }
 
-    public  function action_delete()
+    public function action_delete()
     {
         if ($this->allowed())
         {
@@ -25,7 +29,7 @@ class Controller_Comment extends Controller_Web {
             }
             else
             {
-                $this->errors(__('error.delete'));
+                $this->errors(__('error.no_params'));
             }
         }
         else

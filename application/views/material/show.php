@@ -54,8 +54,10 @@
         </div>
         <div class="share42init pull-right"></div>
     </div>
-    <?$user = A2::instance()->get_user();?>
-
+    <?
+    $user = A2::instance()->get_user();
+    if($user AND $user->is_admin()) $admin = TRUE;;
+    ?>
     <div class="comments">
         <h4><?=__('comments.title')?></h4>
         <form class="form-horizontal" method="post" action="">
@@ -98,9 +100,9 @@
             <li class="comment">
                 <div class="photo_frame square_42">
                     <?if($c->user->email):?>
-                        <span><img src="<?=$c->user->avatar()?>" height="48" width="48" alt=""></span>
+                        <a href="<?=Route::url('default', array('controller' => 'material', 'action' => 'user', 'id' => $c->user->id))?>"><img src="<?=$c->user->avatar()?>" height="48" width="48" alt=""></a>
                     <?else:?>
-                        <a href="#"><img src="<?=$c->user->avatar()?>" height="48" width="48" alt=""></a>
+                        <span><img src="<?=$c->user->avatar()?>" height="48" width="48" alt=""></span>
                     <?endif;?>
                 </div>
                 <div class="msg">
@@ -114,6 +116,7 @@
                     <div class="msg_footer">
                         <a class="answer pull-left" href="#">Ответить</a>
                         <div class="buttons pull-right">
+                            <?=($admin?'<a href="'.Route::url('default', array('controller' => 'comment', 'action' => 'delete', 'id' => $c->id)).'" class="btn btn-mini btn-danger"><i class="icon icon-remove icon-white"></i>'.__('global.delete').'</a>':'')?>
                             <button class="btn btn-mini btn-success" type="button"><i class="icon icon-thumbs-up icon-white"></i> 15</button>
                             <button class="btn btn-mini btn-warning" type="button"><i class="icon icon-thumbs-down icon-white"></i>205</button>
                         </div>

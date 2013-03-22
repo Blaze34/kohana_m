@@ -247,7 +247,6 @@ class Controller_Material extends Controller_Web {
 			{
                 if($_POST)
                 {
-
                     $comment = Jelly::factory('comment');
 
                     $extra_validation = NULL;
@@ -263,14 +262,14 @@ class Controller_Material extends Controller_Web {
                             $comment->guest_name = Arr::get($_POST, 'guest_name');
                             $extra_validation = Validation::factory($_POST)
                                 ->rule('guest_name', 'not_empty')
-                                ->rule('guest_name', 'min_length', array(':value', 3))->labels(array('guest_name' => 'comments.field.guest'));
+                                ->rule('guest_name', 'min_length', array(':value', 3))->labels(array('guest_name' => 'comment.field.guest_name'));
                         }
 
                         try
                         {
                             $comment->set(array(
                                 'material' => $material->id(),
-                                'text' => html_entity_decode(Arr::get($_POST, 'text', ''), ENT_QUOTES),
+                                'text' => Arr::get($_POST, 'text', ''),
                             ))->save($extra_validation);
 
                             if($comment->saved())
@@ -286,7 +285,7 @@ class Controller_Material extends Controller_Web {
                     else
                     {
 
-                        $this->errors(__('error.captcha'));
+                        $this->errors('error.captcha');
                     }
                 }
 
