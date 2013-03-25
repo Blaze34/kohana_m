@@ -25,23 +25,24 @@
     </div>
     <div class="views-info">
         <div class="video-extras-likes-dislikes pull-left">
-            <div class="likes-count pull-left"><i class="icon icon-thumbs-up"></i><span>27592</span></div>
-            <div class="dislikes-count pull-left"><i class="icon icon-thumbs-down"></i><span>2998</span></div>
+            <div class="likes-count pull-left"><i class="icon icon-thumbs-up"></i><span><?=($mpoll['like']['count'] > 0 ? $mpoll['like']['count'] : 0)?></span></div>
+            <div class="dislikes-count pull-left"><i class="icon icon-thumbs-down"></i><span><?=($mpoll['dislike']['count'] > 0 ? $mpoll['dislike']['count'] : 0)?></span></div>
         </div>
         <div class="buttons pull-right">
-            <button class="btn btn-mini btn-success" type="button"><i class="icon icon-thumbs-up icon-white"></i>Нравится</button>
-            <button class="btn btn-mini btn-warning" type="button"><i class="icon icon-thumbs-down icon-white"></i>Не нравится</button>
+            <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-success<?=($m_user_vote['value'] == TRUE ? ' disabled':'')?>" type="button"><i class="icon icon-thumbs-up icon-white"></i>Нравится</a>
+            <a href="<?=Route::url('vote', array('act' => 'dislike', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-warning<?=(($m_user_vote AND ($m_user_vote['value'] == FALSE))? ' disabled':'')?>" type="button"><i class="icon icon-thumbs-down icon-white"></i>Не нравится</a>
         </div>
         <div class="video-extras-sparkbars">
-            <div class="video-extras-sparkbar-likes" style="width: 90%;"></div>
-            <div class="video-extras-sparkbar-dislikes" style="width: 10%;"></div>
+            <?$total = $mpoll['like']['count'] + $mpoll['dislike']['count']?>
+            <div class="video-extras-sparkbar-likes" style="width: <?=($mpoll['like']['count'] > 0? $mpoll['like']['count'] * 100 / $total  : '0')?>%"></div>
+            <div class="video-extras-sparkbar-dislikes" style="width: <?=($mpoll['dislike']['count'] > 0? $mpoll['dislike']['count'] * 100 / $total: '0')?>%;"></div>
         </div>
     </div>
 
     <div class="user_header">
         <div class="pull-left">
             <i class="icon-user"></i>
-            <a href="<?=Route::url('default', array('controller' => 'material', 'action' => 'user', 'id' => $user->id()))?>"><?=$material->user->firstname?></a>
+            <a href="<?=Route::url('default', array('controller' => 'material', 'action' => 'user', 'id' => $material->user->id()))?>"><?=$material->user->firstname?></a>
         </div>
         <div class="pull-right"><?=date('d.m.y', $material->date)?></div>
     </div>
@@ -112,8 +113,8 @@
                         <a class="answer pull-left" href="#">Ответить</a>
                         <div class="buttons pull-right">
                             <?=($admin?'<a href="'.Route::url('default', array('controller' => 'comment', 'action' => 'delete', 'id' => $c->id)).'" class="btn btn-mini btn-danger"><i class="icon icon-remove icon-white"></i>'.__('global.delete').'</a>':'')?>
-                            <button class="btn btn-mini btn-success" type="button"><i class="icon icon-thumbs-up icon-white"></i> 15</button>
-                            <button class="btn btn-mini btn-warning" type="button"><i class="icon icon-thumbs-down icon-white"></i>205</button>
+                            <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $c->get_resource_id(), 'id' => $c->id()))?>" class="btn btn-mini btn-success" type="button"><i class="icon icon-thumbs-up icon-white"></i>&nbsp;</a>
+                            <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $c->get_resource_id(), 'id' => $c->id()))?>" class="btn btn-mini btn-warning" type="button"><i class="icon icon-thumbs-up icon-white"></i>&nbsp;</a>
                         </div>
                     </div>
                 </div>
