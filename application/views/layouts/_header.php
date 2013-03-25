@@ -1,7 +1,7 @@
 <?$user = A2::instance()->get_user();?>
 <div class="page-header">
     <div class="site_logo pull-left">
-        <a href="/"><img src="/web/img/template/mmatica_logo.png" alt="mmatica"></a>
+        <a href="/"><img src="/web/img/template/logo.png" alt="mmatica"></a>
     </div>
     <div class="navbar pull-left top_menu">
         <div class="navbar-inner">

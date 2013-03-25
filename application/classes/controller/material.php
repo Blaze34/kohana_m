@@ -292,34 +292,86 @@ class Controller_Material extends Controller_Web {
                 $this->title($material->title, FALSE);
 
                 $comments = $material->get('comments')->with('user')->order_by('date', 'DESC')->pagination('comments')->select_all();
-                $material_poll = Jelly::query('poll')->select_column(array(array(DB::expr('COUNT(id)'), 'count'), 'value'))->where('type_id', '=', $id)->where('type', '=', $material->get_resource_id())->group_by('value')->select_all()->as_array();
-                $m_user_vote = Jelly::query('poll')->select_column('value', 'value')->where('user_id', '=', $this->user->id())->where('type_id', '=', $id)->where('type', '=', $material->get_resource_id())->select()->as_array();
+                $material_poll = Jelly::query('poll')
+                    ->select_column(array(array(DB::expr('COUNT(id)'), 'count'), 'value'))
+                    ->where('type_id', '=', $id)
+                    ->where('type', '=', $material->get_resource_id())
+                    ->group_by('value')
+                    ->select_all()->as_array('value', 'count');
 
-                $ids = $mpoll = array();
-                foreach ($material_poll as $item)
+
+                $m_user_vote = Jelly::query('poll')
+                    ->where('user_id', '=', $this->user->id())
+                    ->where('type_id', '=', $id)
+                    ->where('type', '=', $material->get_resource_id())
+                    ->limit(1)
+                    ->select();
+
+                $ids = $mpoll = $cpoll = array();
+
+                $mpoll = array(
+                    'dislike' => Arr::get($material_poll, '0', 0),
+                    'like' => Arr::get($material_poll, '1', 0)
+                );
+
+                foreach ($comments as $c)
                 {
-                    if ($item['value'] == FALSE)
-                    {
-                        $mpoll['dislike'] = $item;
-                    }
-                    else{
-                        $mpoll['like'] = $item;
-                    }
+                    $ids[] = $c->id();
                 }
 
-
-                // comments poll
-                foreach ($comments as $c){
-                    $ids[] = $c->id;
-                }
                 if(sizeof($ids))
                 {
-                    $comment_poll = Jelly::query('poll')->select_column(array(array(DB::expr('COUNT(id)'), 'count'), 'value'))->where('type_id', 'in', $ids)->where('type', '=', 'comment')->group_by('value')->select_all()->as_array();
+                    $comment_poll = Jelly::query('poll')
+                        ->select_column(array(array(DB::expr('COUNT(id)'), 'count'), 'type_id', 'value'))
+                        ->where('type_id', 'IN', $ids)
+                        ->where('type', '=', Jelly::factory('comment')->get_resource_id())
+                        ->group_by('type_id', 'value')->select_all()->as_array();
+
+                    $c_user_vote_db = Jelly::query('poll')
+                        ->select_column(array('value', 'type_id'))
+                        ->where('type_id', 'IN', $ids)
+                        ->where('user_id', '=', $this->user->id())
+                        ->where('type', '=', Jelly::factory('comment')->get_resource_id())->select_all()->as_array();
+
+                    foreach ($comment_poll as $item)
+                    {
+                        if ($item['value'])
+                        {
+                            $cpoll[$item['type_id']]['like'] = $item['count'];
+                        }
+                        else
+                        {
+                            $cpoll[$item['type_id']]['dislike'] = $item['count'];
+                        }
+
+                        if ($item['user_id'] == $this->user->id())
+                        {
+                            $cpoll[$item['type_id']]['voted'] = $item['value'];
+                        }
+                    }
+
+                    if (sizeof($c_user_vote_db))
+                    {
+                        foreach ($c_user_vote_db as $c)
+                        {
+                            if ($c['value'])
+                            {
+                                $c_user_vote[$c['type_id']]['like'] = TRUE;
+                            }
+                            else
+                            {
+                                $c_user_vote[$c['type_id']]['dislike'] = TRUE;
+                            }
+
+                        }
+                    }
                 }
 
                 $this->view()->material = $material;
                 $this->view()->mpoll = $mpoll;
-                $this->view()->m_user_vote = $m_user_vote[0];
+                $this->view()->cpoll = $cpoll;
+                $this->view()->m_user_vote = $m_user_vote;
+                $this->view()->c_user_vote = $c_user_vote;
                 $this->view()->comments = $comments;
 			}
 			else
