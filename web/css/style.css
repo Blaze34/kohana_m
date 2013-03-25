@@ -136,9 +136,9 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 .views-info{display: inline-block; width: 100%; padding: 10px 0 0;}
 .views-info .buttons{text-align: right;}
 .views-info .video-extras-likes-dislikes{}
-.views-info .video-extras-sparkbars {height: 2px; margin: 10px 0 0; overflow: hidden; clear: both; display: inline-block; width: 100%;}
-.views-info .video-extras-sparkbar-likes {float: left;height: 4px; background: #590;}
-.views-info .video-extras-sparkbar-dislikes {float: left; height: 4px; background: #CCC;}
+.views-info .video-extras-sparkbars {height: 3px; margin: 10px 0 0; overflow: hidden; clear: both; display: inline-block; width: 100%; background: #ccc}
+.views-info .video-extras-sparkbar-likes {float: left;height: 4px; background: #61b904;}
+.views-info .video-extras-sparkbar-dislikes {float: left; height: 4px; background: #de0800;}
 .video-extras-likes-dislikes .likes-count{margin-right: 10px;}
 .user_header{padding-left: 20px; margin: 10px; height: 24px; overflow: hidden;}
 .user_header .user_photo{float: left; margin-right: 10px;}
@@ -150,7 +150,7 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 .comments{}
 .comments ul{padding: 0; margin: 0;}
 .comments h4{font-size: 1.2em; color: #4d4d4d;}
-.comments textarea{width: 572px; max-width: 586px; min-height: 82px;}
+.comments textarea{width: 586px; max-width: 586px; min-height: 82px;}
 .comment{padding-bottom: 15px;}
 .comments .photo_frame{float: left; margin-right: 10px;}
 .comments .msg{font-size: .9em; position: relative; display: block; margin-left: 58px; line-height: 1.2em; border: 1px solid #cccccc; border-radius: 5px; padding: 10px;}

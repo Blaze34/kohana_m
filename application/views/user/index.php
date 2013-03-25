@@ -7,7 +7,6 @@
 		        <th>#</th>
 		        <th><?=__('user.field.email')?></th>
 		        <th><?=__('user.field.firstname')?></th>
-		        <th><?=__('user.field.lastname')?></th>
 		        <th>&nbsp;</th>
 		    </tr>
 	    </thead>
@@ -17,7 +16,6 @@
 		        <td><?=$u->id()?></td>
 		        <td><a href="<?=Route::url('default', array('controller' => 'user', 'action' => 'edit', 'id' => $u->id()));?>"><?=$u->email ? $u->email : __('global.edit')?></a></td>
 		        <td><?=$u->firstname?></td>
-		        <td><?=$u->lastname?></td>
                 <td style="text-align: center">
 
 				    <? if ($u->deleted OR $u->is_me()):?>

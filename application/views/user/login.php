@@ -1,7 +1,7 @@
 <?=Form::open(NULL, array('class' => 'form-signin'))?>
     <h5 class="form-signin-heading"><?=__('auth.sign_in')?></h5>
-    <input id="username" type="text" class="input-block-level" name="username" value="<?=Arr::get($_POST, 'username')?>">
-    <input id="password" type="password" name="password" class="input-block-level">
+    <input id="username" type="text" class="input-block-level" name="username" placeholder="Email" value="<?=Arr::get($_POST, 'username')?>">
+    <input id="password" type="password" name="password" class="input-block-level" placeholder="Password">
     <label class="checkbox">
         <input type="checkbox" name="remember" value="1" checked="checked"> <?=__('auth.login.remember')?>
     </label>

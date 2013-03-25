@@ -3,17 +3,7 @@
 return array(
 
 	'filter'       => array(
-		'username' => array(
-			'condition' => 'LIKE',
-			'type' => 'text',
-			'suffix' => '%'
-		),
 		'firstname' => array(
-			'condition' => 'LIKE',
-			'type' => 'text',
-			'suffix' => '%'
-		),
-		'lastname' => array(
 			'condition' => 'LIKE',
 			'type' => 'text',
 			'suffix' => '%'
