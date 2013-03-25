@@ -300,7 +300,7 @@ class Controller_Material extends Controller_Web {
                     ->select_all()->as_array('value', 'count');
 
 
-                $m_user_vote = Jelly::query('poll')
+                $material_user_vote = Jelly::query('poll')
                     ->where('user_id', '=', $this->user->id())
                     ->where('type_id', '=', $id)
                     ->where('type', '=', $material->get_resource_id())
@@ -327,7 +327,7 @@ class Controller_Material extends Controller_Web {
                         ->where('type', '=', Jelly::factory('comment')->get_resource_id())
                         ->group_by('type_id', 'value')->select_all()->as_array();
 
-                    $c_user_vote_db = Jelly::query('poll')
+                    $comments_user_vote_db = Jelly::query('poll')
                         ->select_column(array('value', 'type_id'))
                         ->where('type_id', 'IN', $ids)
                         ->where('user_id', '=', $this->user->id())
@@ -350,17 +350,17 @@ class Controller_Material extends Controller_Web {
                         }
                     }
 
-                    if (sizeof($c_user_vote_db))
+                    if (sizeof($comments_user_vote_db))
                     {
-                        foreach ($c_user_vote_db as $c)
+                        foreach ($comments_user_vote_db as $c)
                         {
                             if ($c['value'])
                             {
-                                $c_user_vote[$c['type_id']]['like'] = TRUE;
+                                $comments_user_vote[$c['type_id']]['like'] = TRUE;
                             }
                             else
                             {
-                                $c_user_vote[$c['type_id']]['dislike'] = TRUE;
+                                $comments_user_vote[$c['type_id']]['dislike'] = TRUE;
                             }
 
                         }
@@ -370,8 +370,8 @@ class Controller_Material extends Controller_Web {
                 $this->view()->material = $material;
                 $this->view()->mpoll = $mpoll;
                 $this->view()->cpoll = $cpoll;
-                $this->view()->m_user_vote = $m_user_vote;
-                $this->view()->c_user_vote = $c_user_vote;
+                $this->view()->material_user_vote = $material_user_vote;
+                $this->view()->comments_user_vote = $comments_user_vote;
                 $this->view()->comments = $comments;
 			}
 			else
@@ -384,6 +384,28 @@ class Controller_Material extends Controller_Web {
 			$this->errors('global.no_params')->redirect('/');
 		}
 	}
+
+    public function action_user()
+    {
+        if($uid = $this->request->param('id'))
+        {
+            $if_user = Jelly::query('users')->where('id', '=', $uid)->limit(1)->select();
+            if($if_user)
+            {
+                $user_material = Jelly::query('materials')->where('user_id', '=', $uid)->select_all();
+                $this->view()->materials = $user_material;
+            }
+            else
+            {
+                $this->errors('global.no_exist')->redirect('/');
+            }
+        }
+        else
+        {
+            $this->errors('global.no_params')->redirect('/');
+        }
+
+    }
 
 	protected function save_tmp_file($file)
 	{

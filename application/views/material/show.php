@@ -29,8 +29,8 @@
             <div class="dislikes-count pull-left"><i class="icon icon-thumbs-down"></i><span><?=$mpoll['dislike']?></span></div>
         </div>
         <div class="buttons pull-right">
-            <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-success<?=($m_user_vote->loaded() AND ($m_user_vote->value == TRUE)) ? ' disabled':''?>" type="button"><i class="icon icon-thumbs-up icon-white"></i>Нравится</a>
-            <a href="<?=Route::url('vote', array('act' => 'dislike', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-warning<?=($m_user_vote->loaded() AND ($m_user_vote->value == FALSE)) ? ' disabled':''?>" type="button"><i class="icon icon-thumbs-down icon-white"></i>Не нравится</a>
+            <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-success<?=($material_user_vote->loaded() AND ($material_user_vote->value == TRUE)) ? ' disabled':''?>" type="button"><i class="icon icon-thumbs-up icon-white"></i>Нравится</a>
+            <a href="<?=Route::url('vote', array('act' => 'dislike', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-warning<?=($material_user_vote->loaded() AND ($material_user_vote->value == FALSE)) ? ' disabled':''?>" type="button"><i class="icon icon-thumbs-down icon-white"></i>Не нравится</a>
         </div>
         <div class="video-extras-sparkbars">
             <?$total = $mpoll['like'] + $mpoll['dislike']?>
@@ -116,10 +116,10 @@
                         <a class="answer pull-left" href="#">Ответить</a>
                         <div class="buttons pull-right">
                             <?=($admin?'<a href="'.Route::url('default', array('controller' => 'comment', 'action' => 'delete', 'id' => $c->id)).'" class="btn btn-mini btn-danger"><i class="icon icon-remove icon-white"></i>'.__('global.delete').'</a>':'')?>
-                            <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $c->get_resource_id(), 'id' => $c->id()))?>" class="btn btn-mini btn-success<?=($c_user_vote[$c->id()]['like'])?' disabled':''?>">
+                            <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $c->get_resource_id(), 'id' => $c->id()))?>" class="btn btn-mini btn-success<?=($comments_user_vote[$c->id()]['like'])?' disabled':''?>">
                                 <i class="icon icon-thumbs-up icon-white"></i><?=($cpoll[$c->id()]['like'] ? $cpoll[$c->id()]['like']:'0')?>
                             </a>
-                            <a href="<?=Route::url('vote', array('act' => 'dislike', 'type' => $c->get_resource_id(), 'id' => $c->id()))?>" class="btn btn-mini btn-warning<?=($c_user_vote[$c->id()]['dislike'])?' disabled':''?>">
+                            <a href="<?=Route::url('vote', array('act' => 'dislike', 'type' => $c->get_resource_id(), 'id' => $c->id()))?>" class="btn btn-mini btn-warning<?=($comments_user_vote[$c->id()]['dislike'])?' disabled':''?>">
                                 <i class="icon icon-thumbs-up icon-white"></i><?=($cpoll[$c->id()]['dislike']?$cpoll[$c->id()]['dislike']:'0')?>
                             </a>
                         </div>
