@@ -50,7 +50,7 @@ return array(
     'title.category.add' => 'Добавление категории',
 	'title.category.edit' => 'Редактирование категории',
 	'title.category.show' => 'Раздел',
-	'title.category.show' => 'Раздел',
+	'title.material.user' => 'Метриал пользователя',
 	'title.material.add_video' => 'Добавить видео',
 
 	'menu.user.list' => 'Список пользователей',

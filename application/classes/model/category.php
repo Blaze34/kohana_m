@@ -19,9 +19,6 @@ class Model_Category extends Jelly_Model implements Acl_Resource_Interface {
 			)),
 
 			'parent_id' => Jelly::field('integer', array(
-				'rules' => array(
-					array('not_empty'),
-				),
 				'label' => 'category.field.parent'
 			)),
 

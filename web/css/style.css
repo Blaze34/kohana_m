@@ -49,10 +49,10 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 .last_comments{margin: 0;}
 .block_title{font-size: 1.5em; color: #444444; border-bottom: 1px dotted #059ccc; margin-bottom: 15px; padding-bottom: 8px;}
 .popular .well{width: 143px;}
-/*.popular .thumbnails{margin-right: -10px;}*/
+.popular .thumbnails{margin-left: 0px;}
 .thum_items{overflow: hidden;}
 .thum_items .thum_item{ /*width: 31.914893617021278%;*/ width: 177px; float: left; margin-left: 0; margin-right: 6px; height: 158px; overflow: hidden;}
-.thum_item .item_txt{display: block; font-size: .8em; line-height: 1.2em; padding: 5px 2px; height: 24px; overflow: hidden}
+.thum_item .item_txt{display: block; font-size: .8em; line-height: 1.2em; padding: 5px 2px; height: 22px; overflow: hidden}
 .thum_item .item_stat{float: left; font-weight: bold; font-size: .8em; line-height: 1.2em; padding: 0 2px}
 .thum_item .item_stat i{margin-left: 3px;}
 .txt_item{display: inline-block; margin-bottom: 20px; overflow: hidden;}
