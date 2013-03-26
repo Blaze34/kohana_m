@@ -93,17 +93,19 @@ class Tags {
 		return array();
 	}
 
-	public static function similar($material)
+	public static function similar($material, $limit = 5)
 	{
-		$ids = $material->get('tags')->execute()->as_array(NULL, 'id');
+        $similar = array();
+
+        $ids = $material->get('tags')->execute()->as_array(NULL, 'id');
+
 		if (sizeof($ids))
 		{
-			$config = self::config();
 			$similar_id = DB::select('material_id')->from('materials_tags')
 				->where('tag_id', 'in', $ids)
-				->and_where('material_id', '!=', $material->id)
+				->and_where('material_id', '!=', $material->id())
 				->group_by('material_id')
-				->order_by(DB::expr('COUNT(material_id)'), 'DESC')->limit($config['similar'])->execute()->as_array(NULL, 'material_id');
+				->order_by(DB::expr('COUNT(material_id)'), 'DESC')->limit($limit)->execute()->as_array(NULL, 'material_id');
 
 			if (sizeof($similar_id))
 			{
@@ -115,18 +117,10 @@ class Tags {
 				{
 					$similar[$m->id()] = $m;
 				}
-
-				try
-				{
-					return View::factory('similar/material')->set(array('similar' => $similar))->render();
-				}
-				catch (Exception $e)
-				{
-					return NULL;
-				}
 			}
-		}
-	}
+        }
+        return $similar;
+    }
 
 	public static function update($material)
 	{

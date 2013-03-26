@@ -1,20 +1,5 @@
-<div class="span3">
-    <?=Request::factory(Route::url('default', array('controller' => 'comment', 'action' => 'last')))->execute()?>
-</div>
 <div class="span9 popular">
-    <?$action = Request::current()->action();?>
-    <div class="block_title">
-        <?if ($action == 'user'):?>
-            <?=$owner['firstname']?>
-        <?elseif ($action == 'tag'):?>
-
-        <?else:?>
-            Популярное
-        <?endif;?>
-    </div>
-    <div class="well well-small  pull-right">
-        фф… А что, если я скажу вам, что автоматизировал все эти действия по-максимуму? Да, теперь вам нужно выполнить всего пару команд и автодеплой запущен и работает! И все это благодаря Гитхабайзеру.
-    </div>
+    <div class="block_title">Популярное</div>
     <div class="thum_items">
         <?if (sizeof($materials)):?>
         <ul class="thumbnails">
@@ -35,6 +20,8 @@
             </li>
             <?endforeach;?>
         </ul>
+        <?else : ?>
+            Список пуст
         <?endif;?>
     </div>
 </div>

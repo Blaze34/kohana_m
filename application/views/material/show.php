@@ -1,11 +1,11 @@
 <script type="text/javascript">
     swfobject.embedSWF("/web/swf/player.swf", "player", "650", "440", "9.0.0", "/web/swf/expressInstall.swf", {begin: '<?=$material->start?>', end: '<?=$material->end?>', vid: '<?=$material->video?>'});
 </script>
-
+<?$parent = Jelly::query('category')->select_column(array('name', 'id'))->where('id', '=', $material->category->parent_id)->limit(1)->select()?>
 <ul class="breadcrumb">
-    <li><a href="#">Удары</a> <span class="divider">/</span></li>
-    <li><a href="#">Ваншоты</a> <span class="divider">/</span></li>
-    <li class="active">Апперкот</li>
+    <li><a href="<?=Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $parent->id()))?>"><?=$parent->name?></a> <span class="divider">/</span></li>
+    <li><a href="<?=Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $material->category->id()))?>"><?=$material->category->name?></a> <span class="divider">/</span></li>
+    <li class="active"><?=$material->title?></li>
 </ul>
 
 <div class="sections">
@@ -134,71 +134,21 @@
 
 </div><!-- /span8 -->
 <div class="span4 related_videos">
-    <div class="media">
-        <a class="pull-left thumbnail" href="#">
-            <img class="media-object" data-src="holder.js/120x70">
-        </a>
-        <div class="media-body">
-            <h4 class="media-heading"><a href="#">С вертухи в щи</a></h4>
-            <a href="#"><small>Terminator777</small></a>
-        </div>
-        <div class="video-extras-likes-dislikes pull-left">
-            <div class="likes-count pull-left"><i class="icon icon-thumbs-up"></i><span>27592</span></div>
-            <div class="dislikes-count pull-left"><i class="icon icon-thumbs-down"></i><span>2998</span></div>
-        </div>
-    </div><!-- /media -->
-    <div class="media">
-        <a class="pull-left thumbnail" href="#">
-            <img class="media-object" data-src="holder.js/120x70">
-        </a>
-        <div class="media-body">
-            <h4 class="media-heading"><a href="#">С вертухи в щи asdasd as asdasd asd as</a></h4>
-            <a href="#"><small>Terminator777</small></a>
-        </div>
-        <div class="video-extras-likes-dislikes pull-left">
-            <div class="likes-count pull-left"><i class="icon icon-thumbs-up"></i><span>27592</span></div>
-            <div class="dislikes-count pull-left"><i class="icon icon-thumbs-down"></i><span>2998</span></div>
-        </div>
-    </div><!-- /media -->
-    <div class="media">
-        <a class="pull-left thumbnail" href="#">
-            <img class="media-object" data-src="holder.js/120x70">
-        </a>
-        <div class="media-body">
-            <h4 class="media-heading"><a href="#">С вертухи в щи</a></h4>
-            <a href="#"><small>Terminator777</small></a>
-        </div>
-        <div class="video-extras-likes-dislikes pull-left">
-            <div class="likes-count pull-left"><i class="icon icon-thumbs-up"></i><span>27592</span></div>
-            <div class="dislikes-count pull-left"><i class="icon icon-thumbs-down"></i><span>2998</span></div>
-        </div>
-    </div><!-- /media -->
-    <div class="media">
-        <a class="pull-left thumbnail" href="#">
-            <img class="media-object" data-src="holder.js/120x70">
-        </a>
-        <div class="media-body">
-            <h4 class="media-heading"><a href="#">С вертухи в щи</a></h4>
-            <a href="#"><small>Terminator777</small></a>
-        </div>
-        <div class="video-extras-likes-dislikes pull-left">
-            <div class="likes-count pull-left"><i class="icon icon-thumbs-up"></i><span>27592</span></div>
-            <div class="dislikes-count pull-left"><i class="icon icon-thumbs-down"></i><span>2998</span></div>
-        </div>
-    </div><!-- /media -->
-    <div class="media">
-        <a class="pull-left thumbnail" href="#">
-            <img class="media-object" data-src="holder.js/120x70">
-        </a>
-        <div class="media-body">
-            <h4 class="media-heading"><a href="#">С вертухи в щи</a></h4>
-            <a href="#"><small>Terminator777</small></a>
-        </div>
-        <div class="video-extras-likes-dislikes pull-left">
-            <div class="likes-count pull-left"><i class="icon icon-thumbs-up"></i><span>27592</span></div>
-            <div class="dislikes-count pull-left"><i class="icon icon-thumbs-down"></i><span>2998</span></div>
-        </div>
-    </div><!-- /media -->
+    <?foreach ($similar['similar'] as $s):?>
+        <div class="media">
+            <a class="pull-left thumbnail" href="<?=Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $s->id()))?>">
+                <img class="media-object" src="/<?=$s->thumb()?>" width="120">
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading"><a href="<?=Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $s->id()))?>"><?=Text::limit_words($s->title, 6)?></a></h4>
+                <a href="<?=Route::url('default', array('controller' => 'material', 'action' => 'user', 'id' => $s->user->id()))?>"><small><?=$s->user->firstname?></small></a>
+            </div>
+            <div class="video-extras-likes-dislikes pull-left">
+                <div class="likes-count pull-left"><i class="icon icon-thumbs-up"></i><span><?=$similar['votes'][$s->id()]['like'] ? $similar['votes'][$s->id()]['like'] : 0?></span></div>
+                <div class="dislikes-count pull-left"><i class="icon icon-thumbs-down"></i><span><?=$similar['votes'][$s->id()]['dislike'] ? $similar['votes'][$s->id()]['dislike'] : 0?></span></div>
+            </div>
+        </div><!-- /media -->
+    <?endforeach;?>
 </div>
 </div>
 </div>

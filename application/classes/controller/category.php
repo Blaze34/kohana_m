@@ -119,20 +119,24 @@ class Controller_Category extends Controller_Web {
 
     public function action_show()
     {
+
         $category = Jelly::factory('category', $this->request->param('id'));
+
         if ($category->loaded())
         {
             if ($category->parent_id)
             {
                 $this->title($category->name, FALSE);
 
-                $materials = Jelly::query('material')->where('category', '=', $category->id())->select_all();
-                $this->view('/material/list')->materials = $materials;
+                $materials = Jelly::query('material')->with('user')->where('category', '=', $category->id())->pagination()->select_all();
+
+                $this->view()->materials = $materials;
+
+                $category = Jelly::factory('category', $category->parent_id);
             }
-            else
-            {
-                $this->view()->category = $category;
-            }
+
+            $this->view()->category = $category;
+            $this->view()->children = $category->get('children')->order_by('sort')->order_by('id')->select();
         }
         else
         {
@@ -182,4 +186,5 @@ class Controller_Category extends Controller_Web {
         }
         $this->view()->categories = $struct;
     }
+
 }

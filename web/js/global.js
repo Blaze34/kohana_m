@@ -90,12 +90,7 @@ $(function(){
                 ]
             });
         }
-    });
-
-    $('#main_tabs a').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-    });
+    })
     $('.bxslider > ul').bxSlider({
         minSlides: 5,
         maxSlides: 5,

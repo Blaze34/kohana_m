@@ -94,7 +94,7 @@ class Controller_Material extends Controller_Web {
 
 	public function action_parse()
 	{
-		$_GET['url'] = 'http://www.youtube.com/watch?v=3CCFufefe9E';
+//		$_GET['url'] = 'http://www.youtube.com/watch?v=3CCFufefe9E';
 
 		if ($url = Arr::get($_GET, 'url'))
 		{
@@ -357,6 +357,7 @@ class Controller_Material extends Controller_Web {
                 }
 
                 $this->view()->material = $material;
+                $this->view()->similar = $this->get_similar($material);
                 $this->view()->mpoll = $mpoll;
                 $this->view()->cpoll = $cpoll;
                 $this->view()->material_user_vote = $material_user_vote;
@@ -424,8 +425,6 @@ class Controller_Material extends Controller_Web {
                         }
                     }
                 }
-//                echo Debug::vars($polls);
-//                exit;
 
                 $this->view()->materials = $materials;
                 $this->view()->owner = $user;
@@ -434,14 +433,117 @@ class Controller_Material extends Controller_Web {
             }
             else
             {
-//                $this->errors('global.no_exist')->redirect('/');
+                $this->errors('global.no_exist')->redirect('/');
             }
         }
         else
         {
-//            $this->errors('global.no_params')->redirect('/');
+            $this->errors('global.no_params')->redirect('/');
+        }
+    }
+
+    public function action_popular()
+    {
+        $materials = Jelly::query('material')->pagination()->select_all();
+
+        $mids = array();
+
+        foreach ($materials as $m)
+        {
+            $mids[] = $m->id();
         }
 
+        if($materials)
+        {
+            $comments = Jelly::query('comment')
+                ->with('material')
+                ->select_column(array(array(DB::expr('COUNT(comments.id)'), 'count')))
+                ->group_by('material_id')
+                ->select_all()->as_array('material');
+
+            if (sizeof($comments))
+            {
+                $polls_arr = Jelly::query('poll')
+                    ->select_column(array(array(DB::expr('COUNT(id)'), 'count'), 'type_id', 'value'))
+                    ->where('type', '=', Jelly::factory('material')->get_resource_id())
+                    ->where('type_id', 'IN', $mids)
+                    ->group_by('type_id', 'value')
+                    ->select_all()->as_array();
+
+                if(sizeof($polls_arr))
+                {
+                    foreach ($polls_arr as $item)
+                    {
+                        if ($item['value'])
+                        {
+                            $polls[$item['type_id']]['like'] = $item['count'];
+                        }
+                        else
+                        {
+                            $polls[$item['type_id']]['dislike'] = $item['count'];
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->view()->materials = $materials;
+        $this->view()->comments = $comments;
+        $this->view()->polls = $polls;
+    }
+
+    protected function get_similar($material)
+    {
+        $similar_ids = Tags::similar($material);
+
+        $similar = $output = $votes = array();
+
+        if (sizeof($similar_ids))
+        {
+            $similar = Jelly::query('material')
+                ->where('id', 'IN', $similar_ids)
+                ->select_all();
+        }
+        else
+        {
+            $similar = Jelly::query('material')
+                ->where('category', '=', $material->category->id())
+                ->where('id', '!=', $material->id())
+                ->limit(5)->select_all();
+        }
+
+        if(sizeof($similar))
+        {
+            foreach ($similar as $s)
+            {
+                $sids[] = $s->id();
+            }
+
+            $polls_arr = Jelly::query('poll')
+                ->select_column(array(array(DB::expr('COUNT(id)'), 'count'), 'type_id', 'value'))
+                ->where('type', '=', Jelly::factory('material')->get_resource_id())
+                ->where('type_id', 'IN', $sids)
+                ->group_by('type_id', 'value')
+                ->select_all()->as_array();
+
+            if(sizeof($polls_arr))
+            {
+                foreach ($polls_arr as $item)
+                {
+                    if ($item['value'])
+                    {
+                        $votes[$item['type_id']]['like'] = $item['count'];
+                    }
+                    else
+                    {
+                        $votes[$item['type_id']]['dislike'] = $item['count'];
+                    }
+                }
+            }
+        }
+
+
+        return $output = array('similar' => $similar, 'votes' => $votes);
     }
 
 	protected function save_tmp_file($file)

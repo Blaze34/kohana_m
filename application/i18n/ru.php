@@ -51,7 +51,8 @@ return array(
 	'title.category.edit' => 'Редактирование категории',
 	'title.category.show' => 'Раздел',
 	'title.material.user' => 'Метриал пользователя',
-	'title.material.add_video' => 'Добавить видео',
+	'title.material.add_video' => 'Добавление видео',
+	'title.material.add_gif' => 'Добавление GIF',
 
 	'menu.user.list' => 'Список пользователей',
 	'menu.blog' => 'Блог',
