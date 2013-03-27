@@ -496,7 +496,7 @@ class Controller_Material extends Controller_Web {
     {
         $similar_ids = Tags::similar($material);
 
-        $similar = $output = $votes = array();
+        $output = $votes = array();
 
         if (sizeof($similar_ids))
         {
@@ -510,6 +510,14 @@ class Controller_Material extends Controller_Web {
                 ->where('category', '=', $material->category->id())
                 ->where('id', '!=', $material->id())
                 ->limit(5)->select_all();
+
+            if (! sizeof($similar))
+            {
+                $similar = Jelly::query('material')
+                    ->where('id', '!=', $material->id())
+                    ->order_by('date')
+                    ->limit(5)->select_all();
+            }
         }
 
         if(sizeof($similar))

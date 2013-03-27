@@ -17,7 +17,7 @@
         <li class="active"><a href="#find_video"><i class="bt_icon icon-search"></i>Искать видео</a></li>
         <li class=""><a href="#cat_video"><i class="bt_icon icon-film"></i>Нарезать видео</a></li>
     </ul>
-    <a class="pull-right" href="<?=Route::url('default', array('controller' => 'material', 'action' => 'add_gif'))?>">Добавить гиф</a>
+    <a class="btn btn-file pull-right" href="<?=Route::url('default', array('controller' => 'material', 'action' => 'add_gif'))?>"><i class="icon-picture"></i> Добавить гиф</a>
     <div class="clearfix"></div>
     <div class="tab-content">
         <div class="tab-pane active" id="find_video">
