@@ -158,10 +158,6 @@ class Controller_Category extends Controller_Web {
         }
     }
 
-    private function get_comments($category)
-    {
-
-    }
 
     public function action_delete()
     {

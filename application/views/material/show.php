@@ -3,6 +3,7 @@
 </script>
 <?$parent = Jelly::query('category')->select_column(array('name', 'id'))->where('id', '=', $material->category->parent_id)->limit(1)->select()?>
 <ul class="breadcrumb">
+    <li><a href="/">Главная</a> <span class="divider">/</span></li>
     <li><a href="<?=Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $parent->id()))?>"><?=$parent->name?></a> <span class="divider">/</span></li>
     <li><a href="<?=Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $material->category->id()))?>"><?=$material->category->name?></a> <span class="divider">/</span></li>
     <li class="active"><?=$material->title?></li>
