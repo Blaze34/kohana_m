@@ -96,7 +96,7 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 .media_items{overflow: hidden;}
 .media{padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid #e8e8e8;}
 .media-body{font-size: 1em; line-height: 1.2em;}
-.media-heading{font-size: 1.2em; margin: 0 0 0;}
+.media-heading{font-size: 1.1em; margin: 0 0 0;}
 .media .author{display: inline-block; width: 100%;}
 .media .author ul{margin: 0; padding: 0; font-size: .9em; padding-left: 10px;}
 .media .author li{float: left; }

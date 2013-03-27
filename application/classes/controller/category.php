@@ -119,24 +119,34 @@ class Controller_Category extends Controller_Web {
 
     public function action_show()
     {
-
         $category = Jelly::factory('category', $this->request->param('id'));
+        $pid = $category->id();
 
         if ($category->loaded())
         {
+            $this->title($category->name, FALSE);
+            $comments = $materials = $children = array();
+
             if ($category->parent_id)
             {
-                $this->title($category->name, FALSE);
-
                 $materials = Jelly::query('material')->with('user')->where('category', '=', $category->id())->pagination()->select_all();
-
-                $this->view()->materials = $materials;
-
+                $comments = Jelly::query('comment')->with('material')->where('category_id', '=', $category->id())->select_all();
                 $category = Jelly::factory('category', $category->parent_id);
+                if(! $comments->count())
+                {
+                    $ids = array();
+                    foreach ($category->children as $c)
+                    {
+                        $ids[] = $c->id();
+                    }
+                    $comments = Jelly::query('comment')->with('material')->where('category_id', 'IN', $ids)->select_all();
+                }
+
+
             }
 
-            $this->view()->category = $category;
-            $this->view()->children = $category->get('children')->order_by('sort')->order_by('id')->select();
+            $children = $category->get('children')->order_by('sort')->order_by('id')->select();
+            $this->view(array('materials' => $materials, 'category' => $category, 'children' => $children, 'comments' => $comments));
         }
         else
         {
@@ -146,6 +156,11 @@ class Controller_Category extends Controller_Web {
 
 //            $this->error('global.no_exists')->redirect(Route::url('default', array('controller' => 'category')));
         }
+    }
+
+    private function get_comments($category)
+    {
+
     }
 
     public function action_delete()
