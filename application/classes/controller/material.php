@@ -292,77 +292,21 @@ class Controller_Material extends Controller_Web {
                 $this->title($material->title, FALSE);
 
                 $comments = $material->get('comments')->with('user')->order_by('date', 'DESC')->pagination('comments')->select_all();
-                $material_poll = Jelly::query('poll')
-                    ->select_column(array(array(DB::expr('COUNT(id)'), 'count'), 'value'))
-                    ->where('type_id', '=', $id)
-                    ->where('type', '=', $material->get_resource_id())
-                    ->group_by('value')
-                    ->select_all()->as_array('value', 'count');
 
+                list($material_user_vote, $mpoll) = $this->get_material_votes ($id, $material);
 
-                $material_user_vote = Jelly::query('poll')
-                    ->where('user_id', '=', $this->user->id())
-                    ->where('type_id', '=', $id)
-                    ->where('type', '=', $material->get_resource_id())
-                    ->limit(1)
-                    ->select();
+                list($cpoll, $comments_user_vote) = $this->get_votes_comments ($comments);
 
-                $ids = $mpoll = $cpoll = array();
+                $this->view(array(
+                    'material' => $material,
+                    'comments' => $comments,
+                    'similar' => $this->get_similar($material),
+                    'mpoll' => $mpoll,
+                    'cpoll' => $cpoll,
+                    'material_user_vote' => $material_user_vote,
+                    'comments_user_vote' => $comments_user_vote,
+                ));
 
-                $mpoll = array(
-                    'dislike' => Arr::get($material_poll, '0', 0),
-                    'like' => Arr::get($material_poll, '1', 0)
-                );
-
-                foreach ($comments as $c)
-                {
-                    $ids[] = $c->id();
-                }
-
-                if(sizeof($ids))
-                {
-                    $comment_poll = Jelly::query('poll')
-                        ->select_column(array(array(DB::expr('COUNT(id)'), 'count'), 'type_id', 'value'))
-                        ->where('type_id', 'IN', $ids)
-                        ->where('type', '=', Jelly::factory('comment')->get_resource_id())
-                        ->group_by('type_id', 'value')
-                        ->select_all()->as_array();
-
-                    $comments_user_vote_db = Jelly::query('poll')
-                        ->select_column(array('value', 'type_id'))
-                        ->where('type_id', 'IN', $ids)
-                        ->where('user_id', '=', $this->user->id())
-                        ->where('type', '=', Jelly::factory('comment')->get_resource_id())
-                        ->select_all()->as_array('type_id', 'value');
-
-                    foreach ($comment_poll as $item)
-                    {
-                        if ($item['value'])
-                        {
-                            $cpoll[$item['type_id']]['like'] = $item['count'];
-                        }
-                        else
-                        {
-                            $cpoll[$item['type_id']]['dislike'] = $item['count'];
-                        }
-                    }
-
-                    if (sizeof($comments_user_vote_db))
-                    {
-                        foreach ($comments_user_vote_db as $id => $value)
-                        {
-                            $comments_user_vote[$id][ $value ? 'like' : 'dislike' ] = TRUE;
-                        }
-                    }
-                }
-
-                $this->view()->material = $material;
-                $this->view()->similar = $this->get_similar($material);
-                $this->view()->mpoll = $mpoll;
-                $this->view()->cpoll = $cpoll;
-                $this->view()->material_user_vote = $material_user_vote;
-                $this->view()->comments_user_vote = $comments_user_vote;
-                $this->view()->comments = $comments;
 			}
 			else
 			{
@@ -374,6 +318,89 @@ class Controller_Material extends Controller_Web {
 			$this->errors('global.no_params')->redirect('/');
 		}
 	}
+
+    private  function get_material_votes ($id, $material)
+    {
+        if ($id AND sizeof($material))
+        {
+            $material_poll = $mpoll = $material_user_vote = array();
+
+            $material_poll = Jelly::query ('poll')
+                ->select_column (array(array(DB::expr ('COUNT(id)'), 'count'), 'value'))
+                ->where ('type_id', '=', $id)
+                ->where ('type', '=', $material->get_resource_id ())
+                ->group_by ('value')
+                ->select_all ()->as_array ('value', 'count');
+
+            if (sizeof($material_poll))
+            {
+
+                $material_user_vote = Jelly::query ('poll')
+                    ->where ('user_id', '=', $this->user->id ())
+                    ->where ('type_id', '=', $id)
+                    ->where ('type', '=', $material->get_resource_id ())
+                    ->limit (1)
+                    ->select ();
+
+                $mpoll = array(
+                    'dislike' => Arr::get ($material_poll, '0', 0),
+                    'like' => Arr::get ($material_poll, '1', 0)
+                );
+            }
+
+            return array($material_user_vote, $mpoll);
+        }
+
+        return false;
+    }
+
+    protected function get_votes_comments ($comments)
+    {
+        $ids = $cpoll = $comments_user_vote = array();
+        foreach ($comments as $c)
+        {
+            $ids[] = $c->id ();
+        }
+
+        if (sizeof ($ids))
+        {
+            $comment_poll = Jelly::query ('poll')
+                ->select_column (array(array(DB::expr ('COUNT(id)'), 'count'), 'type_id', 'value'))
+                ->where ('type_id', 'IN', $ids)
+                ->where ('type', '=', Jelly::factory ('comment')->get_resource_id ())
+                ->group_by ('type_id', 'value')
+                ->select_all ()->as_array ();
+
+            $comments_user_vote_db = Jelly::query ('poll')
+                ->select_column (array('value', 'type_id'))
+                ->where ('type_id', 'IN', $ids)
+                ->where ('user_id', '=', $this->user->id ())
+                ->where ('type', '=', Jelly::factory ('comment')->get_resource_id ())
+                ->select_all ()->as_array ('type_id', 'value');
+
+            foreach ($comment_poll as $item)
+            {
+                if ($item['value'])
+                {
+                    $cpoll[$item['type_id']]['like'] = $item['count'];
+                }
+                else
+                {
+                    $cpoll[$item['type_id']]['dislike'] = $item['count'];
+                }
+            }
+
+            if (sizeof ($comments_user_vote_db))
+            {
+                foreach ($comments_user_vote_db as $id => $value)
+                {
+                    $comments_user_vote[$id][$value ? 'like' : 'dislike'] = TRUE;
+                }
+            }
+        }
+
+        return array($cpoll, $comments_user_vote);
+    }
 
     public function action_user()
     {
@@ -515,7 +542,7 @@ class Controller_Material extends Controller_Web {
             {
                 $similar = Jelly::query('material')
                     ->where('id', '!=', $material->id())
-                    ->order_by('date')
+                    ->order_by('date', 'DESC')
                     ->limit(5)->select_all();
             }
         }
