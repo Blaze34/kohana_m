@@ -30,8 +30,8 @@
             <div class="dislikes-count pull-left"><i class="icon icon-thumbs-down"></i><span><?=$mpoll['dislike']?></span></div>
         </div>
         <div class="buttons pull-right">
-            <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-success<?=($material_user_vote->loaded() AND ($material_user_vote->value == TRUE)) ? ' disabled':''?>" type="button"><i class="icon icon-thumbs-up icon-white"></i>Нравится</a>
-            <a href="<?=Route::url('vote', array('act' => 'dislike', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-warning<?=($material_user_vote->loaded() AND ($material_user_vote->value == FALSE)) ? ' disabled':''?>" type="button"><i class="icon icon-thumbs-down icon-white"></i>Не нравится</a>
+            <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-success<?=(sizeof($material_user_vote) AND ($material_user_vote->value == TRUE)) ? ' disabled':''?>" type="button"><i class="icon icon-thumbs-up icon-white"></i>Нравится</a>
+            <a href="<?=Route::url('vote', array('act' => 'dislike', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-warning<?=(sizeof($material_user_vote) AND ($material_user_vote->value == FALSE)) ? ' disabled':''?>" type="button"><i class="icon icon-thumbs-down icon-white"></i>Не нравится</a>
         </div>
         <div class="video-extras-sparkbars">
             <?$total = $mpoll['like'] + $mpoll['dislike']?>

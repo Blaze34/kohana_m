@@ -55,7 +55,7 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 .thum_item .item_txt{display: block; font-size: .8em; line-height: 1.2em; padding: 5px 2px; height: 22px; overflow: hidden}
 .thum_item .item_stat{float: left; font-weight: bold; font-size: .8em; line-height: 1.2em; padding: 0 2px}
 .thum_item .item_stat i{margin-left: 3px;}
-.txt_item{display: inline-block; margin-bottom: 20px; overflow: hidden;}
+.txt_item{display: inline-block; margin-bottom: 20px; overflow: hidden; width: 100%}
 .txt_item .item_header{font-size: 1em; line-height: 1.4em;}
 .txt_item .item_body{font-size: .9em; ;line-height: 1.2em; padding: 3px 0; }
 .txt_item .item_footer{font-size: .9em; line-height: 1.4em; font-weight: bold;}

@@ -10,8 +10,6 @@ class Controller_Poll extends Controller_Web {
             {
                 $value = (bool) ($act == 'like');
 
-                echo Debug::vars($value, $type, $type_id);
-
                 if(Jelly::query($type)->where('id', '=', $type_id)->count())
                 {
                     $poll = Jelly::query('poll')
