@@ -45,6 +45,8 @@ class Controller_Static extends Controller_Web {
     {
         if ($this->allowed())
         {
+            $this->js('jquery.tinymce.js');
+
             $static = Jelly::factory('static');
             if ($_POST)
             {
@@ -79,6 +81,8 @@ class Controller_Static extends Controller_Web {
     {
         if ($this->allowed())
         {
+            $this->js('jquery.tinymce.js');
+
             $static = Jelly::factory('static', $this->request->param('id'));
             if ($static->loaded())
             {
