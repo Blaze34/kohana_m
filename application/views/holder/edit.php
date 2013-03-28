@@ -1,41 +1,32 @@
-<a class="btn btn-info adm_btn" href="<?=Route::url('static')?>"><?=__('global.go_back')?></a>
+<h3><?=__('title.holder.edit')?> - <?=$holder->title?><a class="btn btn-info pull-right" href="<?=Route::url('default', array('controller' => 'holder'))?>"><?=__('global.go_back')?></a></h3>
+
 <div class="form_add">
     <?=Form::open(NULL, array('class' => 'form-horizontal'))?>
-<div class="control-group">
-    <label class="control-label"><?=__('static.title')?></label>
-    <div class="controls">
-        <input type="text" name="title" value="<?=$static->title?>">
-    </div>
-</div>
-<div class="control-group">
-    <label class="control-label"><?=__('static.alias')?></label>
-    <div class="controls">
-        <div class="alias_label input-prepend input-append">
-            <span class="add-on"><?=URL::site('', TRUE)?></span>
-            <input class="alias" type="text" name="alias" value="<?=$static->alias?>">
-            <span class="add-on">.html</span>
+    <div class="control-group">
+        <label class="control-label"><?=__('category.field.name')?></label>
+        <div class="controls">
+            <input type="text" name="title" value="<?=$holder->title?>">
         </div>
     </div>
-</div>
-<div class="control-group">
-    <label class="control-label"><?=__('static.body')?></label>
-    <div class="controls">
-        <textarea class="tinymce" name="body"><?=$static->body?></textarea >
+    <div class="control-group">
+        <label class="control-label"><?=__('holder.field.body')?></label>
+        <div class="controls">
+            <textarea class="tinymce" name="body"><?=$holder->body?></textarea>
+        </div>
     </div>
-</div>
-<div class="control-group">
-    <label class="control-label"><?=__('static.active')?></label>
-    <div class="controls">
-        <input type="checkbox" name="active" <?=$static->active ? 'checked="checked"' : '' ?>>
+    <div class="control-group">
+        <label class="control-label"><?=__('holder.field.activity')?></label>
+        <div class="controls">
+            <input type="checkbox" name="activity" <?=$holder->activity ? 'checked="checked"' : '' ?>>
+        </div>
     </div>
-</div>
-<div class="control-group">
-    <div class="controls">
-        <button type="submit" class="btn"><?=__('static.save')?></button>
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" class="btn"><?=__('static.save')?></button>
+        </div>
     </div>
-</div>
 
-<?=Form::close()?>
+    <?=Form::close()?>
 </div>
 
 <script type="text/javascript">
@@ -58,4 +49,3 @@
         });
     });
 </script>
-

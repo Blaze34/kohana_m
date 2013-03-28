@@ -31,6 +31,8 @@ return array(
 	'global.deleted' => 'Запись успешно удалена',
 	'global.anonymous' => 'Аноним',
 	'global.delete' => 'Удалить',
+	'global.add' => 'Добавить',
+	'global.adit' => 'Редактировать',
 
     'error.captcha' => 'Неправильно введена капча',
     'error.delete' => 'Ошибка при удалении',
@@ -50,6 +52,11 @@ return array(
     'title.menu.add_link' => 'Добавление пункта меню',
     'title.menu.edit_menu' => 'Редактирование меню',
     'title.menu.edit_link' => 'Редактирование пункта',
+
+    'title.holder.index' => 'Включаемые области',
+    'title.holder.add' => 'Добавление вкл. области',
+    'title.holder.edit' => 'Редактирование вкл. области',
+
     'title.static.edit' => 'Редактирование страницы',
     'title.static.add' => 'Добавление страницы',
     'title.category.index' => 'Категории',
@@ -59,6 +66,11 @@ return array(
 	'title.material.user' => 'Метриал пользователя',
 	'title.material.add_video' => 'Добавление видео',
 	'title.material.add_gif' => 'Добавление GIF',
+
+    'holder.field.title' => 'Название включаемой области',
+    'holder.field.body' => 'Содержимое включаемой области',
+    'holder.field.activity' => 'Вкл/Выкл',
+    'holder.field.code' => 'Код',
 
 	'menu.user.list' => 'Список пользователей',
 	'menu.adm' => 'Админка',
@@ -71,6 +83,7 @@ return array(
     'menu.btn.add_link' => 'Добавить пункт меню',
 
     'adm.users' => 'Пользователи',
+    'adm.holder' => 'Включаемые области',
     'adm.comments' => 'Комментарии',
     'adm.publications' => 'Публикации',
     'adm.statics' => 'Страницы',

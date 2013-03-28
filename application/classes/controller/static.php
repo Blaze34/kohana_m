@@ -83,6 +83,7 @@ class Controller_Static extends Controller_Web {
         {
             $this->js('jquery.tinymce.js');
 
+
             $static = Jelly::factory('static', $this->request->param('id'));
             if ($static->loaded())
             {
