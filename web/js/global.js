@@ -91,6 +91,7 @@ $(function(){
             });
         }
     })
+
     $('.bxslider > ul').bxSlider({
         minSlides: 5,
         maxSlides: 5,
@@ -98,6 +99,21 @@ $(function(){
         infiniteLoop: true,
         hideControlOnEnd: false,
         pager: false,
-        autoHover: true,
+        autoHover: true
     });
+
+    var confirmDelete = $('#confirmDelete');
+
+    $('.alert_delete').on('click', function(e){
+        e.preventDefault();
+        var href = $(this).data('href');
+        if (href){
+            confirmDelete.modal('show');
+            confirmDelete.find('.modal-footer a').attr('href', href)
+        }
+    });
+
+    confirmDelete.on('hidden', function (e){
+        $(this).find('.modal-footer a').attr('href', 'javascript:;')
+    })
 })

@@ -12,7 +12,7 @@
     <div class="controls">
         <div class="alias_label input-prepend input-append">
             <span class="add-on"><?=URL::site('', TRUE)?></span>
-            <input class="span2" type="text" name="alias" value="<?=$static->alias?>">
+            <input class="alias" type="text" name="alias" value="<?=$static->alias?>">
             <span class="add-on">.html</span>
         </div>
     </div>

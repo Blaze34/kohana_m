@@ -1,6 +1,9 @@
 <div id="footer">
     <div class="top_part">
         <div class="container">
+            <div class="navbar pull-left top_menu">
+                <?Menu::show(3)?>
+            </div>
             <table class="soc_links">
                 <tr>
                     <td><a href="#"><img src="#" alt=""></a></td>                    
@@ -29,3 +32,14 @@
         </div>
     </div>
 </div><!-- /footer -->
+<div id="confirmDelete" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Подтвердите удаление!</h3>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true"><?=__('global.cancel')?></button>
+        <a href="javascript:;" class="btn btn-primary"><?=__('global.confirm')?></a>
+    </div>
+</div>

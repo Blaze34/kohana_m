@@ -16,7 +16,7 @@
                 <td><?=HTML::anchor(Route::url('static_view', array('alias' => $s->alias)))?></td>
                 <td>
                     <a class="btn btn-mini btn-warning" href="<?=Route::url('static', array('action' => 'edit', 'id' => $s->id))?>"><?=__('static.edit')?></a>
-                    <a class="btn btn-mini btn-danger" href="<?=Route::url('static', array('action' => 'delete', 'id' => $s->id))?>"><?=__('static.delete')?></a>
+                    <a class="btn btn-mini btn-danger alert_delete"  href="javascript:;" data-href="<?=Route::url('static', array('action' => 'delete', 'id' => $s->id))?>"><?=__('static.delete')?></a>
                 </td>
             </tr>
         <?php endforeach; ?>

@@ -25,6 +25,7 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
     margin-bottom: 15px;
     padding: 7px 9px;
 }
+.form_add .form-horizontal input[type="text"].alias{width: auto}
 .recover{margin-top: 5px}
 .register_block, .edit_profile{width: 600px; margin: 0 auto; background: #ffffff; padding: 20px 30px; -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10pz;: 10px }
 .register_block .form-signin-heading{text-align: left; padding-bottom: 25px}
@@ -74,7 +75,7 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 #footer .btm_part{background: #111111;}
 #footer .soc_links{float: right;}
 .soc_links td{padding: 5px 3px;}
-#footer .soc_links td{ padding: 40px 10px 20px;}
+#footer .soc_links td{ padding: 0 10px 0;}
 #footer .brands{width: 100%; text-align: center;}
 #footer .brands td{text-align: center; padding: 15px 3px;}
 

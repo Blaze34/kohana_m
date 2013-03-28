@@ -4,13 +4,7 @@
         <a href="/"><img src="/web/img/template/logo.png" alt="mmatica"></a>
     </div>
     <div class="navbar pull-left top_menu">
-        <div class="navbar-inner">
-            <ul class="nav">
-                <li><a href="#"><?=__('menu.blog')?></a></li>
-                <li><a href="#"><?=__('menu.about')?></a></li>
-                <li><a href="#"><?=__('menu.contacts')?></a></li>
-            </ul>
-        </div>
+        <?Menu::show(1)?>
     </div>
     <div class="navbar pull-right user_panel">
         <div class="navbar-inner">

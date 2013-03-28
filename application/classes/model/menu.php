@@ -10,6 +10,7 @@ class Model_Menu extends Jelly_Model implements Acl_Resource_Interface {
                 'rules' => array(
                     array('not_empty'),
                 ),
+                'unique' => TRUE,
                 'label' => 'menu.field.name'
             )),
 

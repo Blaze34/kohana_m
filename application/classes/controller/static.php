@@ -31,6 +31,7 @@ class Controller_Static extends Controller_Web {
         $static = Jelly::query('static')->where('alias', '=', $alias)->limit(1)->select();
         if ($static->loaded() AND $static->active)
         {
+            $this->title($static->title, FALSE);
             $this->view()->static = $static;
         }
         else
