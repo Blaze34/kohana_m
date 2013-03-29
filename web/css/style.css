@@ -35,13 +35,14 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 
 .main_tabs form{margin-bottom: 0;}
 .main_tabs .nav{margin-bottom: 0; border-bottom: 0 none;}
-.main_tabs .tab-content{padding: 20px 0; background: #eeeeee; border: 1px solid #ddd;
+.main_tabs .tab-content{padding: 20px 0; background: #eeeeee; border: 1px solid #ddd; overflow: inherit;
     -webkit-border-radius: 0 7px 7px 7px; -moz-border-radius: 0 7px 7px 7px; border-radius: 0 7px 7px 7px;}
 .main_tabs .input-append{text-align: center; display: block;}
 .main_tabs .input-append input{width: 790px; padding: 11px 19px;}
 .main_tabs .bt_icon{margin-right: 5px;}
 .main_tabs .nav-tabs > .active > a, .main_tabs .nav-tabs > .active > a:hover,
     .main_tabs .nav-tabs > .active > a:focus{background: #eeeeee; color: #2d2d2d;}
+
 .bxslider{margin: 30px 0}
 .bxslider > ul{padding: 0; margin: 0;}
 .bxslider li ul{margin-left: 10px;}

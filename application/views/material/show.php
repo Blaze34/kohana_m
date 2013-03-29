@@ -22,7 +22,11 @@
 <?$user = A2::instance()->get_user();?>
 <div class="span8">
     <div class="player">
-        <div id="player"></div>
+        <?if($material->video):?>
+            <div id="player"></div>
+        <?else:?>
+            <img src="/<?=$material->file()?>" alt=""/>
+        <?endif;?>
     </div>
     <div class="views-info">
         <div class="video-extras-likes-dislikes pull-left">
@@ -39,7 +43,13 @@
             <div class="video-extras-sparkbar-dislikes" style="width: <?=$mpoll['dislike'] * 100 / $total?>%;"></div>
         </div>
     </div>
-
+    <?if ($material->tags):?>
+        <ul class="tagit_list">
+            <?foreach ($material->tags as $t):?>
+                <li class="tagit-choice"><a href="<?=Route::url('default', array('controller' => 'tag', 'action' => 'show')).'?q='.urldecode($t->name)?>" ><?=$t->name?></a></li>
+            <?endforeach?>
+        </ul>
+    <?endif;?>
     <div class="user_header">
         <div class="pull-left">
             <i class="icon-user"></i>
@@ -121,7 +131,7 @@
                                 <i class="icon icon-thumbs-up icon-white"></i><?=($cpoll[$c->id()]['like'] ? $cpoll[$c->id()]['like']:'0')?>
                             </a>
                             <a href="<?=Route::url('vote', array('act' => 'dislike', 'type' => $c->get_resource_id(), 'id' => $c->id()))?>" class="btn btn-mini btn-warning<?=($comments_user_vote[$c->id()]['dislike']) ? ' disabled' : ''?>">
-                                <i class="icon icon-thumbs-up icon-white"></i><?=($cpoll[$c->id()]['dislike']?$cpoll[$c->id()]['dislike']:0)?>
+                                <i class="icon icon-thumbs-down icon-white"></i><?=($cpoll[$c->id()]['dislike']?$cpoll[$c->id()]['dislike']:0)?>
                             </a>
                         </div>
                     </div>

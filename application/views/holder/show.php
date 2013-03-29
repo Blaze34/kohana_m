@@ -1,3 +1,3 @@
 <div class="well <?=$holder['class']?>" <?=($holder['style']? 'style="'.$holder['style'].'"': '')?>>
-    <?=$holder['body']?>
+    <div style="overflow: hidden"><?=$holder['body']?></div>
 </div>

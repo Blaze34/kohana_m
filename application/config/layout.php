@@ -23,6 +23,7 @@ return array(
             'main' => array(
                 'js' => array(
                     'jquery/1.8.3.min.js',
+                    'jquery/jquery-ui.min.js',
 	                'bootstrap.min.js',
 	                'html5shiv.js',
 	                'bootstrap-datepicker.js',
@@ -33,6 +34,7 @@ return array(
 	                'jquery/noty/themes/default.js',
 	                'swfobject.js',
                     'jquery/jquery.bxslider.min.js',
+                    'tagit/tagit.js',
                 ),
                 'css' => array(
                     'http://fonts.googleapis.com/css?family=Open+Sans:400,700,800&subset=latin,cyrillic-ext',
@@ -40,6 +42,8 @@ return array(
                     'bootstrap.css',
                     'datepicker.css',
                     'jquery.bxslider.css',
+                    'jquery-ui-base-1.8.20.css',
+                    'tagit-theme.css',
                     'style.css',
                 )
             )

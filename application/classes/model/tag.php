@@ -10,9 +10,6 @@ class Model_Tag extends Jelly_Model
 				'rules' => array(
 					'not_empty' => NULL
 				)
-			)),
-			'checked' => Jelly::field('primary', array(
-				'default' => TRUE
 			))
 		));
 	}

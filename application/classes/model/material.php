@@ -83,6 +83,17 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 		return $with_default ? $_config['default'] : NULL;
 	}
 
+    public function file()
+    {
+
+        $_dir = $this->dir('gif');
+
+        $thumb = $_dir.$this->file;
+
+        if (file_exists($thumb))
+            return $thumb;
+    }
+
 	public function get_filename($group)
 	{
 		$_config = Kohana::$config->load('material.'.$group);

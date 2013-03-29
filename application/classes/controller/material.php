@@ -129,6 +129,7 @@ class Controller_Material extends Controller_Web {
 				'user' => $this->user ? $this->user->id() : NULL
 			));
 
+
 			$tmp_file = NULL;
 
 			if ($file AND Upload::not_empty($file) AND Upload::valid($file))
@@ -184,7 +185,7 @@ class Controller_Material extends Controller_Web {
 				}
 				else
 				{
-					$this->errors(__('material.upload.error'));
+					$this->errors('material.upload.error');
 				}
 			}
 		}
@@ -521,15 +522,17 @@ class Controller_Material extends Controller_Web {
 
     protected function get_similar($material)
     {
-        $similar_ids = Tags::similar($material);
+        $similar_materials_by_tags = Tags::similar($material);
 
         $output = $votes = array();
 
-        if (sizeof($similar_ids))
+        if (sizeof($similar_materials_by_tags))
         {
-            $similar = Jelly::query('material')
-                ->where('id', 'IN', $similar_ids)
-                ->select_all();
+//            $similar = Jelly::query('material')
+//                ->where('id', 'IN', $similar_ids)
+//                ->select_all();
+
+            $similar = $similar_materials_by_tags;
         }
         else
         {
