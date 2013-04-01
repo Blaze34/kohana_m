@@ -2,9 +2,9 @@
 
 return array(
 	'last' => array(
-        'count' => 10,
+        'count' => 8,
         'title_limit_words' => 7,
-        'text_limit_words' => 12
+        'text_limit_words' => 10
     ),
 
 );

@@ -4,15 +4,6 @@
             <div class="navbar pull-left top_menu">
                 <?Menu::show(3)?>
             </div>
-            <table class="soc_links">
-                <tr>
-                    <td><a href="#"><img src="#" alt=""></a></td>                    
-                    <td><a href="#"><img src="#" alt=""></a></td>                    
-                    <td><a href="#"><img src="#" alt=""></a></td>                    
-                    <td><a href="#"><img src="#" alt=""></a></td>                    
-                    <td><a href="#"><img src="#" alt=""></a></td>                    
-                </tr>
-            </table>
         </div>
     </div>
     <div class="btm_part">

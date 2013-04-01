@@ -141,8 +141,6 @@ class Controller_Category extends Controller_Web {
                     }
                     $comments = Jelly::query('comment')->with('material')->where('category_id', 'IN', $ids)->select_all();
                 }
-
-
             }
 
             $children = $category->get('children')->order_by('sort')->order_by('id')->select();

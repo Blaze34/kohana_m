@@ -93,6 +93,7 @@ return array(
     'adm.category.edit' => 'Редактирование категории',
 
     'material.field.title' => 'Название',
+    'material.field.category' => 'Категория',
     'material.parse.error' => 'Ошибка, видео не найдено',
     'material.upload.error' => 'Ошибка при добавлении материала',
 
@@ -116,6 +117,8 @@ return array(
     'upload.error.extensions' => 'Загрузка возможна только GIF',
     'upload.error.size' => 'Максимальный размер GIF - 5M',
     'upload.error.response' => 'Страница с указанным URL не доступна',
+
+    'error.vote.unlogin' => 'Что бы голосовать нужно залогиниться',
 
 	'user.field.username' => 'Логин',
 	'user.field.email' => 'Email',

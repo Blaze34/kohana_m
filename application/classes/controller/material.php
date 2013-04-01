@@ -6,7 +6,6 @@ class Controller_Material extends Controller_Web {
 	{
 //        $materials = Jelly::query('material')->with('user')->with('category')->pagination()->select_all();
 
-
 	}
 
 	public function action_add_video()
@@ -41,48 +40,40 @@ class Controller_Material extends Controller_Web {
 
 				if ($_POST)
 				{
-                    $category = $this->get_selected_category($category_options);
-                    if ($category)
+                    $material->set(array(
+                        'title' => Arr::get($_POST, 'title'),
+                        'description' => Arr::get($_POST, 'description'),
+                        'category' => $this->get_selected_category($category_options),
+                        'start' => Arr::get($_POST, 'start'),
+                        'end' => Arr::get($_POST, 'end')
+                    ));
+
+                    try
                     {
-                        $material->set(array(
-                            'title' => Arr::get($_POST, 'title'),
-                            'description' => Arr::get($_POST, 'description'),
-                            'category' => $category,
-                            'start' => Arr::get($_POST, 'start'),
-                            'end' => Arr::get($_POST, 'end')
-                        ));
-
-                        try
-                        {
-                            $material->save();
-                        }
-                        catch (Jelly_Validation_Exception $e)
-                        {
-                            $this->errors($e->errors('errors'));
-                        }
-
-                        if ($material->saved())
-                        {
-                            Tags::add($material);
-
-                            if ($thumb)
-                            {
-                                if ($_tmp = $this->save_tmp_file($thumb))
-                                {
-                                    if ( ! $material->save_thumb($_tmp))
-                                    {
-                                        $material->rm_thumb();
-                                    }
-                                    unlink($_tmp);
-                                }
-                            }
-
-                            $this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
-                        }
+                        $material->save();
                     }
-                    else
+                    catch (Jelly_Validation_Exception $e)
                     {
-                        $this->errors('category.not_selected');
+                        $this->errors($e->errors('errors'));
+                    }
+
+                    if ($material->saved())
+                    {
+                        Tags::add($material);
+
+                        if ($thumb)
+                        {
+                            if ($_tmp = $this->save_tmp_file($thumb))
+                            {
+                                if ( ! $material->save_thumb($_tmp))
+                                {
+                                    $material->rm_thumb();
+                                }
+                                unlink($_tmp);
+                            }
+                        }
+
+                        $this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
                     }
 				}
 
@@ -128,12 +119,11 @@ class Controller_Material extends Controller_Web {
 		{
 			$url = Arr::get($_POST, 'url');
 			$file = Arr::get($_FILES, 'gif');
-            $category = $this->get_selected_category($category_options);
 
             $material->set(array(
                 'title' => Arr::get($_POST, 'title'),
                 'description' => Arr::get($_POST, 'description'),
-                'category' => $category,
+                'category' => $this->get_selected_category($category_options),
                 'user' => $this->user ? $this->user->id() : NULL
             ));
 
@@ -155,52 +145,45 @@ class Controller_Material extends Controller_Web {
 
             if ( ! Arr::get($tmp_file, 'error'))
             {
-                if($category)
+                try
                 {
-                    try
+                    $material->save();
+                }
+                catch(Jelly_Validation_Exception $e)
+                {
+
+                    $this->errors($e->errors('errors'));
+                }
+                if ($material->saved())
+                {
+                    $dir = $material->dir('gif');
+                    if ( ! is_dir($dir))
                     {
-                        $material->save();
+                        mkdir($dir);
                     }
-                    catch(Jelly_Validation_Exception $e)
+
+                    $material->set('file', $material->get_filename('gif'))->save();
+
+                    if (copy($tmp_file, $dir.$material->file))
                     {
-                        $this->errors($e->errors('errors'));
-                    }
+                        Tags::add($material);
 
-                    if ($material->saved())
-                    {
-                        $dir = $material->dir('gif');
-                        if ( ! is_dir($dir))
-                        {
-                            mkdir($dir);
-                        }
-
-                        $material->set('file', $material->get_filename('gif'))->save();
-
-                        if (copy($tmp_file, $dir.$material->file))
-                        {
-                            Tags::add($material);
-
-                            $material->save_thumb($tmp_file);
-                        }
-                        else
-                        {
-                            $material->delete();
-                        }
-                    }
-                    unlink($tmp_file);
-
-                    if ($material->saved())
-                    {
-                        $this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
+                        $material->save_thumb($tmp_file);
                     }
                     else
                     {
-                        $this->errors('material.upload.error');
+                        $material->delete();
                     }
+                }
+                unlink($tmp_file);
+
+                if ($material->saved())
+                {
+                    $this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
                 }
                 else
                 {
-                    $this->errors('category.not_selected');
+                    $this->errors('material.upload.error');
                 }
             }
             else
@@ -390,7 +373,7 @@ class Controller_Material extends Controller_Web {
     {
         if ($id AND sizeof($material))
         {
-            $material_poll = $mpoll = $material_user_vote = array();
+            $material_poll = $mpoll = $material_user_vote = $user_vote = array();
 
             $material_poll = Jelly::query ('poll')
                 ->select_column (array(array(DB::expr ('COUNT(id)'), 'count'), 'value'))
@@ -399,21 +382,24 @@ class Controller_Material extends Controller_Web {
                 ->group_by ('value')
                 ->select_all ()->as_array ('value', 'count');
 
-            $user_vote = Jelly::query ('poll')
-                ->where ('user_id', '=', $this->user->id ())
-                ->where ('type_id', '=', $id)
-                ->where ('type', '=', $material->get_resource_id ())
-                ->limit (1)
-                ->select ();
+            if($this->user)
+            {
+                $user_vote = Jelly::query ('poll')
+                    ->where ('user_id', '=', $this->user->id())
+                    ->where ('type_id', '=', $id)
+                    ->where ('type', '=', $material->get_resource_id ())
+                    ->limit (1)
+                    ->select ()->as_array();
+            }
 
             $mpoll = array(
                 'dislike' => Arr::get ($material_poll, '0', 0),
                 'like' => Arr::get ($material_poll, '1', 0)
             );
 
-            if($user_vote->loaded())
+            if(sizeof($user_vote))
             {
-                if($user_vote->value)
+                if($user_vote['value'])
                 {
                     $material_user_vote = 'like';
                 }
@@ -446,12 +432,15 @@ class Controller_Material extends Controller_Web {
                 ->group_by ('type_id', 'value')
                 ->select_all ()->as_array ();
 
-            $comments_user_vote_db = Jelly::query ('poll')
-                ->select_column (array('value', 'type_id'))
-                ->where ('type_id', 'IN', $ids)
-                ->where ('user_id', '=', $this->user->id ())
-                ->where ('type', '=', Jelly::factory ('comment')->get_resource_id ())
-                ->select_all ()->as_array ('type_id', 'value');
+            if($this->user)
+            {
+                $comments_user_vote_db = Jelly::query ('poll')
+                    ->select_column (array('value', 'type_id'))
+                    ->where ('type_id', 'IN', $ids)
+                    ->where ('user_id', '=', $this->user->id())
+                    ->where ('type', '=', Jelly::factory ('comment')->get_resource_id ())
+                    ->select_all ()->as_array ('type_id', 'value');
+            }
 
             foreach ($comment_poll as $item)
             {
@@ -542,56 +531,6 @@ class Controller_Material extends Controller_Web {
         {
             $this->errors('global.no_params')->redirect('/');
         }
-    }
-
-    public function action_popular()
-    {
-        $materials = Jelly::query('material')->pagination('popular')->select_all();
-
-        $mids = array();
-
-        foreach ($materials as $m)
-        {
-            $mids[] = $m->id();
-        }
-
-        if($materials)
-        {
-            $comments = Jelly::query('comment')
-                ->with('material')
-                ->select_column(array(array(DB::expr('COUNT(comments.id)'), 'count')))
-                ->group_by('material_id')
-                ->select_all()->as_array('material');
-
-            if (sizeof($comments))
-            {
-                $polls_arr = Jelly::query('poll')
-                    ->select_column(array(array(DB::expr('COUNT(id)'), 'count'), 'type_id', 'value'))
-                    ->where('type', '=', Jelly::factory('material')->get_resource_id())
-                    ->where('type_id', 'IN', $mids)
-                    ->group_by('type_id', 'value')
-                    ->select_all()->as_array();
-
-                if(sizeof($polls_arr))
-                {
-                    foreach ($polls_arr as $item)
-                    {
-                        if ($item['value'])
-                        {
-                            $polls[$item['type_id']]['like'] = $item['count'];
-                        }
-                        else
-                        {
-                            $polls[$item['type_id']]['dislike'] = $item['count'];
-                        }
-                    }
-                }
-            }
-        }
-
-        $this->view()->materials = $materials;
-        $this->view()->comments = $comments;
-        $this->view()->polls = $polls;
     }
 
     protected function get_similar($material)

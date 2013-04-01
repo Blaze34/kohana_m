@@ -19,7 +19,7 @@
 						<div class="control-group">
 							<label class="control-label">Выбрать категорию<sup>*</sup></label>
 							<div class="controls">
-								<?=Form::select('category', array(0 => 'Не выбрана') + $category_options, Arr::get($_POST, 'category'))?>
+								<?=Form::select('category', array('' => 'Не выбрана') + $category_options, Arr::get($_POST, 'category'))?>
 							</div>
 						</div>
 						<div class="control-group">

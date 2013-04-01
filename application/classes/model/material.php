@@ -16,7 +16,7 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 			)),
 			'category' => Jelly::field('belongsto', array(
 				'rules' => array(
-					array('not_empty'),
+					array('not_zero'),
 				),
 				'label' => 'material.field.category'
 			)),

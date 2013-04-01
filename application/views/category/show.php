@@ -49,14 +49,7 @@
                     <li><a href="?commented">Комментируемые</a><span>/</span></li>
                 </ul>
             </div>
-            <div class="well_block well_rt pull-right">
-                <div class="well">
-                    Брошенная бутылка при столкновении с объектом лопается, горящая жидкость шустро пропитывает всё, на чём оседает.
-                </div>
-                <div class="well">
-                    <img data-src="holder.js/143x250" alt="">
-                </div>
-            </div>
+            <div class="well_block well_rt pull-right"></div>
             <div class="media_items">
                 <?if(sizeof($materials)):?>
                     <?foreach($materials as $m):?>
@@ -80,10 +73,10 @@
                             </div>
                         </div><!-- /media -->
                     <?endforeach;?>
+                    <?=isset($pagination) ? $pagination : ''?>
                 <?else:?>
                     Список пуст
                 <?endif?>
-                <?=isset($pagination) ? $pagination : ''?>
             </div>
         </div><!-- /popular -->
 
