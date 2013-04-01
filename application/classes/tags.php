@@ -21,9 +21,10 @@ class Tags {
 					$create[] = $t;
 				}
 			}
+
 			if (sizeof($create))
 			{
-				DB::query(Database::INSERT, "INSERT INTO `tags` (`name`) VALUES ('".implode("'),('", $tags)."')")->execute();
+				DB::query(Database::INSERT, "INSERT INTO `tags` (`name`) VALUES ('".implode("'),('", $create)."')")->execute();
 				$created = Jelly::query('tag')->where('name', 'IN', $tags)->execute()->as_array('name', 'id');
 
 				$exists = Arr::merge($created, $exists);

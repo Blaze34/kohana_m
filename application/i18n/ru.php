@@ -94,6 +94,7 @@ return array(
 
     'material.field.title' => 'Название',
     'material.parse.error' => 'Ошибка, видео не найдено',
+    'material.upload.error' => 'Ошибка при добавлении материала',
 
     'comments.title' => 'Все коментарии:',
     'comments.last.title' => 'Коментарии:',
@@ -107,6 +108,14 @@ return array(
     'category.field.parent' => 'Родитель',
     'category.field.subcategory' => 'Подкатегория',
     'category.error.has_children' => 'Удаление невозможно, у раздела есть категории',
+    'category.not_selected' => 'Категория не выбрана',
+
+    'upload.error.save' => 'Не удалось сохранить материал',
+    'upload.error.mime' => 'Загрузка возможна только image / gif',
+    'upload.error.getimagesize' => 'GIF повреждена, выберите другой файл',
+    'upload.error.extensions' => 'Загрузка возможна только GIF',
+    'upload.error.size' => 'Максимальный размер GIF - 5M',
+    'upload.error.response' => 'Страница с указанным URL не доступна',
 
 	'user.field.username' => 'Логин',
 	'user.field.email' => 'Email',

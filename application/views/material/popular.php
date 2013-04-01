@@ -20,6 +20,7 @@
             </li>
             <?endforeach;?>
         </ul>
+            <?=isset($pagination) ? $pagination : ''?>
         <?else : ?>
             Список пуст
         <?endif;?>

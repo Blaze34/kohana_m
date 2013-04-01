@@ -41,41 +41,49 @@ class Controller_Material extends Controller_Web {
 
 				if ($_POST)
 				{
-					$material->set(array(
-						'title' => Arr::get($_POST, 'title'),
-						'description' => Arr::get($_POST, 'description'),
-						'category' => $this->get_selected_category($category_options),
-						'start' => Arr::get($_POST, 'start'),
-						'end' => Arr::get($_POST, 'end')
-					));
+                    $category = $this->get_selected_category($category_options);
+                    if ($category)
+                    {
+                        $material->set(array(
+                            'title' => Arr::get($_POST, 'title'),
+                            'description' => Arr::get($_POST, 'description'),
+                            'category' => $category,
+                            'start' => Arr::get($_POST, 'start'),
+                            'end' => Arr::get($_POST, 'end')
+                        ));
 
-					try
-					{
-						$material->save();
-					}
-					catch (Jelly_Validation_Exception $e)
-					{
-						$this->errors($e->errors('errors'));
-					}
+                        try
+                        {
+                            $material->save();
+                        }
+                        catch (Jelly_Validation_Exception $e)
+                        {
+                            $this->errors($e->errors('errors'));
+                        }
 
-					if ($material->saved())
-					{
-						Tags::add($material);
+                        if ($material->saved())
+                        {
+                            Tags::add($material);
 
-						if ($thumb)
-						{
-							if ($_tmp = $this->save_tmp_file($thumb))
-							{
-								if ( ! $material->save_thumb($_tmp))
-								{
-									$material->rm_thumb();
-								}
-								unlink($_tmp);
-							}
-						}
+                            if ($thumb)
+                            {
+                                if ($_tmp = $this->save_tmp_file($thumb))
+                                {
+                                    if ( ! $material->save_thumb($_tmp))
+                                    {
+                                        $material->rm_thumb();
+                                    }
+                                    unlink($_tmp);
+                                }
+                            }
 
-						$this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
-					}
+                            $this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
+                        }
+                    }
+                    else
+                    {
+                        $this->errors('category.not_selected');
+                    }
 				}
 
 				$this->view()->material = $material;
@@ -116,78 +124,89 @@ class Controller_Material extends Controller_Web {
 
 		$material = Jelly::factory('material');
 		$category_options = $this->get_category_options();
-
 		if($_POST)
 		{
 			$url = Arr::get($_POST, 'url');
 			$file = Arr::get($_FILES, 'gif');
+            $category = $this->get_selected_category($category_options);
 
-			$material->set(array(
-				'title' => Arr::get($_POST, 'title'),
-				'description' => Arr::get($_POST, 'description'),
-				'category' => $this->get_selected_category($category_options),
-				'user' => $this->user ? $this->user->id() : NULL
-			));
+            $material->set(array(
+                'title' => Arr::get($_POST, 'title'),
+                'description' => Arr::get($_POST, 'description'),
+                'category' => $category,
+                'user' => $this->user ? $this->user->id() : NULL
+            ));
 
 
-			$tmp_file = NULL;
+            $tmp_file = NULL;
 
-			if ($file AND Upload::not_empty($file) AND Upload::valid($file))
-			{
-				if ($tmp_file = $this->save_gif_from_file($file, $config))
-				{
-					$url = '';
-				}
-			}
+            if ($file AND Upload::not_empty($file) AND Upload::valid($file))
+            {
+                if ($tmp_file = $this->save_gif_from_file($file, $config))
+                {
+                    $url = '';
+                }
+            }
 
-			if($url)
-			{
-				$tmp_file = $this->save_gif_from_url($url, $config);
-			}
+            if($url)
+            {
+                $tmp_file = $this->save_gif_from_url($url, $config);
+            }
 
-			if ($tmp_file)
-			{
-				try
-				{
-					$material->save();
-				}
-				catch(Jelly_Validation_Exception $e)
-				{
-					$this->errors($e->errors('errors'));
-				}
+            if ( ! Arr::get($tmp_file, 'error'))
+            {
+                if($category)
+                {
+                    try
+                    {
+                        $material->save();
+                    }
+                    catch(Jelly_Validation_Exception $e)
+                    {
+                        $this->errors($e->errors('errors'));
+                    }
 
-				if ($material->saved())
-				{
-					$dir = $material->dir('gif');
-					if ( ! is_dir($dir))
-					{
-						mkdir($dir);
-					}
+                    if ($material->saved())
+                    {
+                        $dir = $material->dir('gif');
+                        if ( ! is_dir($dir))
+                        {
+                            mkdir($dir);
+                        }
 
-					$material->set('file', $material->get_filename('gif'))->save();
+                        $material->set('file', $material->get_filename('gif'))->save();
 
-					if (copy($tmp_file, $dir.$material->file))
-					{
-						Tags::add($material);
+                        if (copy($tmp_file, $dir.$material->file))
+                        {
+                            Tags::add($material);
 
-						$material->save_thumb($tmp_file);
-					}
-					else
-					{
-						$material->delete();
-					}
-				}
-				unlink($tmp_file);
+                            $material->save_thumb($tmp_file);
+                        }
+                        else
+                        {
+                            $material->delete();
+                        }
+                    }
+                    unlink($tmp_file);
 
-				if ($material->saved())
-				{
-					$this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
-				}
-				else
-				{
-					$this->errors('material.upload.error');
-				}
-			}
+                    if ($material->saved())
+                    {
+                        $this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
+                    }
+                    else
+                    {
+                        $this->errors('material.upload.error');
+                    }
+                }
+                else
+                {
+                    $this->errors('category.not_selected');
+                }
+            }
+            else
+            {
+                $this->errors(Arr::get($tmp_file, 'error'));
+            }
 		}
 
 		$this->view()->category_options = $category_options;
@@ -195,6 +214,8 @@ class Controller_Material extends Controller_Web {
 
 	protected function save_gif_from_url($url, $config)
 	{
+        $result = array('error' => '');
+
 		if(in_array(pathinfo($url, PATHINFO_EXTENSION), $config['extensions']))
 		{
 			stream_context_create(array('http'=>array('method'=>'HEAD', 'max_redirects'=>1, 'timeout'=>10)));
@@ -208,34 +229,79 @@ class Controller_Material extends Controller_Web {
 					{
 						if( in_array(Arr::get($header, 'Content-Type'), $config['mimes']))
 						{
-							return $tmp_gif;
+							$result = $tmp_gif;
 						}
+                        else
+                        {
+                            $result['error'] = 'upload.error.mime';
+                        }
 						unlink($tmp_gif);
 					}
+                    else
+                    {
+                        $result['error'] = 'upload.error.size';
+                    }
 				}
+                else
+                {
+                    $result['error'] = 'upload.error.size';
+                }
 			}
+            else
+            {
+                $result['error'] = 'upload.error.response';
+            }
 		}
+        else
+        {
+            $result['error'] = 'upload.error.extensions';
+        }
 
-		return FALSE;
+		return $result;
 	}
 
 	protected function save_gif_from_file($file, $config)
 	{
-		if (Upload::size($file, $config['size']) AND Upload::type($file, $config['extensions']))
-		{
-			if ($info = getimagesize($file['tmp_name']))
-			{
-				if( in_array(Arr::get($info, 'mime'), $config['mimes']))
-				{
-					if ($_tmp = $this->save_tmp_file($file))
-					{
-						return $_tmp;
-					}
-				}
-			}
-		}
+        $result = array('error' => '');
 
-		return FALSE;
+		if (Upload::size($file, $config['size']))
+		{
+            if (Upload::type($file, $config['extensions']))
+            {
+                if ($info = getimagesize($file['tmp_name']))
+                {
+                    if( in_array(Arr::get($info, 'mime'), $config['mimes']))
+                    {
+                        if ($_tmp = $this->save_tmp_file($file))
+                        {
+                            $result = $_tmp;
+                        }
+                        else
+                        {
+                            $result['error'] = 'upload.error.save';
+                        }
+                    }
+                    else
+                    {
+                        $result['error'] = 'upload.error.mime';
+                    }
+                }
+                else
+                {
+                    $result['error'] = 'upload.error.getimagesize';
+                }
+            }
+            else
+                {
+                    $result['error'] = 'upload.error.extensions';
+                }
+        }
+        else
+        {
+            $result['error'] = 'upload.error.size';
+        }
+
+		return $result;
 	}
 
 	public function action_show()
@@ -333,20 +399,28 @@ class Controller_Material extends Controller_Web {
                 ->group_by ('value')
                 ->select_all ()->as_array ('value', 'count');
 
-            if (sizeof($material_poll))
+            $user_vote = Jelly::query ('poll')
+                ->where ('user_id', '=', $this->user->id ())
+                ->where ('type_id', '=', $id)
+                ->where ('type', '=', $material->get_resource_id ())
+                ->limit (1)
+                ->select ();
+
+            $mpoll = array(
+                'dislike' => Arr::get ($material_poll, '0', 0),
+                'like' => Arr::get ($material_poll, '1', 0)
+            );
+
+            if($user_vote->loaded())
             {
-
-                $material_user_vote = Jelly::query ('poll')
-                    ->where ('user_id', '=', $this->user->id ())
-                    ->where ('type_id', '=', $id)
-                    ->where ('type', '=', $material->get_resource_id ())
-                    ->limit (1)
-                    ->select ();
-
-                $mpoll = array(
-                    'dislike' => Arr::get ($material_poll, '0', 0),
-                    'like' => Arr::get ($material_poll, '1', 0)
-                );
+                if($user_vote->value)
+                {
+                    $material_user_vote = 'like';
+                }
+                else
+                {
+                    $material_user_vote = 'dislike';
+                }
             }
 
             return array($material_user_vote, $mpoll);
@@ -472,7 +546,7 @@ class Controller_Material extends Controller_Web {
 
     public function action_popular()
     {
-        $materials = Jelly::query('material')->pagination()->select_all();
+        $materials = Jelly::query('material')->pagination('popular')->select_all();
 
         $mids = array();
 
