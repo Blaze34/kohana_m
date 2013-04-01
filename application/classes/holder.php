@@ -33,6 +33,10 @@ class Holder {
                                 $output[$k] .= $key.': '.$i.'; ';
                             }
                         }
+                        else if($k == 'well')
+                        {
+                            $output[$k] = $a;
+                        }
                         else
                         {
                             $output[$k] = $a;

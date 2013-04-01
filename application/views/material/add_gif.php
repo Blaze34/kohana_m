@@ -25,7 +25,7 @@
 						<div class="control-group">
 							<label class="control-label">Добавить описание</label>
 							<div class="controls">
-								<textarea name="description" rows="3"><?=Arr::get($_post, 'description')?></textarea>
+								<textarea name="description" rows="3"><?=Arr::get($_POST, 'description')?></textarea>
 							</div>
 						</div>
 						<div class="control-group">

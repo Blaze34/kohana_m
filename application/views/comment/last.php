@@ -1,4 +1,4 @@
-<div class="span3 last_comments">
+<div class="span12 last_comments">
     <div class="block_title"><?=__('comments.last.title')?></div>
     <?if(sizeof($comments)):?>
     <?$title_limit = Kohana::$config->load('comment.last.title_limit_words');

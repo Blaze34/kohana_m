@@ -109,16 +109,17 @@ class Controller_Material extends Controller_Web {
 		$this->errors('material.parse.error')->redirect();
 	}
 
-	public function action_add_gif()
-	{
-		$config = Kohana::$config->load('material.gif');
+    public function action_add_gif()
+    {
+        $config = Kohana::$config->load('material.gif');
 
-		$material = Jelly::factory('material');
-		$category_options = $this->get_category_options();
-		if($_POST)
-		{
-			$url = Arr::get($_POST, 'url');
-			$file = Arr::get($_FILES, 'gif');
+        $material = Jelly::factory('material');
+        $category_options = $this->get_category_options();
+
+        if($_POST)
+        {
+            $url = Arr::get($_POST, 'url');
+            $file = Arr::get($_FILES, 'gif');
 
             $material->set(array(
                 'title' => Arr::get($_POST, 'title'),
@@ -126,7 +127,6 @@ class Controller_Material extends Controller_Web {
                 'category' => $this->get_selected_category($category_options),
                 'user' => $this->user ? $this->user->id() : NULL
             ));
-
 
             $tmp_file = NULL;
 
@@ -143,7 +143,7 @@ class Controller_Material extends Controller_Web {
                 $tmp_file = $this->save_gif_from_url($url, $config);
             }
 
-            if ( ! Arr::get($tmp_file, 'error'))
+            if (! is_array($tmp_file))
             {
                 try
                 {
@@ -151,9 +151,9 @@ class Controller_Material extends Controller_Web {
                 }
                 catch(Jelly_Validation_Exception $e)
                 {
-
                     $this->errors($e->errors('errors'));
                 }
+
                 if ($material->saved())
                 {
                     $dir = $material->dir('gif');
@@ -183,65 +183,67 @@ class Controller_Material extends Controller_Web {
                 }
                 else
                 {
-                    $this->errors('material.upload.error');
+                    $this->errors(__('material.upload.error'));
                 }
             }
             else
             {
-                $this->errors(Arr::get($tmp_file, 'error'));
+                $this->errors(Arr::get($tmp_file, 'file_error'));
             }
-		}
-
-		$this->view()->category_options = $category_options;
-	}
-
-	protected function save_gif_from_url($url, $config)
-	{
-        $result = array('error' => '');
-
-		if(in_array(pathinfo($url, PATHINFO_EXTENSION), $config['extensions']))
-		{
-			stream_context_create(array('http'=>array('method'=>'HEAD', 'max_redirects'=>1, 'timeout'=>10)));
-			$header = @get_headers($url, 1);
-
-			if(strpos(Arr::get($header, 0, ''), '200 OK') !== FALSE)
-			{
-				if( intval(Arr::get($header, 'Content-Length')) <= Num::bytes($config['size']))
-				{
-					if($tmp_gif = $this->save_tmp_file($url))
-					{
-						if( in_array(Arr::get($header, 'Content-Type'), $config['mimes']))
-						{
-							$result = $tmp_gif;
-						}
-                        else
-                        {
-                            $result['error'] = 'upload.error.mime';
-                        }
-						unlink($tmp_gif);
-					}
-                    else
-                    {
-                        $result['error'] = 'upload.error.size';
-                    }
-				}
-                else
-                {
-                    $result['error'] = 'upload.error.size';
-                }
-			}
-            else
-            {
-                $result['error'] = 'upload.error.response';
-            }
-		}
-        else
-        {
-            $result['error'] = 'upload.error.extensions';
         }
 
-		return $result;
-	}
+        $this->view()->category_options = $category_options;
+    }
+
+    protected function save_gif_from_url($url, $config)
+    {
+        $error = array('file_error' => '');
+
+        if(in_array(pathinfo($url, PATHINFO_EXTENSION), $config['extensions']))
+        {
+            stream_context_create(array('http'=>array('method'=>'HEAD', 'max_redirects'=>1, 'timeout'=>10)));
+            $header = @get_headers($url, 1);
+
+            if(strpos(Arr::get($header, 0, ''), '200 OK') !== FALSE)
+            {
+                if( intval(Arr::get($header, 'Content-Length')) <= Num::bytes($config['size']))
+                {
+                    if($tmp_gif = $this->save_tmp_file($url))
+                    {
+                        if( in_array(Arr::get($header, 'Content-Type'), $config['mimes']))
+                        {
+                            return $tmp_gif;
+                        }
+                        else
+                        {
+                            $error['file_error'] = 'upload.error.mime';
+                            unlink($tmp_gif);
+                        }
+                    }
+                    else
+                    {
+                        $error['file_error'] = 'upload.error.save';
+                    }
+                }
+                else
+                {
+                    $error['file_error'] = 'upload.error.size';
+                }
+            }
+            else
+            {
+                $error['file_error'] = 'upload.error.response';
+            }
+
+        }
+        else
+        {
+            $error['file_error'] = 'upload.error.extensions';
+
+        }
+
+        return $error;
+    }
 
 	protected function save_gif_from_file($file, $config)
 	{
@@ -261,27 +263,27 @@ class Controller_Material extends Controller_Web {
                         }
                         else
                         {
-                            $result['error'] = 'upload.error.save';
+                            $result['file_error'] = 'upload.error.save';
                         }
                     }
                     else
                     {
-                        $result['error'] = 'upload.error.mime';
+                        $result['file_error'] = 'upload.error.mime';
                     }
                 }
                 else
                 {
-                    $result['error'] = 'upload.error.getimagesize';
+                    $result['file_error'] = 'upload.error.getimagesize';
                 }
             }
             else
                 {
-                    $result['error'] = 'upload.error.extensions';
+                    $result['file_error'] = 'upload.error.extensions';
                 }
         }
         else
         {
-            $result['error'] = 'upload.error.size';
+            $result['file_error'] = 'upload.error.size';
         }
 
 		return $result;
@@ -389,7 +391,7 @@ class Controller_Material extends Controller_Web {
                     ->where ('type_id', '=', $id)
                     ->where ('type', '=', $material->get_resource_id ())
                     ->limit (1)
-                    ->select ()->as_array();
+                    ->select ();
             }
 
             $mpoll = array(
@@ -397,9 +399,9 @@ class Controller_Material extends Controller_Web {
                 'like' => Arr::get ($material_poll, '1', 0)
             );
 
-            if(sizeof($user_vote))
+            if($user_vote->loaded())
             {
-                if($user_vote['value'])
+                if($user_vote->value)
                 {
                     $material_user_vote = 'like';
                 }
@@ -600,7 +602,6 @@ class Controller_Material extends Controller_Web {
 	protected function save_tmp_file($file)
 	{
 		$_dir = Kohana::$config->load('material.tmp_dir');
-
 		if ( ! is_dir($_dir))
 		{
 			mkdir($_dir);
