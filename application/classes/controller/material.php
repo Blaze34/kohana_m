@@ -678,4 +678,91 @@ class Controller_Material extends Controller_Web {
 
 		return $options;
 	}
+
+    public function action_edit()
+    {
+        if ($this->allowed())
+        {
+            if($id = $this->request->param('id'))
+            {
+                $material = Jelly::factory('material', $id);
+                $category_options = $this->get_category_options();
+
+                if ($material->loaded())
+                {
+                    if ($_POST)
+                    {
+
+                        $material->set(Arr::extract($_POST, array('title', 'description', 'start', 'end')) + array('category' => $this->get_selected_category($category_options)));
+
+                        try
+                        {
+                            $material->save();
+                        }
+                        catch (Jelly_Validation_Exception $e)
+                        {
+                            $this->errors($e->errors('errors'));
+                        }
+
+                        if ($material->saved())
+                        {
+                            Tags::update($material);
+
+                            $this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
+                        }
+
+                    }
+
+                    $this->view()->material = $material;
+                    $this->view()->category_options = $category_options;
+                }
+                else
+                {
+                    $this->errors('global.no_exist')->redirect('/');
+                }
+            }
+            else
+            {
+                $this->errors('global.no_params')->redirect('/');
+            }
+        }
+        else
+        {
+            $this->redirect('/');
+        }
+    }
+
+    public function action_delete()
+    {
+        if ($this->allowed())
+        {
+            if ($id = $this->request->param('id'))
+            {
+                $material = Jelly::factory('material', $id);
+                if($material->loaded())
+                {
+                    $category_id = $material->category->id();
+                    $comments_id = Jelly::query('comment')->select_column('id')->where('material_id', '=', $material->id())->select_all()->as_array('id', 'id');
+                    if(sizeof($comments_id))
+                    {
+                        Jelly::query('poll')->where('type_id', 'IN', $comments_id)->where('type', '=', 'comment')->delete();
+                    }
+                    Jelly::query('poll')->where('type_id', '=', $material->id())->where('type', '=', 'material')->delete();
+                    Tags::delete($material);
+                    $material->get('comments')->delete();
+                    $material->delete();
+                    $this->redirect(Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $category_id)));
+
+                }
+                else
+                {
+                    $this->errors('global.no_exist')->redirect('/');
+                }
+            }
+            else
+            {
+                $this->errors('global.no_params')->redirect('/');
+            }
+        }
+    }
 } // End Welcome

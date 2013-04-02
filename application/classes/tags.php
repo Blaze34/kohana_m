@@ -153,7 +153,7 @@ class Tags {
 
 		if (sizeof($relation))
 		{
-			$qwery = DB::insert('materials_tags', array('materila_id', 'tag_id'));
+			$qwery = DB::insert('materials_tags', array('material_id', 'tag_id'));
 			foreach ($relation as $id)
 			{
 				$qwery->values(array('material_id' => $material->id(), 'tag_id' => $id));

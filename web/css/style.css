@@ -132,7 +132,11 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 .item_layout{display: inline-block; width: 100%; padding-bottom: 20px;}
 .item_layout .headline{position: relative; padding: 0 0 15px; background: #ffffff; color: #505050; font-family: "Verdana", "Geneva CY", "DejaVu Sans",	"sans-serif";}
 .item_layout .headline h2{font-size: 1.6em; line-height: 1.6em; margin: 0;}
-
+.edit_wrapper .player{text-align: center}
+.edit_wrapper .form-horizontal input[type="text"], .edit_wrapper .form-horizontal textarea {width: 690px; max-width: 690px}
+.edit_wrapper .form-horizontal select{width: 704px;}
+.edit_wrapper .form-horizontal textarea{height: 380px;}
+.player{text-align: center; padding: 15px 0}
 .item_layout .icon {vertical-align: middle; margin-right: 3px;}
 .item_layout .span8{margin-left: 0}
 .views-info{display: inline-block; width: 100%; padding: 10px 0 0;}

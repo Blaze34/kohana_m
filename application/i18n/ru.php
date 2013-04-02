@@ -52,6 +52,7 @@ return array(
     'title.menu.add_link' => 'Добавление пункта меню',
     'title.menu.edit_menu' => 'Редактирование меню',
     'title.menu.edit_link' => 'Редактирование пункта',
+    'title.material.edit' => 'Редактирование материала',
 
     'title.holder.index' => 'Включаемые области',
     'title.holder.add' => 'Добавление вкл. области',
