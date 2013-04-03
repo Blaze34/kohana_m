@@ -8,6 +8,7 @@
                 <th><?=__('holder.field.title')?></th>
                 <th><?=__('holder.field.code')?></th>
                 <th><?=__('holder.field.activity')?></th>
+                <th><?=__('holder.field.category')?></th>
                 <th></th>
             </tr>
             </thead>
@@ -17,12 +18,13 @@
                     <td><?=$h->title?></td>
                     <td>
                     <?if ($h->activity):?>
-                        <code>&lt;?Holder::show(<?=$h->id()?>)?&gt;</code>
+                        <code>&lt;?Holder::show(<?=$h->id()?><?=($h->category->id()? ', array(), '.$h->category->id(): '')?>)?&gt;</code>
                     <?else:?>
                             <p>Что бы использовать эту область, включите ее!</p>
                     <?endif;?>
                     </td>
                     <td><?=($h->activity ? '<i class="icon-ok"></i>' : '<i class="icon-off"></i>')?></td>
+                    <td><?=$h->category->name?></td>
                     <td>
                         <a class="btn btn-warning btn-mini" href="<?=Route::url('default', array('controller' => 'holder', 'action' => 'edit', 'id' => $h->id()))?>"><?=__('global.edit')?></a >
 

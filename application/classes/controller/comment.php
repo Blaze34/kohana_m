@@ -24,6 +24,7 @@ class Controller_Comment extends Controller_Web {
                 $comment = Jelly::factory('comment', $id);
                 if($comment->loaded())
                 {
+                    $material = Jelly::factory('material', $comment->material->id())->decrement('comments_count');
                     $comment->delete();
                 }
             }

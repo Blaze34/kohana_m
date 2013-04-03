@@ -120,31 +120,50 @@ class Controller_Category extends Controller_Web {
     public function action_show()
     {
         $category = Jelly::factory('category', $this->request->param('id'));
-        $pid = $category->id();
 
-        if ($category->loaded())
+        if($category->loaded())
         {
+
             $this->title($category->name, FALSE);
-            $comments = $materials = $children = array();
+            $materials = $children = $comments = $ids = array();
+
+            $materials = Jelly::query('material')->with('user')->where('category', '=', $category->id())->order_by('id', 'DESC')->pagination()->select_all();
+
+            $comments = Jelly::query('comment')->with('material')->where('category_id', '=', $category->id())->order_by('id', 'DESC')->select_all();
+
+            if(sizeof($category->children))
+            {
+                foreach($category->children as $ch)
+                {
+                    $ids[] = $ch->id();
+                }
+
+                $comments = Jelly::query('comment')->with('material')->where('category_id', 'IN', $ids)->order_by('date', 'DESC')->select_all();
+                $materials = Jelly::query('material')->with('user')->where('category', 'IN', $ids)->order_by('id', 'DESC')->pagination()->select_all();
+            }
 
             if ($category->parent_id)
             {
-                $materials = Jelly::query('material')->with('user')->where('category', '=', $category->id())->pagination()->select_all();
-                $comments = Jelly::query('comment')->with('material')->where('category_id', '=', $category->id())->select_all();
                 $category = Jelly::factory('category', $category->parent_id);
-                if(! $comments->count())
+
+                if(!sizeof($comments))
                 {
-                    $ids = array();
                     foreach ($category->children as $c)
                     {
                         $ids[] = $c->id();
                     }
-                    $comments = Jelly::query('comment')->with('material')->where('category_id', 'IN', $ids)->select_all();
+
+                    $comments = Jelly::query('comment')->with('material')->where('category_id', 'IN', $ids)->order_by('date', 'DESC')->select_all();
+
                 }
+
             }
+
+
 
             $children = $category->get('children')->order_by('sort')->order_by('id')->select();
             $this->view(array('materials' => $materials, 'category' => $category, 'children' => $children, 'comments' => $comments));
+
         }
         else
         {

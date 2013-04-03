@@ -324,6 +324,8 @@ class Controller_Material extends Controller_Web {
                                 'text' => Arr::get($_POST, 'text', ''),
                             ))->save($extra_validation);
 
+                            $material->increment('comments_count');
+
                             if($comment->saved())
                             {
                                 $this->redirect();
@@ -349,6 +351,9 @@ class Controller_Material extends Controller_Web {
 
                 list($cpoll, $comments_user_vote) = $this->get_votes_comments ($comments);
 
+                $material->increment('views');
+
+
                 $this->view(array(
                     'material' => $material,
                     'comments' => $comments,
@@ -371,7 +376,7 @@ class Controller_Material extends Controller_Web {
 		}
 	}
 
-    private  function get_material_votes ($id, $material)
+    protected  function get_material_votes ($id, $material)
     {
         if ($id AND sizeof($material))
         {
@@ -399,7 +404,7 @@ class Controller_Material extends Controller_Web {
                 'like' => Arr::get ($material_poll, '1', 0)
             );
 
-            if($user_vote->loaded())
+            if(sizeof($user_vote))
             {
                 if($user_vote->value)
                 {
@@ -765,4 +770,5 @@ class Controller_Material extends Controller_Web {
             }
         }
     }
+
 } // End Welcome

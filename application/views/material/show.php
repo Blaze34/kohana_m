@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    swfobject.embedSWF("/web/swf/player.swf", "player", "650", "440", "9.0.0", "/web/swf/expressInstall.swf", {begin: '<?=$material->start?>', end: '<?=$material->end?>', vid: '<?=$material->video?>'});
+    swfobject.embedSWF("/web/swf/player.swf", "player", "650", "440", "9.0.0", "/web/swf/expressInstall.swf", {begin: '<?=$material->start?>', end: '<?=$material->end?>', vid: '<?=$material->video?>'}, {'allowFullScreen': true});
 </script>
 <?$parent = Jelly::query('category')->select_column(array('name', 'id'))->where('id', '=', $material->category->parent_id)->limit(1)->select()?>
 <ul class="breadcrumb">
@@ -10,7 +10,7 @@
 </ul>
 <?$user = A2::instance()->get_user();?>
 <div class="sections">
-    <h3><?=$material->category->name?></h3>
+    <div class="title"><h1><?=$material->name?></h1></div>
 </div><!-- /sections -->
 
 <div class="row-fluid">
@@ -37,11 +37,14 @@
                     <div class="likes-count pull-left"><i class="icon icon-thumbs-up"></i><span><?=$mpoll['like']?></span></div>
                     <div class="dislikes-count pull-left"><i class="icon icon-thumbs-down"></i><span><?=$mpoll['dislike']?></span></div>
                 </div>
+
+                <?if ($user AND ($material->user->firstname != $user->firstname)):?>
                 <div class="buttons pull-right">
                     <?=$material_user_vote->value?>
                     <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-success<?=($material_user_vote == 'like') ? ' disabled':''?>" type="button"><i class="icon icon-thumbs-up icon-white"></i>Нравится</a>
                     <a href="<?=Route::url('vote', array('act' => 'dislike', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-warning<?=($material_user_vote == 'dislike') ? ' disabled':''?>" type="button"><i class="icon icon-thumbs-down icon-white"></i>Не нравится</a>
                 </div>
+                <?endif;?>
                 <div class="video-extras-sparkbars">
                     <?$total = $mpoll['like'] + $mpoll['dislike']?>
                     <div class="video-extras-sparkbar-likes" style="width: <?=$mpoll['like'] * 100 / $total?>%"></div>
@@ -123,7 +126,7 @@
                     <?foreach ($comments as $c):?>
                     <li class="comment">
                         <div class="photo_frame square_42">
-                            <?if($c->user->email):?>
+                            <?if($c->user->firstname):?>
                                 <a href="<?=Route::url('default', array('controller' => 'material', 'action' => 'user', 'id' => $c->user->id))?>"><img src="<?=$c->user->avatar()?>" height="48" width="48" alt=""></a>
                             <?else:?>
                                 <span><img src="<?=$c->user->avatar()?>" height="48" width="48" alt=""></span>
@@ -131,8 +134,8 @@
                         </div>
                         <div class="msg">
                             <div class="msg_topic">
-                                <?=($c->user->email?'<a class="cmnt_author" href="'.Route::url('default', array('controller' => 'material', 'action' => 'user', 'id' => $c->user->id)).'"><strong>'.$c->user->firstname.'</strong></a>': '<span class="cmnt_author"><strong>'.$c->guest_name.'</strong></span>')?>
-                                <small class="pull-right"><?=date('d.m.y', $c->date)?></small>
+                                <?=($c->user->firstname?'<a class="cmnt_author" href="'.Route::url('default', array('controller' => 'material', 'action' => 'user', 'id' => $c->user->id)).'"><strong>'.$c->user->firstname.'</strong></a>': '<span class="cmnt_author"><strong>'.$c->guest_name.'</strong></span>')?>
+                                <small class="pull-right"><?=Utils::convert_date($c->date)?> назад</small>
                             </div>
                             <div class="msg_txt">
                                 <?=$c->text?>
@@ -141,12 +144,15 @@
                                 <a class="answer pull-left" href="#">Ответить</a>
                                 <div class="buttons pull-right">
                                     <?=($admin?'<a href="javascript" data-href="'.Route::url('default', array('controller' => 'comment', 'action' => 'delete', 'id' => $c->id)).'" class="btn btn-mini btn-danger alert_delete"><i class="icon icon-remove icon-white"></i>'.__('global.delete').'</a>':'')?>
-                                    <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $c->get_resource_id(), 'id' => $c->id()))?>" class="btn btn-mini btn-success<?=($comments_user_vote[$c->id()]['like']) ? ' disabled' : ''?>">
-                                        <i class="icon icon-thumbs-up icon-white"></i><?=($cpoll[$c->id()]['like'] ? $cpoll[$c->id()]['like']:'0')?>
-                                    </a>
-                                    <a href="<?=Route::url('vote', array('act' => 'dislike', 'type' => $c->get_resource_id(), 'id' => $c->id()))?>" class="btn btn-mini btn-warning<?=($comments_user_vote[$c->id()]['dislike']) ? ' disabled' : ''?>">
-                                        <i class="icon icon-thumbs-down icon-white"></i><?=($cpoll[$c->id()]['dislike']?$cpoll[$c->id()]['dislike']:0)?>
-                                    </a>
+                                    <?if ($user AND ($c->user->firstname != $user->firstname)):?>
+                                        <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $c->get_resource_id(), 'id' => $c->id()))?>" class="btn btn-mini btn-success<?=($comments_user_vote[$c->id()]['like']) ? ' disabled' : ''?>">
+                                            <i class="icon icon-thumbs-up icon-white"></i><?=($cpoll[$c->id()]['like'] ? $cpoll[$c->id()]['like']:'0')?>
+                                        </a>
+                                        <a href="<?=Route::url('vote', array('act' => 'dislike', 'type' => $c->get_resource_id(), 'id' => $c->id()))?>" class="btn btn-mini btn-warning<?=($comments_user_vote[$c->id()]['dislike']) ? ' disabled' : ''?>">
+                                            <i class="icon icon-thumbs-down icon-white"></i><?=($cpoll[$c->id()]['dislike']?$cpoll[$c->id()]['dislike']:0)?>
+                                        </a>
+                                    <?endif;?>
+
                                 </div>
                             </div>
                         </div>

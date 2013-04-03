@@ -21,7 +21,11 @@ class Model_Holder extends Jelly_Model implements Acl_Resource_Interface {
             'activity' => Jelly::field('boolean', array(
                 'default' => false,
                 'label' => 'holder.field.activity',
-            ))
+            )),
+            'category' => Jelly::field('belongsto', array(
+                'label' => 'holder.field.category',
+                'default' => NULL,
+            )),
 		));
 	}
 

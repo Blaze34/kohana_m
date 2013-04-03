@@ -18,6 +18,8 @@ class Controller_Holder extends Controller_Web {
             $this->js('jquery.tinymce.js');
             $holder = Jelly::factory('holder');
 
+            $categories = $this->get_category_options();
+
             if ($_POST)
             {
                 try
@@ -25,7 +27,8 @@ class Controller_Holder extends Controller_Web {
                     $holder->set(array(
                         'title' => Arr::get($_POST, 'title'),
                         'body' => html_entity_decode(Arr::get($_POST, 'body', ''), ENT_QUOTES),
-                        'activity' => Arr::get($_POST, 'activity')
+                        'activity' => Arr::get($_POST, 'activity'),
+                        'category' => Arr::get($_POST, 'category')
                     ))->save();
                 }
                 catch (Jelly_Validation_Exception $e)
@@ -39,7 +42,7 @@ class Controller_Holder extends Controller_Web {
                 }
             }
 
-            $this->view()->holder = $holder;
+            $this->view(array('holder' => $holder, 'categories' => $categories));
         }
         else
         {
@@ -67,6 +70,7 @@ class Controller_Holder extends Controller_Web {
         {
             $this->js('jquery.tinymce.js');
             $holder = Jelly::factory('holder', $this->request->param('id'));
+            $categories = $this->get_category_options();
 
             if ($holder->loaded())
             {
@@ -78,6 +82,7 @@ class Controller_Holder extends Controller_Web {
                             'title' => Arr::get($_POST, 'title'),
                             'body' => html_entity_decode(Arr::get($_POST, 'body', ''), ENT_QUOTES),
                             'activity' => Arr::get($_POST, 'activity'),
+                            'category' => Arr::get($_POST, 'category')
                         ))->save();
                     }
                     catch (Jelly_Validation_Exception $e)
@@ -87,11 +92,11 @@ class Controller_Holder extends Controller_Web {
 
                     if ($holder->saved())
                     {
-                        $this->redirect(Route::url('default', array('controller' => 'holder')));
+//                        $this->redirect(Route::url('default', array('controller' => 'holder')));
                     }
                 }
 
-                $this->view()->holder = $holder;
+                $this->view(array('holder' => $holder, 'categories' => $categories));
             }
             else
             {
@@ -126,6 +131,30 @@ class Controller_Holder extends Controller_Web {
         {
             $this->redirect('/');
         }
+    }
+
+    protected function get_category_options()
+    {
+        $categories = Jelly::query('category')->order_by('parent_id')->order_by('sort')->select_all();
+        $options = $sections = array();
+
+        foreach ($categories as $c)
+        {
+            if ($c->parent_id)
+            {
+                if ($optgroup = Arr::get($sections, $c->parent_id))
+                {
+                    $options[$optgroup][$c->id()] = $c->name;
+                }
+            }
+            else
+            {
+                $sections[$c->id()] = $c->name;
+                $options[$c->name] = array();
+            }
+        }
+
+        return $options;
     }
 
 } // End Welcome

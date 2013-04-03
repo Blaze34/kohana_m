@@ -17,7 +17,7 @@
                             <img src="/<?=$m->thumb()?>" alt="<?=$m->title?>"/>
                         </a>
                         <div class="item_txt">
-                            <?=Text::limit_words($m->description, 15)?>
+                            <?=Text::limit_words($m->title, 15)?>
                         </div>
                         <div class="item_stat">Комм <?=$comm?>. &nbsp; <?=$like?><i class="icon-thumbs-up"></i>&nbsp;&nbsp; <?=$dislike?><i class="icon-thumbs-down"></i></div>
                     </li>

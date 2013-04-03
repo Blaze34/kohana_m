@@ -18,13 +18,13 @@ class Controller_Index extends Controller_Web {
     {
         $comments = $polls = array();
 
-        $materials = Jelly::query ('material')->pagination ('popular')->select_all ();
+        $materials = Jelly::query ('material')->order_by('popular_sort', 'DESC')->pagination ('popular')->select_all();
 
         $mids = array();
 
         foreach ($materials as $m)
         {
-            $mids[] = $m->id ();
+            $mids[] = $m->id();
         }
 
         if ($materials)

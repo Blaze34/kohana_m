@@ -21,6 +21,12 @@
         </div>
     </div>
     <div class="control-group">
+        <label class="control-label"><?=__('holder.field.category')?></label>
+        <div class="controls">
+            <?=Form::select('category', array(0 => 'Не выбрана') + $categories, $holder->category->id())?>
+        </div>
+    </div>
+    <div class="control-group">
         <div class="controls">
             <button type="submit" class="btn"><?=__('static.save')?></button>
         </div>

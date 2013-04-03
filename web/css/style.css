@@ -63,6 +63,7 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 .txt_item .item_footer{font-size: .9em; line-height: 1.4em; font-weight: bold;}
 .txt_item .item_footer span{font-weight: normal; font-size: .8em; float: right;}
 .popular .thum_item{width: 172px;}
+.title h1{font-size: 1.7em; margin: 0 0 5px }
 
 /*.container-fluid{padding-top: 10px;}*/
 .container-fluid .block {margin-left: 0; margin-top: 10px;}

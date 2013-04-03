@@ -18,19 +18,35 @@ class Controller_Poll extends Controller_Web {
                         ->where('type', '=', $type)
                         ->limit(1)->select();
 
+
+                    $material = array();
+
+                    if($type == 'material')
+                    {
+                        $material = Jelly::factory('material', $type_id);
+                    }
+
                     if($poll->loaded())
                     {
+                        if($material->loaded())
+                        {
+                            $material->update_opinion($value);
+                        }
                         $poll->set('value', $value);
                     }
                     else
                     {
+                        if($material->loaded())
+                        {
+                            $material->add_opinion($value);
+                        }
+
                         $poll->set(array(
                             'user' => $this->user->id(),
                             'type_id' => $type_id,
                             'type' => $type,
                             'value' => $value
                         ));
-
                     }
 
                     $poll->save();

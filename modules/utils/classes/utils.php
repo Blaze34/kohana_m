@@ -2,6 +2,58 @@
 
 class Utils {
 
+    public static function convert_date($date)
+    {
+
+        if(preg_match('/^\d+$(\d+)?/',$date))
+        {
+            $time = Date::span($date, time());
+
+            if(is_array($time))
+            {
+                $output = '';
+
+                if ($time['years'] > 0)
+                {
+                    $output .= $time['years'].' г. ' ;
+                }
+
+                if ($time['months'] > 0)
+                {
+                    $output .= $time['months'].' мес. ' ;
+                }
+
+                if ($time['weeks'] > 0)
+                {
+                    $output .= $time['weeks'].' нед. ' ;
+                }
+
+                if ($time['days'] > 0)
+                {
+                    $output .= $time['days'].' дн. ' ;
+                }
+
+                if ($time['hours'] > 0)
+                {
+                    $output .= $time['hours'].' ч. ' ;
+                }
+
+                if ($time['minutes'] > 0)
+                {
+                    $output .= $time['minutes'].' мин. ' ;
+                }
+
+                if ($time['seconds'] > 0 AND $time['minutes'] == 0)
+                {
+                    $output .= $time['seconds'].' сек. ' ;
+                }
+
+                return $output;
+            }
+        }
+        return false;
+    }
+
     public static function translit_url($str, $sep = '_')
     {
         $arr = array(

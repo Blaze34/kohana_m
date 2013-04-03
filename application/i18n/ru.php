@@ -68,10 +68,11 @@ return array(
 	'title.material.add_video' => 'Добавление видео',
 	'title.material.add_gif' => 'Добавление GIF',
 
-    'holder.field.title' => 'Название включаемой области',
-    'holder.field.body' => 'Содержимое включаемой области',
+    'holder.field.title' => 'Название ',
+    'holder.field.body' => 'Содержимое',
     'holder.field.activity' => 'Вкл/Выкл',
     'holder.field.code' => 'Код',
+    'holder.field.category' => 'Категория',
 
 	'menu.user.list' => 'Список пользователей',
 	'menu.adm' => 'Админка',

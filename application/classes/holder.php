@@ -14,9 +14,17 @@ class Holder {
      * @param array $attr
      */
 
-    public static function show(integer $id, array $attr = array())
+    public static function show(integer $id, array $attr = array(), $cid = NULL)
     {
-        $holder = Jelly::factory('holder', $id);
+        if($cid)
+        {
+            $holder = Jelly::query('holder')->where('category', '=', $cid)->limit(1)->select();
+        }
+        else
+        {
+            $holder = Jelly::factory('holder', $id);
+        }
+
         if($holder->loaded())
         {
             if($holder->activity)

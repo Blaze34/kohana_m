@@ -9,7 +9,7 @@
             <div class="item_body"><?=Text::limit_words($c->text, $text_limit)?></div>
             <div class="item_footer">
                 <?=($c->user->email?'<a href="'.Route::url('default', array('controller' => 'material', 'action' => 'user', 'id' => $c->user->id())).'">'.$c->user->firstname.'</a>':''.$c->guest_name)?>
-                <span><?=date('d.m.y', $c->date)?></span>
+                <span><?=Utils::convert_date($c->date)?> назад</span>
             </div>
         </div>
         <?endforeach?>

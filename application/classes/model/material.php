@@ -31,7 +31,7 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 				'default' => NULL
 			)),
 
-			'rating' => Jelly::field('integer', array(
+			'popular_sort' => Jelly::field('integer', array(
 				'default' => 0
 			)),
 
@@ -48,9 +48,24 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 			'tags' => Jelly::field('manytomany'),
             'date' => Jelly::field('timestamp', array(
                 'auto_now_create' => TRUE,
-                'auto_now_update' => TRUE
             )),
             'comments' => Jelly::field('hasmany'),
+
+            'likes' => Jelly::field('integer', array(
+                'default' => 0
+            )),
+            'dislikes' => Jelly::field('integer', array(
+                'default' => 0
+            )),
+            'views' => Jelly::field('integer', array(
+                'default' => 0
+            )),
+            'days' => Jelly::field('integer', array(
+                'default' => 0
+            )),
+            'comments_count' => Jelly::field('integer', array(
+                'default' => 0
+            ))
 		));
 	}
 
@@ -85,7 +100,6 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 
     public function file()
     {
-
         $_dir = $this->dir('gif');
 
         $thumb = $_dir.$this->file;
@@ -174,4 +188,97 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 
 		return TRUE;
 	}
+
+
+    public function increment($field)
+    {
+        $this->$field +=1;
+        $this->save();
+        $this->recount('popular_sort');
+    }
+
+    public function add_opinion($value)
+    {
+        if($value)
+        {
+            $this->increment('likes');
+        }
+        else
+        {
+            $this->increment('dislikes');
+        }
+
+        $this->recount('popular_sort');
+    }
+
+    public function update_opinion($value)
+    {
+        if($value)
+        {
+            $this->likes += 1;
+            $this->dislikes -= 1;
+        }
+        else
+        {
+            $this->likes -= 1;
+            $this->dislikes += 1;
+        }
+
+        $this->save();
+        $this->recount('popular_sort');
+    }
+
+    public function decrement($field)
+    {
+        $this->$field -=1;
+        $this->save();
+        $this->recount('popular_sort');
+    }
+
+    public function recount($sort_field, $formula = '')
+    {
+        $material = $this->as_array();
+        $vars = Arr::extract($material, array('likes', 'dislikes', 'comments_count', 'views'));
+        $time = Date::span($this->date, time(), 'days');
+        $vars['date'] = ($time ? $time : 0);
+//        $formula = ($vars['views']) / $vars['date'] * ($vars['views'] + $vars['like'] - $vars['dislike'] + $vars['comments_count']);
+        $formula = $vars['views'] + $vars['date'] + $vars['like'] - $vars['dislike'] + $vars['comments_count'];
+        $result = $this->$sort_field = round($formula, 3);
+        $this->save();
+
+    }
+
+    public function recheck()
+    {
+        //todo: Дописать
+        $id = $this->id();
+        $commets_count = Jelly::query('comment')->select_column (DB::expr ('COUNT(id)'), 'count')->where('material', '=', $id)->limit(1)->select();
+        if($commets_count->count != $this->comments_count)
+        {
+            $this->comments_count = $commets_count->count;
+        }
+
+        $vote = Jelly::query('poll')
+            ->select_column(array(array(DB::expr ('COUNT(id)'), 'count'), 'value'))
+            ->where('type', '=', 'material')
+            ->where('type_id', '=', $id)
+            ->group_by('value')->select_all()->as_array('value', 'count');
+
+        list($dislikes, $likes) = $vote;
+
+        if($this->likes != $likes)
+        {
+            $this->likes = $likes;
+        }
+
+        if($this->dislikes != $dislikes)
+        {
+            $this->dislikes = $dislikes;
+        }
+
+//        echo Debug::vars($dislikes, $likes);
+
+        $this->save();
+    }
+
 }
