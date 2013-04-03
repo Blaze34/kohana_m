@@ -15,7 +15,7 @@
 
 <div class="row-fluid">
     <div class="item_layout">
-        <div class="headline"><h2><?=$material->title?></h2></div>
+        <div class="headline"><h1><?=$material->title?></h1></div>
         <div class="span8">
             <?if ($user AND $user->is_admin()):?>
                 <div class="well well-small">
@@ -70,7 +70,11 @@
             <div class="user_header">
                 <div class="pull-left">
                     <i class="icon-user"></i>
-                    <a href="<?=Route::url('default', array('controller' => 'material', 'action' => 'user', 'id' => $material->user->id()))?>"><?=$material->user->firstname?></a>
+                    <?if($material->user->firstname):?>
+                        <a href="<?=Route::url('default', array('controller' => 'material', 'action' => 'user', 'id' => $material->user->id()))?>"><?=$material->user->firstname?></a>
+                    <?else:?>
+                        <span>Гость</span>
+                    <?endif;?>
                 </div>
                 <div class="pull-right"><?=date('d.m.y', $material->date)?></div>
             </div>

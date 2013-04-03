@@ -1,4 +1,3 @@
-<?Holder::show(1, array('class' => 'test', 'style' => array('width' => '300px', 'height' => '200px')))?>
 <div class="categories">
         <h3><?=__('adm.holder')?><a href="<?=Route::url('default', array('controller' => 'holder', 'action' => 'add'))?>" class="btn btn-success pull-right"><?=__('global.add')?></a ></h3>
         <?if (sizeof($holders)):?>
@@ -17,8 +16,10 @@
                 <tr>
                     <td><?=$h->title?></td>
                     <td>
-                    <?if ($h->activity):?>
-                        <code>&lt;?Holder::show(<?=$h->id()?><?=($h->category->id()? ', array(), '.$h->category->id(): '')?>)?&gt;</code>
+                    <?if ($h->activity ):?>
+                            <?if(!$h->category->id()):?>
+                                <code>&lt;?Holder::show(<?=$h->id()?><?=($h->category->id()? ', '.$h->category->id(): '')?>)?&gt;</code>
+                            <?endif;?>
                     <?else:?>
                             <p>Что бы использовать эту область, включите ее!</p>
                     <?endif;?>

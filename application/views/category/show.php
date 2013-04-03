@@ -1,4 +1,7 @@
-<?Holder::show(3, array(), Request::initial()->param('id'))?>
+<?if(sizeof($holder)):?>
+    <?Holder::show($holder->id(), $holder->category->id())?>
+<?endif;?>
+<?Holder::show(13)?>
 <div class="sections">
     <div class="title"><h1><?=$category->name?></h1></div>
     <?$id = Request::initial()->param('id')?>

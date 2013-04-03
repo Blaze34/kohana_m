@@ -490,44 +490,52 @@ class Controller_Material extends Controller_Web {
                     $mids[] = $m->id();
                 }
 
-                if($materials)
+                if($materials->count())
                 {
-                    $comments = Jelly::query('comment')
+                    $comments =Jelly::query('comment')
+                            ->with('material')
+                            ->with('user')
+                            ->where('material', 'IN', $mids)
+                            ->order_by('date', 'DESC')
+                            ->select_all();
+//                    echo Debug::vars($comments);
+
+                    $comments_count = Jelly::query('comment')
                         ->with('material')
                         ->select_column(array(array(DB::expr('COUNT(comments.id)'), 'count')))
                         ->group_by('material_id')
                         ->select_all()->as_array('material');
 
-                    if (sizeof($comments))
-                    {
-                        $polls_arr = Jelly::query('poll')
-                            ->select_column(array(array(DB::expr('COUNT(id)'), 'count'), 'type_id', 'value'))
-                            ->where('type', '=', Jelly::factory('material')->get_resource_id())
-                            ->where('type_id', 'IN', $mids)
-                            ->group_by('type_id', 'value')
-                            ->select_all()->as_array();
+                    $polls_arr = Jelly::query('poll')
+                        ->select_column(array(array(DB::expr('COUNT(id)'), 'count'), 'type_id', 'value'))
+                        ->where('type', '=', Jelly::factory('material')->get_resource_id())
+                        ->where('type_id', 'IN', $mids)
+                        ->group_by('type_id', 'value')
+                        ->select_all()->as_array();
 
-                        if(sizeof($polls_arr))
+                    if(sizeof($polls_arr))
+                    {
+                        foreach ($polls_arr as $item)
                         {
-                            foreach ($polls_arr as $item)
+                            if ($item['value'])
                             {
-                                if ($item['value'])
-                                {
-                                    $polls[$item['type_id']]['like'] = $item['count'];
-                                }
-                                else
-                                {
-                                    $polls[$item['type_id']]['dislike'] = $item['count'];
-                                }
+                                $polls[$item['type_id']]['like'] = $item['count'];
+                            }
+                            else
+                            {
+                                $polls[$item['type_id']]['dislike'] = $item['count'];
                             }
                         }
                     }
                 }
 
-                $this->view()->materials = $materials;
-                $this->view()->owner = $user;
-                $this->view()->comments = $comments;
-                $this->view()->polls = $polls;
+                $this->view(array(
+                    'materials' => $materials,
+                    'comments' => $comments,
+                    'comments_count' => $comments_count,
+                    'owner' => $user,
+                    'polls' => $polls,
+                ));
             }
             else
             {
@@ -559,6 +567,7 @@ class Controller_Material extends Controller_Web {
             $similar = Jelly::query('material')
                 ->where('category', '=', $material->category->id())
                 ->where('id', '!=', $material->id())
+                ->order_by('date', 'DESC')
                 ->limit(5)->select_all();
 
             if (! sizeof($similar))

@@ -14,7 +14,7 @@ class Holder {
      * @param array $attr
      */
 
-    public static function show(integer $id, array $attr = array(), $cid = NULL)
+    public static function show(integer $id, $cid = NULL, array $attr = array('class' => 'well', 'wrapper' => TRUE))
     {
         if($cid)
         {
@@ -40,10 +40,6 @@ class Holder {
                             {
                                 $output[$k] .= $key.': '.$i.'; ';
                             }
-                        }
-                        else if($k == 'well')
-                        {
-                            $output[$k] = $a;
                         }
                         else
                         {

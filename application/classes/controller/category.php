@@ -119,7 +119,7 @@ class Controller_Category extends Controller_Web {
 
     public function action_show()
     {
-        $category = Jelly::factory('category', $this->request->param('id'));
+        $category = Jelly::factory('category', $id = $this->request->param('id'));
 
         if($category->loaded())
         {
@@ -158,11 +158,9 @@ class Controller_Category extends Controller_Web {
                 }
 
             }
-
-
-
+            $holder = Jelly::query('holder')->where('category', '=', $id)->limit(1)->select();
             $children = $category->get('children')->order_by('sort')->order_by('id')->select();
-            $this->view(array('materials' => $materials, 'category' => $category, 'children' => $children, 'comments' => $comments));
+            $this->view(array('materials' => $materials, 'holder' => $holder, 'category' => $category, 'children' => $children, 'comments' => $comments));
 
         }
         else
