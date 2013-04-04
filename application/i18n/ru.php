@@ -67,6 +67,8 @@ return array(
 	'title.material.user' => 'Метриал пользователя',
 	'title.material.add_video' => 'Добавление видео',
 	'title.material.add_gif' => 'Добавление GIF',
+	'title.formula.index' => 'Формулы сортировки',
+	'title.formula.edit' => 'Редактирование формулы',
 
     'holder.field.title' => 'Название ',
     'holder.field.body' => 'Содержимое',
@@ -93,6 +95,7 @@ return array(
     'adm.menu' => 'Меню',
     'adm.category.add' => 'Добавление категории',
     'adm.category.edit' => 'Редактирование категории',
+    'adm.formula' => 'Формулы',
 
     'material.field.title' => 'Название',
     'material.field.category' => 'Категория',
@@ -104,6 +107,9 @@ return array(
     'comments.last.empty' => 'Список комментариев пуст',
     'comment.field.guest_name' => 'Ваше имя',
     'comment.field.text' => 'Комментарий',
+
+    'formula.field.formula' => 'Формула',
+    'formula.field.name' => 'Название',
 
     'category.field.id' => 'ID',
     'category.field.name' => 'Название',
