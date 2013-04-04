@@ -76,6 +76,7 @@ class Controller_Holder extends Controller_Web {
             {
                 if ($_POST)
                 {
+                    echo Debug::vars($_POST['category']);
                     try
                     {
                         $holder->set(array(
@@ -95,7 +96,6 @@ class Controller_Holder extends Controller_Web {
 //                        $this->redirect(Route::url('default', array('controller' => 'holder')));
                     }
                 }
-
                 $this->view(array('holder' => $holder, 'categories' => $categories));
             }
             else
@@ -136,8 +136,7 @@ class Controller_Holder extends Controller_Web {
     protected function get_category_options()
     {
         $categories = Jelly::query('category')->order_by('parent_id')->order_by('sort')->select_all();
-        $options = $sections = array();
-
+        $options = $sections = $output = array();
         foreach ($categories as $c)
         {
             if ($c->parent_id)
@@ -153,8 +152,8 @@ class Controller_Holder extends Controller_Web {
                 $options[$c->name] = array();
             }
         }
-
-        return $options;
+        $output = array('parent' => $sections, 'children' => $options);
+        return $output;
     }
 
 } // End Welcome

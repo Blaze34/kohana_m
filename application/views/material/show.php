@@ -1,5 +1,10 @@
 <script type="text/javascript">
     swfobject.embedSWF("/web/swf/player.swf", "player", "650", "440", "9.0.0", "/web/swf/expressInstall.swf", {begin: '<?=$material->start?>', end: '<?=$material->end?>', vid: '<?=$material->video?>'}, {'allowFullScreen': true});
+    $(function(){
+        $('a.disabled').bind('click', function(e){
+            e.preventDefault();
+        });
+    });
 </script>
 <?$parent = Jelly::query('category')->select_column(array('name', 'id'))->where('id', '=', $material->category->parent_id)->limit(1)->select()?>
 <ul class="breadcrumb">
@@ -10,7 +15,7 @@
 </ul>
 <?$user = A2::instance()->get_user();?>
 <div class="sections">
-    <div class="title"><h1><?=$material->name?></h1></div>
+    <div class="title"><h1><?=$material->category->name?></h1></div>
 </div><!-- /sections -->
 
 <div class="row-fluid">
@@ -41,8 +46,8 @@
                 <?if ($user AND ($material->user->firstname != $user->firstname)):?>
                 <div class="buttons pull-right">
                     <?=$material_user_vote->value?>
-                    <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-success<?=($material_user_vote == 'like') ? ' disabled':''?>" type="button"><i class="icon icon-thumbs-up icon-white"></i>Нравится</a>
-                    <a href="<?=Route::url('vote', array('act' => 'dislike', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-warning<?=($material_user_vote == 'dislike') ? ' disabled':''?>" type="button"><i class="icon icon-thumbs-down icon-white"></i>Не нравится</a>
+                    <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-success<?=($material_user_vote == 'like') ? ' disabled':''?>"><i class="icon icon-thumbs-up icon-white"></i>Нравится</a>
+                    <a href="<?=Route::url('vote', array('act' => 'dislike', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>" class="btn btn-mini btn-warning<?=($material_user_vote == 'dislike') ? ' disabled':''?>"><i class="icon icon-thumbs-down icon-white"></i>Не нравится</a>
                 </div>
                 <?endif;?>
                 <div class="video-extras-sparkbars">
@@ -120,10 +125,6 @@
                             var get_name = $(this).parents('.msg').find('.cmnt_author').text();
                             $('.comments .form-horizontal textarea').val(get_name + ', ');
                         })
-
-                        $('a.disabled').bind('click', function(e){
-                            e.preventDefault();
-                        });
                     });
                 </script>
                 <ul>

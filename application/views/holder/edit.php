@@ -23,7 +23,19 @@
     <div class="control-group">
         <label class="control-label"><?=__('holder.field.category')?></label>
         <div class="controls">
-            <?=Form::select('category', array(0 => 'Не выбрана') + $categories, $holder->category->id())?>
+            <?$cur_id = $holder->category->id()?>
+            <select name="category">
+                <option value="0">Не выбрана</option>
+                <?foreach ($categories['parent'] as $sid => $s):?>
+                    <option value="<?=$sid?>" <?=($sid == $cur_id ? 'selected="selected"' : '')?>><?=$s?></option>
+                    <?if(sizeof($categories['children'][$s])):?>
+                        <?foreach ($categories['children'][$s] as $cid =>  $ch):?>
+                            <option value="<?=$cid?>" <?=($cid == $cur_id ? 'selected="selected"' : '')?>>&nbsp;&nbsp;&nbsp;<?=$ch?></option>
+                        <?endforeach;?>
+                    <?endif;?>
+                <?endforeach;?>
+            </select>
+            <?//=Form::select('category', array(0 => 'Не выбрана') + $categories, $holder->category->id())?>
         </div>
     </div>
     <div class="control-group">
