@@ -1,12 +1,10 @@
 <script type="text/javascript">
-
 	function setLimit(begin, end)
 	{
 		$("#video_start").val(begin);
 		$("#video_end").val(end);
 	}
-
-	swfobject.embedSWF("/web/swf/cut.swf", "player", "746", "440", "9.0.0", "/web/swf/expressInstall.swf", {vid: '<?=$material->video?>'});
+	swfobject.embedSWF("/web/swf/cut.swf", "player", "746", "440", "9.0.0", "/web/swf/expressInstall.swf", {begin: '<?=$material->start?>', end: '<?=$material->end?>', vid: '<?=$material->video?>'});
 </script>
 
 <div class="sections">

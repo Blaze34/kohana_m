@@ -139,7 +139,7 @@ class Controller_Category extends Controller_Web {
             }
 
             $materials = Jelly::query('material')->with('user')->where('category', '=', $category->id())->order_by($sort, 'DESC')->pagination()->select_all();
-
+//            echo Debug::vars($materials->as_array());
             $comments = Jelly::query('comment')->with('material')->where('category_id', '=', $category->id())->order_by('id', 'DESC')->select_all();
 
             if(sizeof($category->children))
