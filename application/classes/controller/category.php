@@ -127,7 +127,18 @@ class Controller_Category extends Controller_Web {
             $this->title($category->name, FALSE);
             $materials = $children = $comments = $ids = array();
 
-            $materials = Jelly::query('material')->with('user')->where('category', '=', $category->id())->order_by('id', 'DESC')->pagination()->select_all();
+            $sort = 'popular_category';
+
+            if(isset($_GET['popular']))
+            {
+                $sort = 'popular_category';
+            }
+            elseif(isset($_GET['commented']))
+            {
+                $sort = 'commented_category';
+            }
+
+            $materials = Jelly::query('material')->with('user')->where('category', '=', $category->id())->order_by($sort, 'DESC')->pagination()->select_all();
 
             $comments = Jelly::query('comment')->with('material')->where('category_id', '=', $category->id())->order_by('id', 'DESC')->select_all();
 
@@ -139,7 +150,7 @@ class Controller_Category extends Controller_Web {
                 }
 
                 $comments = Jelly::query('comment')->with('material')->where('category_id', 'IN', $ids)->order_by('date', 'DESC')->select_all();
-                $materials = Jelly::query('material')->with('user')->where('category', 'IN', $ids)->order_by('id', 'DESC')->pagination()->select_all();
+                $materials = Jelly::query('material')->with('user')->where('category', 'IN', $ids)->order_by($sort, 'DESC')->pagination()->select_all();
             }
 
             if ($category->parent_id)

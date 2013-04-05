@@ -32,7 +32,7 @@ return array(
 	'global.anonymous' => 'Аноним',
 	'global.delete' => 'Удалить',
 	'global.add' => 'Добавить',
-	'global.adit' => 'Редактировать',
+	'global.check' => 'Проверить',
 
     'error.captcha' => 'Неправильно введена капча',
     'error.delete' => 'Ошибка при удалении',
@@ -127,6 +127,7 @@ return array(
     'upload.error.response' => 'Страница с указанным URL не доступна',
 
     'error.vote.unlogin' => 'Что бы голосовать нужно залогиниться',
+    'error.save' => 'Ошибка при сохранении',
 
 	'user.field.username' => 'Логин',
 	'user.field.email' => 'Email',

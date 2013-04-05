@@ -14,12 +14,14 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 				),
 				'label' => 'material.field.title'
 			)),
+
 			'category' => Jelly::field('belongsto', array(
 				'rules' => array(
 					array('not_zero'),
 				),
 				'label' => 'material.field.category'
 			)),
+
 			'description' => Jelly::field('text', array(
 				'label' => 'material.field.description'
 			)),
@@ -31,24 +33,41 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 				'default' => NULL
 			)),
 
-			'popular_sort' => Jelly::field('integer', array(
+			'popular_index' => Jelly::field('integer', array(
 				'default' => 0
 			)),
+
+            'popular_category' => Jelly::field('integer', array(
+                'default' => 0
+            )),
+
+            'commented_category' => Jelly::field('integer', array(
+                'default' => 0
+            )),
 
 			'user' => Jelly::field('belongsto', array(
 				'label' => 'material.field.user'
 			)),
 
 			'video' => Jelly::field('string'),
+
 			'file' => Jelly::field('string'),
+
 			'url' => Jelly::field('string', array(
 				'label' => 'material.field.url'
 			)),
 
 			'tags' => Jelly::field('manytomany'),
+
             'date' => Jelly::field('timestamp', array(
                 'auto_now_create' => TRUE,
             )),
+
+            'on_index' => Jelly::field('boolean', array(
+                'default' => true,
+                'label' => 'holder.field.activity',
+            )),
+
             'comments' => Jelly::field('hasmany'),
 
             'likes' => Jelly::field('integer', array(
@@ -194,7 +213,46 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
     {
         $this->$field +=1;
         $this->save();
-        $this->recount('popular_sort');
+        $this->recount();
+    }
+
+    public function decrement($field)
+    {
+        $this->$field -=1;
+        $this->save();
+        $this->recount();
+    }
+
+    public function recount()
+    {
+        $formulas = Jelly::query('formula')->select_all();
+
+        $l = $this->likes;
+        $d = $this->dislikes;
+        $t = Date::span($this->date, time(), 'days');
+        $c = $this->comments_count;
+        $v = $this->views;
+
+        $output = array();
+
+        foreach($formulas as $f)
+        {
+            if(eval("\$rez = round($f->formula);") !== FALSE)
+            {
+                $output[$f->name] = $rez;
+            }
+            else
+            {
+                $this->errors('Error in formula');
+            }
+
+
+        }
+        foreach($output as $k => $v)
+        {
+            $this->$k = $v;
+        }
+        $this->save();
     }
 
     public function add_opinion($value)
@@ -228,26 +286,6 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
         $this->recount('popular_sort');
     }
 
-    public function decrement($field)
-    {
-        $this->$field -=1;
-        $this->save();
-        $this->recount('popular_sort');
-    }
-
-    public function recount($sort_field, $formula = '')
-    {
-        $material = $this->as_array();
-        $vars = Arr::extract($material, array('likes', 'dislikes', 'comments_count', 'views'));
-        $time = Date::span($this->date, time(), 'days');
-        $vars['date'] = ($time ? $time : 0);
-//        $formula = ($vars['views']) / $vars['date'] * ($vars['views'] + $vars['like'] - $vars['dislike'] + $vars['comments_count']);
-        $formula = $vars['views'] + $vars['date'] + $vars['like'] - $vars['dislike'] + $vars['comments_count'];
-        $result = $this->$sort_field = round($formula, 3);
-        $this->save();
-
-    }
-
     public function recheck()
     {
         //todo: Дописать
@@ -275,8 +313,6 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
         {
             $this->dislikes = $dislikes;
         }
-
-//        echo Debug::vars($dislikes, $likes);
 
         $this->save();
     }

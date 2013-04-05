@@ -1,3 +1,4 @@
+<?$user = A2::instance()->get_user();?>
 <div class="span3">
     <?=Request::factory(Route::url('default', array('controller' => 'comment', 'action' => 'last')))->execute()?>
 </div>
@@ -16,6 +17,9 @@
                         <a href="<?=Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $m->id()))?>" class="thumbnail">
                             <img src="/<?=$m->thumb()?>" alt="<?=$m->title?>"/>
                         </a>
+                        <?if($user AND $user->is_admin()):?>
+                            <div class="hide_from_page"><a href="<?=Route::url('default', array('controller' => 'material', 'action' => 'onindex', 'id' => $m->id()))?>"><i class="icon-remove"></i> Убрать с главной</a></div>
+                        <?endif;?>
                         <div class="item_txt">
                             <?=Text::limit_words($m->title, 15)?>
                         </div>

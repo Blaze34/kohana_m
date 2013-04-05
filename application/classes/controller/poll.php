@@ -6,6 +6,11 @@ class Controller_Poll extends Controller_Web {
 	{
         if ($this->user)
         {
+            /*if ($this->request->is_ajax())
+            {
+                $this->view('/clean')->echo = Utils::json_encode(array('type' => 'success'));
+            }*/
+
             if($act = $this->request->param('act') AND $type = $this->request->param('type') AND $type_id = $this->request->param('id'))
             {
                 $value = (bool) ($act == 'like');

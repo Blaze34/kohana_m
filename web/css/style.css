@@ -191,3 +191,6 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 .guest_name{width: 160px}
 .i-captcha{width: 80px}
 .alert-error ul{padding: 0; margin: 0}
+
+.thum_item{position: relative;}
+.hide_from_page{font-size: .8em; margin-bottom: -5px}

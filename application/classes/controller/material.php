@@ -706,8 +706,10 @@ class Controller_Material extends Controller_Web {
                 {
                     if ($_POST)
                     {
+                        echo Debug::vars($material->on_index);
 
-                        $material->set(Arr::extract($_POST, array('title', 'description', 'start', 'end')) + array('category' => $this->get_selected_category($category_options)));
+                        $material->set(Arr::extract($_POST, array('title', 'on_index', 'description', 'start', 'end')) + array('category' => $this->get_selected_category($category_options)));
+                        echo Debug::vars($material->on_index);
 
                         try
                         {
@@ -777,6 +779,31 @@ class Controller_Material extends Controller_Web {
             {
                 $this->errors('global.no_params')->redirect('/');
             }
+        }
+    }
+
+
+    public function action_onindex()
+    {
+        if($this->allowed())
+        {
+            if($id = $this->request->param('id'))
+            {
+                $material = Jelly::query('material')->where('id', '=', $id)->limit(1)->select();
+                if($material->loaded())
+                {
+                    $material->set(array('on_index' => FALSE))->save();
+                    $this->redirect();
+                }
+            }
+            else
+            {
+                $this->errors('global.no_params')->redirect('/');
+            }
+        }
+        else
+        {
+            $this->redirect('/');
         }
     }
 

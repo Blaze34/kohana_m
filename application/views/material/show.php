@@ -71,7 +71,6 @@
                     var h=d[g]('head')[0] || d[g]('body')[0];
                     h.appendChild(s);
                 })();</script>
-            <div class="pluso" data-options="medium,round,line,horizontal,counter,theme=01" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email,yandex,yazakladki" data-background="transparent"></div>
             <div class="user_header">
                 <div class="pull-left">
                     <i class="icon-user"></i>
@@ -86,12 +85,15 @@
             <div class="video_desc">
                 <?=$material->description?>
             </div>
+
             <div class="video_footer">
-                <div class="video_code pull-left">
-                    <textarea name="" id="" cols="30" rows="3"></textarea>
-                    <div class="help-block">Код видео</div>
-                </div>
-                <div class="share42init pull-right"></div>
+                <?if($material->video):?>
+                    <div class="video_code pull-left">
+                        <textarea onclick="this.select();"><object type="application/x-shockwave-flash" data="<?=URL::site('', TRUE)?>web/swf/player.swf" width="650" height="440" id="player" style="visibility: visible;"><param name="allowFullScreen" value="true"><param name="flashvars" value="begin=<?=$material->start?>&end=<?=$material->end?>&vid=<?=$material->video?>"></object></textarea>
+                        <div class="help-block">Код видео</div>
+                    </div>
+                <?endif;?>
+                <div class="pluso pull-right" data-options="medium,round,line,horizontal,counter,theme=01" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email,yandex,yazakladki" data-background="transparent"></div>
             </div>
             <?
             if($user AND $user->is_admin()) $admin = TRUE?>

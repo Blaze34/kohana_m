@@ -47,6 +47,12 @@
                     </div>
                 </div>
                 <div class="control-group">
+                    <label class="control-label">Показывать на главной</label>
+                    <div class="controls">
+                        <input type="checkbox" name="on_index" <?=$material->on_index ? 'checked="checked"' : '' ?>>
+                    </div>
+                </div>
+                <div class="control-group">
                     <div class="controls">
                         <button type="submit" class="btn">Отправить</button>
                     </div>
