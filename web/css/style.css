@@ -52,7 +52,7 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 .block_title{font-size: 1.5em; color: #444444; border-bottom: 1px dotted #059ccc; margin-bottom: 15px; padding-bottom: 8px;}
 .popular .well{width: 143px;}
 .popular .thumbnails{margin-left: 0px;}
-.thum_items{/*overflow: hidden;*/ width: 710px; margin-right: -10px}
+.thum_items{/*overflow: hidden;*/ /*width: 710px; */margin-right: -10px}
 .thum_items .thum_item{ /*width: 31.914893617021278%;*/ width: 177px; float: left; margin-left: 0; margin-right: 5px; height: 158px; overflow: hidden;}
 .thum_item .item_txt{display: block; font-size: .8em; line-height: 1.2em; padding: 5px 2px; height: 22px; overflow: hidden}
 .thum_item .item_stat{float: left; font-weight: bold; font-size: .8em; line-height: 1.2em; padding: 0 2px}
@@ -70,7 +70,7 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 .blog{margin-top: 15px;}
 .blog .txt_item{width: 240px; margin-right: 80px;}
 .blog .txt_item .item_header{font-size: 1.3em; padding-bottom: 3px;}
-.novelty .thum_item{margin-left: 12px;}
+.novelty .thum_item{margin-left: 17px;}
 
 #footer{height: 151px;}
 #footer .top_part{background: #0290c7; padding: 25px 0 10px; height: 55px}
