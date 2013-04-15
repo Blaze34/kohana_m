@@ -26,7 +26,7 @@ class Controller_Index extends Controller_Web {
             $mids[] = $m->id();
         }
 
-        if ($materials)
+        if (sizeof($materials))
         {
             $comments = Jelly::query ('comment')
                 ->with ('material')
@@ -76,7 +76,7 @@ class Controller_Index extends Controller_Web {
             $mids[] = $m->id();
         }
 
-        if ($materials)
+        if (sizeof($materials))
         {
             $comments = Jelly::query ('comment')
                 ->with ('material')

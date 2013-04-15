@@ -45,6 +45,10 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
                 'default' => 0
             )),
 
+            'novelty_index' => Jelly::field('integer', array(
+                'default' => 0
+            )),
+
 			'user' => Jelly::field('belongsto', array(
 				'label' => 'material.field.user'
 			)),
@@ -245,8 +249,6 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
             {
                 $this->errors('Error in formula');
             }
-
-
         }
 
         foreach($output as $k => $v)

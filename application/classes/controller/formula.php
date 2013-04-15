@@ -100,14 +100,13 @@ class Controller_Formula extends Controller_Web {
                 if($m->total_recount())
                 {
                     $output['msg'] = 'Пересчет успешно завершен!';
+
                 }
                 else
                 {
                     $output['err'] = 'Пересчет завершен c ошибками!';
                 }
             }
-
-
 
             $this->errors($output['err'] ? $output['err'] : $output['msg'])->redirect();
         }
