@@ -50,7 +50,7 @@ class Controller_Formula extends Controller_Web {
 
                             if($formula->saved())
                             {
-                                $this->redirect(Route::url('default', array('controller' => 'formula')));
+                                $this->redirect(Route::url('default', array('controller' => 'formula', 'action' => 'recount')));
                             }
                             else
                             {
@@ -97,7 +97,7 @@ class Controller_Formula extends Controller_Web {
 
             foreach ($materials as $m)
             {
-                if($m->recount_sort_fileds())
+                if($m->total_recount())
                 {
                     $output['msg'] = 'Пересчет успешно завершен!';
                 }

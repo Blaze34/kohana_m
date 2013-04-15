@@ -253,7 +253,17 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
         {
             $this->$k = $v;
         }
-        $this->save();
+
+        $model = $this->save();
+
+        if($model->saved())
+        {
+            return true;
+        }
+
+        return false;
+
+
     }
 
     public function add_opinion($value)
@@ -287,7 +297,7 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
         $this->recount();
     }
 
-    public function recount_sort_fileds()
+    public function total_recount()
     {
 
         $id = $this->id();
@@ -315,9 +325,9 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
             $this->dislikes = $dislikes;
         }
 
-        $rez = $this->save();
+        $model = self::recount();
 
-        if($rez->saved())
+        if($model)
         {
             return true;
         }
