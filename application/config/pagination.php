@@ -29,4 +29,11 @@ return array(
         'view'           => 'pagination/twitter_bootstrap',
         'auto_hide'      => TRUE,
     ),
+
+    'formula' => array(
+        'current_page'   => array('source' => 'query_string', 'key' => 'p'), // source: "query_string" or "route"
+        'items_per_page' => 15,
+        'view'           => 'pagination/twitter_bootstrap',
+        'auto_hide'      => TRUE,
+    ),
 );

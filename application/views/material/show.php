@@ -14,13 +14,13 @@
     <li class="active"><?=$material->title?></li>
 </ul>
 <?$user = A2::instance()->get_user();?>
-<div class="sections">
-    <div class="title"><h1><?=$material->category->name?></h1></div>
-</div><!-- /sections -->
+
 
 <div class="row-fluid">
     <div class="item_layout">
-        <div class="headline"><h1><?=$material->title?></h1></div>
+        <div class="sections">
+            <div class="headline"><h1><?=$material->title?></h1></div>
+        </div><!-- /sections -->
         <div class="span8">
             <?if ($user AND $user->is_admin()):?>
                 <div class="well well-small">
@@ -41,8 +41,8 @@
                 <div class="video-extras-likes-dislikes pull-left">
                     <div class="likes-count pull-left"><i class="icon icon-thumbs-up"></i><span><?=$mpoll['like']?></span></div>
                     <div class="dislikes-count pull-left"><i class="icon icon-thumbs-down"></i><span><?=$mpoll['dislike']?></span></div>
+                    <div class="mviews pull-left"><?=$material->views?> <i class="icon icon-eye-open"></i></div>
                 </div>
-
                 <?if ($user AND ($material->user->firstname != $user->firstname)):?>
                 <div class="buttons pull-right">
                     <?=$material_user_vote->value?>
@@ -82,9 +82,7 @@
                 </div>
                 <div class="pull-right"><?=date('d.m.y', $material->date)?></div>
             </div>
-            <div class="video_desc">
-                <?=$material->description?>
-            </div>
+            <div class="video_desc"><?=$material->description?></div>
 
             <div class="video_footer">
                 <?if($material->video):?>

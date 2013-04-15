@@ -1,7 +1,13 @@
 <h3><?=__('title.formula.index')?></h3>
 <?php if ( !sizeof($formula)):?>
-    <p>No static pages</p>
+    <p>ПУсто</p>
 <?php else: ?>
+    <div class="text-right">
+        <a class="btn btn btn-primary text-right" href="<?=Route::url('default', array('controller' => 'formula', 'action' => 'materials'))?>">Таблица материала с полями для сортировки</a>
+        <a class="btn btn btn-primary text-right" href="<?=Route::url('default', array('controller' => 'formula', 'action' => 'recount'))?>">Пересчитать поля</a>
+        <p></p>
+    </div>
+
     <table class="table table-striped">
         <tr>
             <th><?=__('formula.field.name')?></th>
@@ -16,6 +22,7 @@
                     <a class="btn btn-mini btn-warning" href="<?=Route::url('default', array('controller' => 'formula', 'action' => 'edit', 'id' => $f->id))?>"><?=__('global.edit')?></a>
                 </td>
             </tr>
-        <?php endforeach; ?>
+        <?endforeach; ?>
     </table>
+    <?=isset($pagination) ? $pagination : ''?>
 <? endif;?>

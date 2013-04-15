@@ -94,8 +94,8 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 .pagination{text-align: center;}
 .sections{display: inline-block; width: 100%; padding: 10px 0 15px; border-bottom: 2px dotted #059CCC; margin-bottom: 20px;}
 .sections h3{margin: 0; font-size: 1.4em; line-height: 1.6em;}
-.sections li{float: left; margin-right: 15px; font-size: 1.1em; }
-.sections li.active{color: #2d2d2d;}
+.sections .subcategories li{display: inline-block; margin-right: 15px; font-size: 1.1em; }
+.sections .subcategories  li.active{color: #2d2d2d;}
 .media_items{overflow: hidden;}
 .media{padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid #e8e8e8;}
 .media-body{font-size: 1em; line-height: 1.2em;}
@@ -142,15 +142,16 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 .item_layout .span8{margin-left: 0}
 .views-info{display: inline-block; width: 100%; padding: 10px 0 0;}
 .views-info .buttons{text-align: right;}
-.views-info .video-extras-likes-dislikes{}
+.views-info .video-extras-likes-dislikes{font-weight: bold;  font-family: "Verdana", "Geneva CY", "DejaVu Sans", "sans-serif";}
 .views-info .video-extras-sparkbars {height: 3px; margin: 10px 0 0; overflow: hidden; clear: both; display: inline-block; width: 100%; background: #ccc}
 .views-info .video-extras-sparkbar-likes {float: left;height: 4px; background: #61b904;}
 .views-info .video-extras-sparkbar-dislikes {float: left; height: 4px; background: #de0800;}
 .video-extras-likes-dislikes .likes-count{margin-right: 10px;}
+.mviews{margin-left: 20px}
 .user_header{padding-left: 20px; margin: 10px; height: 24px; overflow: hidden;}
 .user_header .user_photo{float: left; margin-right: 10px;}
 .video_footer{display: inline-block; width: 100%;}
-.video_desc{ border-top: 1px solid #eee; clear: both; padding: 10px;}
+.video_desc{ border-top: 1px solid #eee; clear: both; padding: 10px; white-space: pre-wrap;}
 .video_desc p{font-weight: bold; margin: 10px 0;}
 .video_code textarea{margin-bottom: 0; width: 220px; max-width: 220px; }
 .video_code .help-block{font-size: .8em;}
@@ -194,3 +195,6 @@ html, body{background: #ffffff; height: 100%; font-family: 'Open Sans', sans-ser
 
 .thum_item{position: relative;}
 .hide_from_page{font-size: .8em; margin-bottom: -5px}
+
+pre.for_text{padding: 0; margin: 0;}
+span.for_text{white-space: pre-wrap}

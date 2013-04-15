@@ -26,7 +26,7 @@
                             <td><?=$child['sort']?></td>
                             <td>
                                 <a class="btn btn-warning btn-mini" href="<?=Route::url('default', array('controller' => 'category', 'action' => 'edit', 'id' => $child_id))?>"><?=__('global.edit')?></a >
-                                <a class="btn btn-danger btn-mini alert_delete"  href="javascript:;" data-href="<?=Route::url('default', array('controller' => 'category', 'action' => 'delete', 'id' => $cid))?>" ><?=__('global.delete')?></a >
+                                <a class="btn btn-danger btn-mini alert_delete"  href="javascript:;" data-href="<?=Route::url('default', array('controller' => 'category', 'action' => 'delete', 'id' => $child_id))?>" ><?=__('global.delete')?></a >
                             </td>
                         </tr>
                     <?endforeach;?>

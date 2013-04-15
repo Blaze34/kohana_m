@@ -229,7 +229,7 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 
         $l = $this->likes;
         $d = $this->dislikes;
-        $t = Date::span($this->date, time(), 'days');
+        $this->days = $t = Date::span($this->date, time(), 'days');
         $c = $this->comments_count;
         $v = $this->views;
 
@@ -239,7 +239,7 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
         {
             if(eval("\$rez = round($f->formula);") !== FALSE)
             {
-                $output[$f->name] = $rez;
+                $output[$f->name] = (int)$rez;
             }
             else
             {
@@ -248,6 +248,7 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 
 
         }
+
         foreach($output as $k => $v)
         {
             $this->$k = $v;
@@ -266,7 +267,7 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
             $this->increment('dislikes');
         }
 
-        $this->recount('popular_sort');
+        $this->recount();
     }
 
     public function update_opinion($value)
@@ -283,12 +284,12 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
         }
 
         $this->save();
-        $this->recount('popular_sort');
+        $this->recount();
     }
 
-    public function recheck()
+    public function recount_sort_fileds()
     {
-        //todo: Дописать
+
         $id = $this->id();
         $commets_count = Jelly::query('comment')->select_column (DB::expr ('COUNT(id)'), 'count')->where('material', '=', $id)->limit(1)->select();
         if($commets_count->count != $this->comments_count)
@@ -314,7 +315,14 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
             $this->dislikes = $dislikes;
         }
 
-        $this->save();
+        $rez = $this->save();
+
+        if($rez->saved())
+        {
+            return true;
+        }
+
+        return false;
     }
 
 }

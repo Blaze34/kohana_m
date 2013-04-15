@@ -69,6 +69,7 @@ return array(
 	'title.material.add_gif' => 'Добавление GIF',
 	'title.formula.index' => 'Формулы сортировки',
 	'title.formula.edit' => 'Редактирование формулы',
+	'title.formula.materials' => 'Таблица материала с полями для сортировки',
 
     'holder.field.title' => 'Название ',
     'holder.field.body' => 'Содержимое',
@@ -128,6 +129,7 @@ return array(
 
     'error.vote.unlogin' => 'Что бы голосовать нужно залогиниться',
     'error.save' => 'Ошибка при сохранении',
+    'error.add_gif.unlogin' => 'Что бы добавлять GIF-файлы нужно залогиниться',
 
 	'user.field.username' => 'Логин',
 	'user.field.email' => 'Email',

@@ -15,7 +15,8 @@ class Controller_Formula extends Controller_Web {
 	{
         if ($this->allowed())
         {
-            $formula = Jelly::query('formula')->select_all();
+
+            $formula = Jelly::query('formula')->pagination('formula')->select_all();
 
             $this->view(array('formula' => $formula));
         }
@@ -69,6 +70,50 @@ class Controller_Formula extends Controller_Web {
             {
                 $this->errors('global.no_params')->redirect();
             }
+        }
+    }
+
+    public function action_materials ()
+    {
+        if($this->allowed())
+        {
+            $materials = Jelly::query('material')->pagination('formula')->select_all();
+
+            $this->view(array('materials' => $materials));
+        }
+        else
+        {
+            $this->redirect('/');
+        }
+    }
+
+    public function action_recount ()
+    {
+        if($this->allowed())
+        {
+            $materials = Jelly::query('material')->select_all();
+
+            $output = array('msg' => '', 'err' => '');
+
+            foreach ($materials as $m)
+            {
+                if($m->recount_sort_fileds())
+                {
+                    $output['msg'] = 'Пересчет успешно завершен!';
+                }
+                else
+                {
+                    $output['err'] = 'Пересчет завершен c ошибками!';
+                }
+            }
+
+
+
+            $this->errors($output['err'] ? $output['err'] : $output['msg'])->redirect();
+        }
+        else
+        {
+            $this->redirect('/');
         }
     }
 

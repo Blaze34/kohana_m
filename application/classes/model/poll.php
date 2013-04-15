@@ -20,7 +20,7 @@ class Model_Poll extends Jelly_Model implements Acl_Resource_Interface {
             )),
 
             'value' => Jelly::field('boolean', array(
-                'default' => TRUE,
+                'default' => NULL,
                 'label' => 'like.field.value',
             )),
 		));

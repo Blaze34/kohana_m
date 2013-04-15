@@ -33,6 +33,7 @@
         <?endif;?>
     </div>
 </div>
+<?Holder::show(12, NULL, array('wrapper' => false))?>
 <div class="span12 block popular novelty">
     <div class="block_title">Новинки</div>
     <div class="thum_items">

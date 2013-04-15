@@ -111,88 +111,95 @@ class Controller_Material extends Controller_Web {
 
     public function action_add_gif()
     {
-        $config = Kohana::$config->load('material.gif');
-
-        $material = Jelly::factory('material');
-        $category_options = $this->get_category_options();
-
-        if($_POST)
+        if($this->user)
         {
-            $url = Arr::get($_POST, 'url');
-            $file = Arr::get($_FILES, 'gif');
+            $config = Kohana::$config->load('material.gif');
 
-            $material->set(array(
-                'title' => Arr::get($_POST, 'title'),
-                'description' => Arr::get($_POST, 'description'),
-                'category' => $this->get_selected_category($category_options),
-                'user' => $this->user ? $this->user->id() : NULL
-            ));
+            $material = Jelly::factory('material');
+            $category_options = $this->get_category_options();
 
-            $tmp_file = NULL;
-
-            if ($file AND Upload::not_empty($file) AND Upload::valid($file))
+            if($_POST)
             {
-                if ($tmp_file = $this->save_gif_from_file($file, $config))
-                {
-                    $url = '';
-                }
-            }
+                $url = Arr::get($_POST, 'url');
+                $file = Arr::get($_FILES, 'gif');
 
-            if($url)
-            {
-                $tmp_file = $this->save_gif_from_url($url, $config);
-            }
+                $material->set(array(
+                    'title' => Arr::get($_POST, 'title'),
+                    'description' => Arr::get($_POST, 'description'),
+                    'category' => $this->get_selected_category($category_options),
+                    'user' => $this->user ? $this->user->id() : NULL
+                ));
 
-            if (! is_array($tmp_file))
-            {
-                try
-                {
-                    $material->save();
-                }
-                catch(Jelly_Validation_Exception $e)
-                {
-                    $this->errors($e->errors('errors'));
-                }
+                $tmp_file = NULL;
 
-                if ($material->saved())
+                if ($file AND Upload::not_empty($file) AND Upload::valid($file))
                 {
-                    $dir = $material->dir('gif');
-                    if ( ! is_dir($dir))
+                    if ($tmp_file = $this->save_gif_from_file($file, $config))
                     {
-                        mkdir($dir);
+                        $url = '';
+                    }
+                }
+
+                if($url)
+                {
+                    $tmp_file = $this->save_gif_from_url($url, $config);
+                }
+
+                if (! is_array($tmp_file))
+                {
+                    try
+                    {
+                        $material->save();
+                    }
+                    catch(Jelly_Validation_Exception $e)
+                    {
+                        $this->errors($e->errors('errors'));
                     }
 
-                    $material->set('file', $material->get_filename('gif'))->save();
-
-                    if (copy($tmp_file, $dir.$material->file))
+                    if ($material->saved())
                     {
-                        Tags::add($material);
+                        $dir = $material->dir('gif');
+                        if ( ! is_dir($dir))
+                        {
+                            mkdir($dir);
+                        }
 
-                        $material->save_thumb($tmp_file);
+                        $material->set('file', $material->get_filename('gif'))->save();
+
+                        if (copy($tmp_file, $dir.$material->file))
+                        {
+                            Tags::add($material);
+
+                            $material->save_thumb($tmp_file);
+                        }
+                        else
+                        {
+                            $material->delete();
+                        }
+                    }
+                    unlink($tmp_file);
+
+                    if ($material->saved())
+                    {
+                        $this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
                     }
                     else
                     {
-                        $material->delete();
+                        $this->errors(__('material.upload.error'));
                     }
-                }
-                unlink($tmp_file);
-
-                if ($material->saved())
-                {
-                    $this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
                 }
                 else
                 {
-                    $this->errors(__('material.upload.error'));
+                    $this->errors(Arr::get($tmp_file, 'file_error'));
                 }
             }
-            else
-            {
-                $this->errors(Arr::get($tmp_file, 'file_error'));
-            }
-        }
 
-        $this->view()->category_options = $category_options;
+            $this->view()->category_options = $category_options;
+        }
+        else
+        {
+            $this->errors('error.add_gif.unlogin')->redirect();
+        }
     }
 
     protected function save_gif_from_url($url, $config)
@@ -353,7 +360,6 @@ class Controller_Material extends Controller_Web {
 
                 $material->increment('views');
 
-
                 $this->view(array(
                     'material' => $material,
                     'comments' => $comments,
@@ -406,11 +412,11 @@ class Controller_Material extends Controller_Web {
 
             if(sizeof($user_vote))
             {
-                if($user_vote->value)
+                if($user_vote->value === TRUE)
                 {
                     $material_user_vote = 'like';
                 }
-                else
+                elseif($user_vote->value === FALSE)
                 {
                     $material_user_vote = 'dislike';
                 }
@@ -498,7 +504,6 @@ class Controller_Material extends Controller_Web {
                             ->where('material', 'IN', $mids)
                             ->order_by('date', 'DESC')
                             ->select_all();
-//                    echo Debug::vars($comments);
 
                     $comments_count = Jelly::query('comment')
                         ->with('material')
@@ -706,10 +711,7 @@ class Controller_Material extends Controller_Web {
                 {
                     if ($_POST)
                     {
-                        echo Debug::vars($material->on_index);
-
                         $material->set(Arr::extract($_POST, array('title', 'on_index', 'description', 'start', 'end')) + array('category' => $this->get_selected_category($category_options)));
-                        echo Debug::vars($material->on_index);
 
                         try
                         {

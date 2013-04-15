@@ -44,6 +44,7 @@ class Controller_Category extends Controller_Web {
             $categories = Jelly::query('category')->where('parent_id', '=', 0)->order_by('sort')->select_all()->as_array('id', 'name');
 
             $category = Jelly::factory('category');
+
             if ($_POST)
             {
                 try
@@ -79,6 +80,7 @@ class Controller_Category extends Controller_Web {
         if ($this->allowed())
         {
             $categories = Jelly::query('category')->where('parent_id', '=', 0)->order_by('sort')->select_all()->as_array('id', 'name');
+
             $category = Jelly::factory('category', $this->request->param('id'));
 
             if ($category->loaded())
@@ -125,7 +127,7 @@ class Controller_Category extends Controller_Web {
         {
 
             $this->title($category->name, FALSE);
-            $materials = $children = $comments = $ids = array();
+            $materials = $children = $child = $comments = $ids = array();
 
             $sort = 'popular_category';
 
@@ -139,7 +141,7 @@ class Controller_Category extends Controller_Web {
             }
 
             $materials = Jelly::query('material')->with('user')->where('category', '=', $category->id())->order_by($sort, 'DESC')->pagination()->select_all();
-//            echo Debug::vars($materials->as_array());
+
             $comments = Jelly::query('comment')->with('material')->where('category_id', '=', $category->id())->order_by('id', 'DESC')->select_all();
 
             if(sizeof($category->children))
@@ -151,10 +153,14 @@ class Controller_Category extends Controller_Web {
 
                 $comments = Jelly::query('comment')->with('material')->where('category_id', 'IN', $ids)->order_by('date', 'DESC')->select_all();
                 $materials = Jelly::query('material')->with('user')->where('category', 'IN', $ids)->order_by($sort, 'DESC')->pagination()->select_all();
+                $children = $category->get('children')->order_by('sort')->order_by('id')->select()->as_array('id');
             }
 
             if ($category->parent_id)
             {
+
+                $child = $category;
+
                 $category = Jelly::factory('category', $category->parent_id);
 
                 if(!sizeof($comments))
@@ -170,8 +176,7 @@ class Controller_Category extends Controller_Web {
 
             }
             $holder = Jelly::query('holder')->where('category', '=', $id)->limit(1)->select();
-            $children = $category->get('children')->order_by('sort')->order_by('id')->select();
-            $this->view(array('materials' => $materials, 'holder' => $holder, 'category' => $category, 'children' => $children, 'comments' => $comments));
+            $this->view(array('materials' => $materials, 'holder' => $holder, 'category' => $category, 'children' => $children, 'child' => $child, 'comments' => $comments));
 
         }
         else
@@ -190,6 +195,7 @@ class Controller_Category extends Controller_Web {
         if ($this->allowed())
         {
             $category = Jelly::factory('category', $this->request->param('id'));
+
             if ($category->loaded())
             {
                 if(sizeof($category->children))
