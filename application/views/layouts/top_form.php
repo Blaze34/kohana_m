@@ -49,7 +49,7 @@
             </div>
         </div>
         <div class="tab-pane" id="cat_video">
-            <form class="form-search" action="<?=Route::url('default', array('controller' => 'material', 'action' => 'parse'))?>">
+            <form class="form-search" method="post" action="<?=Route::url('default', array('controller' => 'material', 'action' => 'parse'))?>">
                 <div class="input-append">
                     <input type="text" class="span2 search-query" name="url" placeholder="Например: http://www.youtube.com/watch?v=RmaHGY7BEog">
                     <button type="submit" class="btn btn-large">Нарезать</button>

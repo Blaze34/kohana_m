@@ -1,2 +1,1 @@
-<object type="application/x-shockwave-flash" data="http://mmatica.loc/web/swf/player.swf" width="650" height="440" id="player" style="visibility: visible;"><param name="allowFullScreen" value="true"><param name="flashvars" value="begin=0&end=193&vid=SNwt9JFAtAw"></object>
-<object type="application/x-shockwave-flash" data="http://mmatica.loc/web/swf/player.swf" width="650" height="440" id="player" style="visibility: visible;"><param name="allowFullScreen" value="true"><param name="flashvars" value="begin=0&end=96.803&vid=7hsBdNSqSRA"></object>
+adas

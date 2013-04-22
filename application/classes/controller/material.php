@@ -95,11 +95,10 @@ class Controller_Material extends Controller_Web {
 	{
 //		$_GET['url'] = 'http://www.youtube.com/watch?v=3CCFufefe9E';
 
-		if ($url = Arr::get($_GET, 'url'))
+		if ($url = Arr::get($_POST, 'url'))
 		{
 			if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match))
 			{
-
 				if ($video_id = Arr::get($match, 1))
 				{
 					$this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'add_video', 'id' => $video_id)));
@@ -127,6 +126,7 @@ class Controller_Material extends Controller_Web {
                     'title' => Arr::get($_POST, 'title'),
                     'description' => Arr::get($_POST, 'description'),
                     'category' => $this->get_selected_category($category_options),
+                    'url' => $url,
                     'user' => $this->user ? $this->user->id() : NULL
                 ));
 
@@ -177,6 +177,7 @@ class Controller_Material extends Controller_Web {
                             $material->delete();
                         }
                     }
+
                     unlink($tmp_file);
 
                     if ($material->saved())
@@ -356,7 +357,7 @@ class Controller_Material extends Controller_Web {
 
                 list($material_user_vote, $mpoll) = $this->get_material_votes ($id, $material);
 
-                list($cpoll, $comments_user_vote) = $this->get_votes_comments ($comments);
+                list($cpoll, $comments_user_vote) = $this->get_comments_votes ($comments);
 
                 $material->increment('views');
 
@@ -428,7 +429,7 @@ class Controller_Material extends Controller_Web {
         return false;
     }
 
-    protected function get_votes_comments ($comments)
+    protected function get_comments_votes ($comments)
     {
         $ids = $cpoll = $comments_user_vote = array();
         foreach ($comments as $c)
@@ -783,7 +784,6 @@ class Controller_Material extends Controller_Web {
             }
         }
     }
-
 
     public function action_onindex()
     {

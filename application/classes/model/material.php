@@ -61,6 +61,11 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 				'label' => 'material.field.url'
 			)),
 
+            'fix_url' => Jelly::field('string', array(
+                'default' => false,
+                'label' => 'material.field.fix_url'
+            )),
+
 			'tags' => Jelly::field('manytomany'),
 
             'date' => Jelly::field('timestamp', array(
@@ -123,12 +128,30 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 
     public function file()
     {
+
+        $url = $this->url;
+
+        if( ! $this->fix_url AND $url)
+        {
+            $headers = @get_headers($url);
+
+            if(sizeof($headers) AND strpos($headers[0], '200'))
+            {
+                return $url;
+            }
+        }
+
+        $this->fix_url = true;
+
+        $this->save();
+
         $_dir = $this->dir('gif');
 
-        $thumb = $_dir.$this->file;
+        $file = $_dir.$this->file;
 
-        if (file_exists($thumb))
-            return $thumb;
+        if (file_exists($file))
+
+            return $file;
     }
 
 	public function get_filename($group)

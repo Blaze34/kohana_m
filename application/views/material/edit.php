@@ -1,11 +1,12 @@
 <script type="text/javascript">
-
     function setLimit(begin, end)
     {
         $("#video_start").val(begin);
         $("#video_end").val(end);
     }
-    swfobject.embedSWF("/web/swf/cut.swf", "player", "746", "440", "9.0.0", "/web/swf/expressInstall.swf", {begin: '<?=$material->start?>', end: '<?=$material->end?>', vid: '<?=$material->video?>'});
+    $(document).ready(function(){
+        swfobject.embedSWF("/web/swf/cut.swf", "player", "746", "440", "9.0.0", "/web/swf/expressInstall.swf", {begin: '<?=$material->start?>', end: '<?=$material->end?>', vid: '<?=$material->video?>'});
+    });
 </script>
 <div class="add_layout">
     <div class="add_block edit_wrapper">
@@ -13,7 +14,8 @@
             <?if($material->video):?>
                 <div id="player"></div>
             <?else:?>
-                <img src="/<?=$material->file()?>" alt=""/>
+                <?=$material->file()?>
+<!--                <img src="/--><?//=$material->file()?><!--" alt=""/>-->
             <?endif;?>
         </div>
         <div class="wrapper">
