@@ -2,3 +2,4 @@
 application/cache/
 application/logs/
 source/
+test.php

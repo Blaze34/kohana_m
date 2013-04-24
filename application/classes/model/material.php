@@ -61,9 +61,9 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 				'label' => 'material.field.url'
 			)),
 
-            'fix_url' => Jelly::field('string', array(
+            'url_fix' => Jelly::field('string', array(
                 'default' => false,
-                'label' => 'material.field.fix_url'
+                'label' => 'material.field.url_fix'
             )),
 
 			'tags' => Jelly::field('manytomany'),
@@ -131,7 +131,7 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 
         $url = $this->url;
 
-        if( ! $this->fix_url AND $url)
+        if( ! $this->url_fix AND $url)
         {
             $headers = @get_headers($url);
 
@@ -141,7 +141,7 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
             }
         }
 
-        $this->fix_url = true;
+        $this->url_fix = true;
 
         $this->save();
 

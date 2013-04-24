@@ -14,8 +14,7 @@
             <?if($material->video):?>
                 <div id="player"></div>
             <?else:?>
-                <?=$material->file()?>
-<!--                <img src="/--><?//=$material->file()?><!--" alt=""/>-->
+                <img src="/<?=$material->file()?>" alt=""/>
             <?endif;?>
         </div>
         <div class="wrapper">

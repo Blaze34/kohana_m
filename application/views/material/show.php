@@ -34,7 +34,7 @@
                 <?if($material->video):?>
                     <div id="player"></div>
                 <?else:?>
-                    <img src="<?=($material->fix_url? '/' : '')?><?=$material->file()?>" alt=""/>
+                    <img src="<?=($material->url_fix || !$material->url  ? '/' : '')?><?=$material->file()?>" alt=""/>
                 <?endif;?>
             </div>
             <div class="views-info">

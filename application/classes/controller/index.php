@@ -67,7 +67,7 @@ class Controller_Index extends Controller_Web {
     {
         $comments = $polls = array();
 
-        $materials = Jelly::query ('material')->where('on_index', '=', 1)->order_by('novelty_index', 'DESC')->order_by('date', 'DESC')->limit(16)->select_all();
+        $materials = Jelly::query ('material')->where('on_index', '=', 1)->order_by('novelty_index', 'ASC')->order_by('date', 'DESC')->limit(16)->select_all();
 
         $mids = array();
 
