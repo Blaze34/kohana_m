@@ -21,7 +21,7 @@ return array(
 		'salt' => 'k84yflk46e',
 		'dir' => 'uploads/materials/gif/',
 		'split' => 1000,
-		'size' => '5M',
+		'size' => '25M',
 		'extensions' => array(
 			'gif'
 		),

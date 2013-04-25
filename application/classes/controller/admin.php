@@ -15,11 +15,23 @@ class Controller_Admin extends Controller_Web {
 	{
 		if($this->allowed())
 		{
-			$this->view();
+            if($_POST)
+            {
+                $settings = Jelly::query('setting')->select_all();
+
+                foreach ($settings as $s)
+                {
+                    $s->set(array('status' => ($_POST[$s->title] ? 1 : 0)))->save();
+                }
+            }
+
+			$settings = Jelly::query('setting')->select_all();
+
+            $this->view()->settings = $settings;
 		}
 		else
 		{
-			$this->redirect();
+			$this->redirect('/');
 		}
 	}
 } // End Welcome

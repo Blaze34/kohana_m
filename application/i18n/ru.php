@@ -39,6 +39,7 @@ return array(
     'error.poll.unlogin' => 'Только зарегестрированные пользователи могут голосовать',
     'error.poll.no_exist' => 'Вы пытаетесь проголосовать за несуществующий объект',
     'error.list.empty' => 'Список пуст',
+    'error.lock_guest' => 'Только зарегистрированные пользователи могут воспользоваться этой функцией',
 
 	'title.user.login' => 'Авторизация',
 	'title.user.index' => 'Список пользователей',
@@ -99,6 +100,7 @@ return array(
     'adm.formula' => 'Формулы',
 
     'material.field.title' => 'Название',
+    'material.field.meta_title' => 'Мета заголовок',
     'material.field.category' => 'Категория',
     'material.parse.error' => 'Ошибка, видео не найдено',
     'material.upload.error' => 'Ошибка при добавлении материала',
@@ -114,6 +116,7 @@ return array(
 
     'category.field.id' => 'ID',
     'category.field.name' => 'Название',
+    'category.field.meta_title' => 'Мета заголовок',
     'category.field.sort' => 'Сортировка',
     'category.field.parent' => 'Родитель',
     'category.field.subcategory' => 'Подкатегория',
@@ -145,6 +148,7 @@ return array(
     'static.title' => 'Название публикации',
     'static.alias' => 'URL публикации',
     'static.active' => 'Отображать',
+    'static.cant_comment' => 'Возможность комментировать',
     'static.body' => 'Контент публикации',
     'static.create' => 'Создать',
 

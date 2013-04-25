@@ -35,6 +35,9 @@ class Model_Static extends Jelly_Model
             )),
 			'active' =>  Jelly::field('boolean', array(
                 'default' => FALSE
+            )),
+            'cant_comment' =>  Jelly::field('boolean', array(
+                'default' => TRUE
             ))
 		));
 	}

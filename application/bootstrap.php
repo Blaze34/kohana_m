@@ -141,6 +141,12 @@ Kohana::modules(array(
  * defaults for the URI.
  */
 
+Route::set('cmnt', 'cmnt/<action>/<type>/<id>')
+    ->defaults(array(
+        'controller' => 'comment',
+        'action' => 'index'
+));
+
 Route::set('vote', 'v/<type>/<act>/<id>')
     ->defaults(array(
         'controller' => 'poll',
