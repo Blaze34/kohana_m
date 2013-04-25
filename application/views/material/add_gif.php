@@ -16,6 +16,12 @@
 								<input name="title" type="text" placeholder="Заголовок" value="<?=Arr::get($_POST, 'title')?>">
 							</div>
 						</div>
+                        <div class="control-group">
+							<label class="control-label"><?=__('material.field.meta_title')?></label>
+							<div class="controls">
+								<input name="meta_title" type="text" placeholder="Мета" value="<?=Arr::get($_POST, 'meta_title')?>">
+							</div>
+						</div>
 						<div class="control-group">
 							<label class="control-label">Выбрать категорию<sup>*</sup></label>
 							<div class="controls">

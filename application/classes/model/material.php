@@ -6,6 +6,7 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 	{
 		$meta->fields(array(
 			'id' => Jelly::field('primary'),
+
 			'title' => Jelly::field('string', array(
 				'rules' => array(
 					array('not_empty'),
@@ -14,6 +15,11 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
 				),
 				'label' => 'material.field.title'
 			)),
+
+            'meta_title' => Jelly::field('string', array(
+                'default' => NULL,
+                'label' => 'material.field.meta_title'
+            )),
 
 			'category' => Jelly::field('belongsto', array(
 				'rules' => array(
@@ -82,15 +88,19 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
             'likes' => Jelly::field('integer', array(
                 'default' => 0
             )),
+
             'dislikes' => Jelly::field('integer', array(
                 'default' => 0
             )),
+
             'views' => Jelly::field('integer', array(
                 'default' => 0
             )),
+
             'days' => Jelly::field('integer', array(
                 'default' => 0
             )),
+
             'comments_count' => Jelly::field('integer', array(
                 'default' => 0
             ))

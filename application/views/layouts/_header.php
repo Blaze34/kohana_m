@@ -4,7 +4,7 @@
         <a href="/"><img src="/web/img/template/logo.png" alt="mmatica"></a>
     </div>
     <div class="navbar pull-left top_menu">
-        <?Menu::show(1)?>
+        <div class="navbar"><?Menu::show(2)?></div>
     </div>
     <div class="navbar pull-right user_panel">
         <div class="navbar-inner">

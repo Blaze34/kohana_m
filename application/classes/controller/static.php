@@ -28,11 +28,20 @@ class Controller_Static extends Controller_Web {
     public function action_view()
     {
         $alias = $this->request->param('alias');
+
         $static = Jelly::query('static')->where('alias', '=', $alias)->limit(1)->select();
+
         if ($static->loaded() AND $static->active)
         {
+            $comments = array();
+
+            if($static->cant_comment)
+            {
+                $comments = Jelly::query('comment')->where('static_id', '=', $static->id())->order_by('date', 'DESC')->pagination()->select_all();
+            }
+
             $this->title($static->title, FALSE);
-            $this->view()->static = $static;
+            $this->view(array('static' => $static, 'comments' => $comments));
         }
         else
         {
@@ -48,6 +57,7 @@ class Controller_Static extends Controller_Web {
             $this->js('jquery.tinymce.js');
 
             $static = Jelly::factory('static');
+
             if ($_POST)
             {
                 try
@@ -56,6 +66,7 @@ class Controller_Static extends Controller_Web {
                         'title' => Arr::get($_POST, 'title'),
                         'alias' => $this->alias($_POST),
                         'active' => Arr::get($_POST, 'active', 0),
+                        'cant_comment' => Arr::get($_POST, 'cant_comment', 0),
                         'body' => html_entity_decode(Arr::get($_POST, 'body', ''), ENT_QUOTES)
                     ))->save();
                 }
@@ -95,6 +106,7 @@ class Controller_Static extends Controller_Web {
                             'title' => Arr::get($_POST, 'title'),
                             'alias' => $this->alias($_POST),
                             'active' => Arr::get($_POST, 'active', 0),
+                            'cant_comment' => Arr::get($_POST, 'cant_comment', 0),
                             'body' => html_entity_decode(Arr::get($_POST, 'body', ''), ENT_QUOTES)
                         ))->save();
                     }

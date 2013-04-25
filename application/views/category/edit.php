@@ -9,6 +9,12 @@
         </div>
     </div>
     <div class="control-group">
+        <label class="control-label"><?=__('category.field.meta_title')?></label>
+        <div class="controls">
+            <input type="text" name="meta_title" value="<?=$category->meta_title?>">
+        </div>
+    </div>
+    <div class="control-group">
         <label class="control-label"><?=__('category.field.sort')?></label>
         <div class="controls">
             <div class="input-prepend">

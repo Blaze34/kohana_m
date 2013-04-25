@@ -76,7 +76,6 @@ class Controller_Holder extends Controller_Web {
             {
                 if ($_POST)
                 {
-                    echo Debug::vars($_POST['category']);
                     try
                     {
                         $holder->set(array(

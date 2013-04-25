@@ -13,6 +13,7 @@ class Controller_Web extends Controller_Layout {
 	 * @var  string  page template
 	 */
     public $user = NULL;
+    public $settings = array();
 
 	/**
 	 * Loads the template [View] object.
@@ -34,6 +35,16 @@ class Controller_Web extends Controller_Layout {
 		}
 
 		$this->user = $user;
+
+        // global site settings
+        $settings = Admin::settings();
+
+        foreach($settings as $s)
+        {
+            $this->settings[$s->title] =  $s->status;
+        }
+
+        $this->layout->layout()->set_global($this->settings);
 
 		if ($this->user AND $this->user->deleted)
 		{

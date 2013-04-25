@@ -13,8 +13,8 @@
     <li><a href="<?=Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $material->category->id()))?>"><?=$material->category->name?></a> <span class="divider">/</span></li>
     <li class="active"><?=$material->title?></li>
 </ul>
-<?$user = A2::instance()->get_user();?>
 
+<?$user = A2::instance()->get_user();?>
 
 <div class="row-fluid">
     <div class="item_layout">
@@ -34,7 +34,9 @@
                 <?if($material->video):?>
                     <div id="player"></div>
                 <?else:?>
-                    <img src="<?=($material->url_fix || !$material->url  ? '/' : '')?><?=$material->file()?>" alt=""/>
+                    <div id="GIF" <?=$lock_gif ? 'oncontextmenu="return false;"' : ''?>>
+                        <img src="<?=($material->url_fix || !$material->url  ? '/' : '')?><?=$material->file()?>" alt=""/>
+                    </div>
                 <?endif;?>
             </div>
             <div class="views-info">
@@ -97,25 +99,25 @@
             if($user AND $user->is_admin()) $admin = TRUE?>
             <div class="comments">
                 <h4><?=__('comments.title')?></h4>
-                <form class="form-horizontal" method="post" action="">
-                    <div class="photo_frame square_42">
-                        <img src="<?=$user ? $user->avatar() : Jelly::factory('user')->avatar()?>" height="48" width="48" alt="">
-                    </div>
-                    <div class="msg">
-                        <textarea name="text"><?=Arr::get($_POST, 'text')?></textarea>
-                        <?if (!$user):?>
-                            <br><br>
-                            <input type="text" class="guest_name" name="guest_name" placeholder="Ваше имя" value="<?=Arr::get($_POST, 'guest_name')?>"/>
-                            <input type="text" class="i-captcha" name="captcha" placeholder="Каптча"/>
-                            <?=Captcha::instance('default')->render();?>
-                        <?endif;?>
-                        <button type="submit" class="btn btn-mini btn-primary pull-right">Отправить</button>
-                        <button type="reset" class="btn btn-mini pull-right">Очистить</button>
-                        <div class="clearfix"></div>
-                    </div>
-
-                </form>
-
+                <?if(! $lock_guest_cmnt OR ($lock_guest_cmnt AND $user)):?>
+                    <form class="form-horizontal" method="post" action="<?=Route::url('cmnt', array('action' => 'add', 'type' => $material->get_resource_id(), 'id' => $material->id()))?>">
+                        <div class="photo_frame square_42">
+                            <img src="<?=$user ? $user->avatar() : Jelly::factory('user')->avatar()?>" height="48" width="48" alt="">
+                        </div>
+                        <div class="msg">
+                            <textarea name="text"><?=Arr::get($_POST, 'text')?></textarea>
+                            <?if (!$user):?>
+                                <br><br>
+                                <input type="text" class="guest_name" name="guest_name" placeholder="Ваше имя" value="<?=Arr::get($_POST, 'guest_name')?>"/>
+                                <input type="text" class="i-captcha" name="captcha" placeholder="Каптча"/>
+                                <?=Captcha::instance('default')->render();?>
+                            <?endif;?>
+                            <button type="submit" class="btn btn-mini btn-primary pull-right">Отправить</button>
+                            <button type="reset" class="btn btn-mini pull-right">Очистить</button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </form>
+                <?endif;?>
                 <?if(sizeof($comments)):?>
 
                 <script type="text/javascript">
@@ -148,7 +150,7 @@
                             <div class="msg_footer">
                                 <a class="answer pull-left" href="#">Ответить</a>
                                 <div class="buttons pull-right">
-                                    <?=($admin?'<a href="javascript" data-href="'.Route::url('default', array('controller' => 'comment', 'action' => 'delete', 'id' => $c->id)).'" class="btn btn-mini btn-danger alert_delete"><i class="icon icon-remove icon-white"></i>'.__('global.delete').'</a>':'')?>
+                                    <?=($admin?'<a href="javascript" data-href="'.Route::url('cmnt', array('type' => $material->get_resource_id(), 'action' => 'delete', 'id' => $c->id)).'" class="btn btn-mini btn-danger alert_delete"><i class="icon icon-remove icon-white"></i>'.__('global.delete').'</a>':'')?>
                                     <?if ($user AND ($c->user->firstname != $user->firstname)):?>
                                         <a href="<?=Route::url('vote', array('act' => 'like', 'type' => $c->get_resource_id(), 'id' => $c->id()))?>" class="btn btn-mini btn-success<?=($comments_user_vote[$c->id()]['like']) ? ' disabled' : ''?>">
                                             <i class="icon icon-thumbs-up icon-white"></i><?=($cpoll[$c->id()]['like'] ? $cpoll[$c->id()]['like']:'0')?>

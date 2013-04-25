@@ -29,6 +29,12 @@
                     </div>
                 </div>
                 <div class="control-group">
+                    <label class="control-label"><?=__('material.field.meta_title')?></label>
+                    <div class="controls">
+                        <input name="meta_title" type="text" placeholder="Мета" value="<?=$material->meta_title?>">
+                    </div>
+                </div>
+                <div class="control-group">
                     <label class="control-label">Выбрать категорию<sup>*</sup></label>
                     <div class="controls">
                         <?=Form::select('category', array(0 => 'Не выбрана') + $category_options, $material->category->id())?>

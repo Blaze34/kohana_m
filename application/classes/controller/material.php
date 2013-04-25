@@ -2,47 +2,65 @@
 
 class Controller_Material extends Controller_Web {
 
+    public function before()
+    {
+        if (in_array($this->request->action(), array('index')))
+        {
+            $this->layout = 'admin';
+        }
+
+        return parent::before();
+    }
+
 	public function action_index()
 	{
-//        $materials = Jelly::query('material')->with('user')->with('category')->pagination()->select_all();
-
+        $this->view();
 	}
 
 	public function action_add_video()
 	{
-		if ($id = $this->request->param('id'))
-		{
-			if ($video = Youtube::factory()->find($id))
-			{
-				$material = Jelly::factory('material');
+        if($this->settings['lock_guest_add_video'])
+        {
+            if( ! $this->user)
+            {
+                $this->errors('error.lock_guest')->redirect('/');
+            }
+        }
 
-				$material->set(array(
-					'video' => $id,
-					'title' => $video->title,
-					'description' => $video->description,
-					'user' => $this->user ? $this->user->id() : NULL
-				));
-				$category_options = $this->get_category_options();
+        if ($id = $this->request->param('id'))
+        {
+            if ($video = Youtube::factory()->find($id))
+            {
+                $material = Jelly::factory('material');
 
-				$thumb = NULL;
+                $material->set(array(
+                    'video' => $id,
+                    'title' => $video->title,
+                    'description' => $video->description,
+                    'user' => $this->user ? $this->user->id() : NULL
+                ));
+                $category_options = $this->get_category_options();
 
-				if (property_exists($video, 'thumbnail') AND ($_t = $video->thumbnail))
-				{
-					if (property_exists($_t, 'hqDefault'))
-					{
-						$thumb = $_t->hqDefault;
-					}
-					elseif (property_exists($_t, 'sqDefault'))
-					{
-						$thumb = $_t->sqDefault;
-					}
-				}
+                $thumb = NULL;
 
-				if ($_POST)
-				{
+                if (property_exists($video, 'thumbnail') AND ($_t = $video->thumbnail))
+                {
+                    if (property_exists($_t, 'hqDefault'))
+                    {
+                        $thumb = $_t->hqDefault;
+                    }
+                    elseif (property_exists($_t, 'sqDefault'))
+                    {
+                        $thumb = $_t->sqDefault;
+                    }
+                }
+
+                if ($_POST)
+                {
                     $material->set(array(
                         'title' => Arr::get($_POST, 'title'),
-                        'description' => Arr::get($_POST, 'description'),
+                        'meta_title' => Arr::get($_POST, 'meta_title'),
+                        'description' => ($this->user AND $this->user->is_admin()) ? htmlspecialchars_decode(Arr::get($_POST, 'description')) : Arr::get($_POST, 'description'),
                         'category' => $this->get_selected_category($category_options),
                         'start' => Arr::get($_POST, 'start'),
                         'end' => Arr::get($_POST, 'end')
@@ -75,20 +93,20 @@ class Controller_Material extends Controller_Web {
 
                         $this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
                     }
-				}
+                }
 
-				$this->view()->material = $material;
-				$this->view()->category_options = $category_options;
-			}
-			else
-			{
-				$this->errors('material.parse.error')->redirect('/');
-			}
-		}
-		else
-		{
-			$this->errors('global.no_params')->redirect('/');
-		}
+                $this->view()->material = $material;
+                $this->view()->category_options = $category_options;
+            }
+            else
+            {
+                $this->errors('material.parse.error')->redirect('/');
+            }
+        }
+        else
+        {
+            $this->errors('global.no_params')->redirect('/');
+        }
 	}
 
 	public function action_parse()
@@ -124,7 +142,8 @@ class Controller_Material extends Controller_Web {
 
                 $material->set(array(
                     'title' => Arr::get($_POST, 'title'),
-                    'description' => Arr::get($_POST, 'description'),
+                    'meta_title' => Arr::get($_POST, 'meta_title'),
+                    'description' => ($this->user AND $this->user->is_admin()) ? htmlspecialchars_decode(Arr::get($_POST, 'description')) : Arr::get($_POST, 'description'),
                     'category' => $this->get_selected_category($category_options),
                     'url' => $url,
                     'user' => $this->user ? $this->user->id() : NULL
@@ -305,53 +324,15 @@ class Controller_Material extends Controller_Web {
 
 			if ($material->loaded())
 			{
-                if($_POST)
+
+                if($material->meta_title)
                 {
-                    $comment = Jelly::factory('comment');
-
-                    $extra_validation = NULL;
-
-                    if($this->user OR Captcha::valid(Arr::get($_POST,'captcha')))
-                    {
-                        if($this->user)
-                        {
-                            $comment->user = $this->user;
-                        }
-                        else
-                        {
-                            $comment->guest_name = Arr::get($_POST, 'guest_name');
-                            $extra_validation = Validation::factory($_POST)
-                                ->rule('guest_name', 'not_empty')
-                                ->rule('guest_name', 'min_length', array(':value', 3))->labels(array('guest_name' => 'comment.field.guest_name'));
-                        }
-
-                        try
-                        {
-                            $comment->set(array(
-                                'material' => $material->id(),
-                                'text' => Arr::get($_POST, 'text', ''),
-                            ))->save($extra_validation);
-
-                            $material->increment('comments_count');
-
-                            if($comment->saved())
-                            {
-                                $this->redirect();
-                            }
-                        }
-                        catch (Jelly_Validation_Exception $e)
-                        {
-                            $this->errors($e->errors('errors'));
-                        }
-                    }
-                    else
-                    {
-
-                        $this->errors('error.captcha');
-                    }
+                    $this->title($material->meta_title, FALSE);
                 }
-
-                $this->title($material->title, FALSE);
+                else
+                {
+                    $this->title($material->title, FALSE);
+                }
 
                 $comments = $material->get('comments')->with('user')->order_by('date', 'DESC')->pagination('comments')->select_all();
 
@@ -712,7 +693,12 @@ class Controller_Material extends Controller_Web {
                 {
                     if ($_POST)
                     {
-                        $material->set(Arr::extract($_POST, array('title', 'on_index', 'description', 'start', 'end')) + array('category' => $this->get_selected_category($category_options)));
+                        $material->set(Arr::extract($_POST, array('title', 'meta_title', 'on_index', 'description', 'start', 'end')) + array('category' => $this->get_selected_category($category_options)));
+
+                        if($this->user AND $this->user->is_admin())
+                        {
+                            $material->set(array('description' => htmlspecialchars_decode(Arr::get($_POST, 'description'))));
+                        }
 
                         try
                         {
@@ -792,6 +778,7 @@ class Controller_Material extends Controller_Web {
             if($id = $this->request->param('id'))
             {
                 $material = Jelly::query('material')->where('id', '=', $id)->limit(1)->select();
+
                 if($material->loaded())
                 {
                     $material->set(array('on_index' => FALSE))->save();

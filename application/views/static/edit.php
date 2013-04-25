@@ -30,6 +30,12 @@
     </div>
 </div>
 <div class="control-group">
+    <label class="control-label"><?=__('static.cant_comment')?></label>
+    <div class="controls">
+        <input type="checkbox" name="cant_comment" <?=$static->cant_comment ? 'checked="checked"' : '' ?>>
+    </div>
+</div>
+<div class="control-group">
     <div class="controls">
         <button type="submit" class="btn"><?=__('static.save')?></button>
     </div>

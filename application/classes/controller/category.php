@@ -1,6 +1,7 @@
     <?php defined('SYSPATH') or die('No direct script access.');
 
 class Controller_Category extends Controller_Web {
+
     public function before()
     {
         if (in_array($this->request->action(), array('index', 'add', 'edit')))
@@ -51,6 +52,7 @@ class Controller_Category extends Controller_Web {
                 {
                     $category->set(array(
                         'name' => Arr::get($_POST, 'name'),
+                        'meta_title' => Arr::get($_POST, 'meta_title'),
                         'sort' => Arr::get($_POST, 'sort'),
                         'parent_id' => Arr::get($_POST, 'parent_id'),
                     ))->save();
@@ -91,6 +93,7 @@ class Controller_Category extends Controller_Web {
                     {
                         $category->set(array(
                             'name' => Arr::get($_POST, 'name'),
+                            'meta_title' => Arr::get($_POST, 'meta_title'),
                             'sort' => Arr::get($_POST, 'sort'),
                             'parent_id' => Arr::get($_POST, 'parent_id'),
                         ))->save();
@@ -125,8 +128,15 @@ class Controller_Category extends Controller_Web {
 
         if($category->loaded())
         {
+            if($category->meta_title)
+            {
+                $this->title($category->meta_title, FALSE);
+            }
+            else
+            {
+                $this->title($category->meta_title, FALSE);
+            }
 
-            $this->title($category->name, FALSE);
             $materials = $children = $child = $comments = $ids = array();
 
             $sort = 'popular_category';

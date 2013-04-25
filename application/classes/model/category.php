@@ -14,6 +14,12 @@ class Model_Category extends Jelly_Model implements Acl_Resource_Interface {
 				),
 				'label' => 'category.field.name'
 			)),
+
+            'meta_title' => Jelly::field('string', array(
+                'default' => NULL,
+                'label' => 'category.field.meta_title'
+            )),
+
 			'sort' => Jelly::field('integer', array(
 				'default' => 1
 			)),

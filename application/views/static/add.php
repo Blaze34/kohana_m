@@ -26,7 +26,13 @@
     <div class="control-group">
         <label class="control-label"><?=__('static.active')?></label>
         <div class="controls">
-            <input type="checkbox" name="active">
+            <input type="checkbox" name="active" <?=(strlen($_POST['active']) ? 'checked="checked"' : '')?>>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label"><?=__('static.cant_comment')?></label>
+        <div class="controls">
+            <input type="checkbox" name="cant_comment" <?=(strlen($_POST['cant_comment']) ? 'checked="checked"' : '')?>>
         </div>
     </div>
     <div class="control-group">

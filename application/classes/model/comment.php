@@ -6,6 +6,7 @@ class Model_Comment extends Jelly_Model implements Acl_Resource_Interface {
 	{
 		$meta->fields(array(
 			'id' => Jelly::field('primary'),
+
 			'text' => Jelly::field('text', array(
 				'rules' => array(
 					array('not_empty'),
@@ -16,11 +17,14 @@ class Model_Comment extends Jelly_Model implements Acl_Resource_Interface {
 			)),
 
 			'user' => Jelly::field('belongsto'),
+
             'guest_name' => Jelly::field('string', array(
                 'label' => 'comment.field.guest_name'
             )),
 
             'material' => Jelly::field('belongsto'),
+
+            'static' => Jelly::field('belongsto'),
 
             'date' => Jelly::field('timestamp', array(
                 'auto_now_create' => TRUE,

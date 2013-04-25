@@ -23,7 +23,6 @@ class Controller_Poll extends Controller_Web {
                         ->where('type', '=', $type)
                         ->limit(1)->select();
 
-
                     $material = array();
 
                     if($type == 'material')
