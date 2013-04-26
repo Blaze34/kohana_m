@@ -7,6 +7,7 @@
 		        <th>#</th>
 		        <th><?=__('user.field.email')?></th>
 		        <th><?=__('user.field.firstname')?></th>
+                <th>К-во лайков по видео</th>
 		        <th>&nbsp;</th>
 		    </tr>
 	    </thead>
@@ -16,8 +17,8 @@
 		        <td><?=$u->id()?></td>
 		        <td><a href="<?=Route::url('default', array('controller' => 'user', 'action' => 'edit', 'id' => $u->id()));?>"><?=$u->email ? $u->email : __('global.edit')?></a></td>
 		        <td><?=$u->firstname?></td>
+                <td><?=$likes[$u->id()]?></td>
                 <td style="text-align: center">
-
 				    <? if ($u->deleted OR $u->is_me()):?>
                         &nbsp;
 				    <?else:?>

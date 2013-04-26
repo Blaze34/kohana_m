@@ -54,7 +54,9 @@ class Model_User extends Model_Auth_User implements Acl_Role_Interface, Acl_Reso
 			// Relationships to other models
 			'user_tokens' => Jelly::field('hasmany', array(
 				'foreign' => 'user_token',
-			))
+			)),
+
+            'materials' => Jelly::field('hasmany', array())
 		));
 	}
 

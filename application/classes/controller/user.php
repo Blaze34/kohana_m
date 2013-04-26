@@ -20,6 +20,7 @@ class Controller_User extends Controller_Web {
 		if ($this->allowed())
 		{
 			$user = Jelly::query('user');
+
 			$filters = Kohana::$config->load('user.filter');
 
 			foreach ($filters as $name => $param)
@@ -31,9 +32,18 @@ class Controller_User extends Controller_Web {
 				}
 			}
 
-			$user = $user->order_by('id', 'ASC')->pagination('list')->select();
 
-			$this->view()->users = $user;
+            $likes = DB::select(array(DB::expr ('COUNT(p.value)'), 'count'), 'm.user_id')
+                ->from(array('materials', 'm'))
+                ->from(array('polls', 'p'))
+                ->where(DB::expr('m.id'), '=', DB::expr('p.type_id'))
+                ->and_where(DB::expr('m.user_id'), '>', 0)
+                ->and_where(DB::expr('p.value'), '=', true)
+                ->group_by('m.user_id')
+                    ->execute()->as_array('user_id', 'count');
+
+			$user = $user->order_by('id', 'ASC')->pagination('list')->select();
+			$this->view(array('users' => $user, 'likes' => $likes));
 		}
 		else
 		{
