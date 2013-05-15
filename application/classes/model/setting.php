@@ -12,12 +12,27 @@ class Model_Setting extends Jelly_Model implements Acl_Resource_Interface {
             )),
 
             'title' => Jelly::field('string', array(
-                'label' => 'setting.field.name'
+                'label' => 'setting.field.title'
             )),
 
             'status' => Jelly::field('boolean', array(
                 'default' => FALSE,
-                'label' => 'setting.field.lock_guest',
+                'label' => 'setting.field.status',
+            )),
+
+            'form' => Jelly::field('boolean', array(
+                'default' => FALSE,
+                'label' => 'setting.field.form',
+            )),
+
+            'value' => Jelly::field('string', array(
+                'default' => NULL,
+                'label' => 'setting.field.value',
+            )),
+
+            'help' => Jelly::field('string', array(
+                'default' => NULL,
+                'label' => 'setting.field.help',
             )),
 		));
 	}

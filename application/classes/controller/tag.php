@@ -19,11 +19,11 @@ class Controller_Tag extends Controller_Web {
 
 			$before_match = $config['before_match'] ? $config['before_match'] : '<strong>';
 			$after_match = $config['after_match'] ? $config['after_match'] : '</strong>';
+
             foreach($terms as $term)
             {
                 $data[] = array(
                     'id' => $term->id(),
-//                    'label' => preg_replace("/\b$t/iu", $before_match.$t.$after_match, $term->name),
                     'value' => $term->name,
                 );
             }

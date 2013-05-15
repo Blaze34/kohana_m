@@ -7,7 +7,7 @@
 		        <th>#</th>
 		        <th><?=__('user.field.email')?></th>
 		        <th><?=__('user.field.firstname')?></th>
-                <th>К-во лайков по видео</th>
+                <th>К-во лайков по <br>материалам</th>
 		        <th>&nbsp;</th>
 		    </tr>
 	    </thead>

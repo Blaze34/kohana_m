@@ -1,24 +1,23 @@
 <div class="sections">
-    <?if(sizeof($children)):?>
-        <div class="title"><h1><?=$category->name?></h1></div>
+    <?if( ! $parent):?>
+        <div class="title"><h1><?=$category->title?></h1></div>
         <?$id = Request::initial()->param('id')?>
         <ul class="subcategories">
             <?foreach ($children as $cid => $c):?>
                 <?if ($id == $cid):?>
                     <li class="active"><?=$c['name']?></li>
                 <?else:?>
-                    <li><a href="<?=Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $cid))?>" ><?=$c['name']?></a></li>
+                    <li><a href="<?=Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $cid))?>" ><?=$c['title']?></a></li>
                 <?endif?>
             <?endforeach;?>
         </ul>
         <?else:?>
         <ul class="breadcrumb">
             <li><a href="/">Главная</a> <span class="divider">/</span></li>
-            <li><a href="<?=Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $category->id()))?>"><?=$category->name?></a> <span class="divider">/</span></li>
-            <li><a href="<?=Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $child->id()))?>"><?=$child->name?></a> <span class="divider">/</span></li>
-            <li class="active"><?=$child->name?></li>
+            <li><a href="<?=Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $parent->id()))?>"><?=$parent->title?></a> <span class="divider">/</span></li>
+            <li class="active"><?=$category->title?></li>
         </ul>
-        <div class="title"><h1><?=$child->name?></h1></div>
+        <div class="title"><h1><?=$category->title?></h1></div>
     <?endif;?>
 </div>
 
@@ -27,6 +26,7 @@
 <?endif;?>
 
 <?if($materials):?>
+
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span3 last_comments">

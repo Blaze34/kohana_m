@@ -23,11 +23,11 @@ class Controller_Category extends Controller_Web {
             {
                 if ($c->parent_id)
                 {
-                    $struct[$c->parent_id]['children'][$c->id()] = array('name' => $c->name, 'sort' => $c->sort);
+                    $struct[$c->parent_id]['children'][$c->id()] = array('title' => $c->title, 'sort' => $c->sort, 'meta_title' => $c->meta_title);
                 }
                 else
                 {
-                    $struct[$c->id()] = array('name' => $c->name, 'sort' => $c->sort, 'children' => array());
+                    $struct[$c->id()] = array('title' => $c->title, 'sort' => $c->sort, 'meta_title' => $c->meta_title,  'children' => array());
                 }
             }
             $this->view()->categories = $struct;
@@ -42,7 +42,7 @@ class Controller_Category extends Controller_Web {
     {
         if ($this->allowed())
         {
-            $categories = Jelly::query('category')->where('parent_id', '=', 0)->order_by('sort')->select_all()->as_array('id', 'name');
+            $categories = Jelly::query('category')->where('parent_id', '=', 0)->order_by('sort')->select_all()->as_array('id', 'title');
 
             $category = Jelly::factory('category');
 
@@ -51,8 +51,10 @@ class Controller_Category extends Controller_Web {
                 try
                 {
                     $category->set(array(
-                        'name' => Arr::get($_POST, 'name'),
+                        'title' => Arr::get($_POST, 'title'),
                         'meta_title' => Arr::get($_POST, 'meta_title'),
+                        'mask_title' => Arr::get($_POST, 'mask_title'),
+                        'meta_desc' => Arr::get($_POST, 'meta_desc'),
                         'sort' => Arr::get($_POST, 'sort'),
                         'parent_id' => Arr::get($_POST, 'parent_id'),
                     ))->save();
@@ -81,7 +83,7 @@ class Controller_Category extends Controller_Web {
     {
         if ($this->allowed())
         {
-            $categories = Jelly::query('category')->where('parent_id', '=', 0)->order_by('sort')->select_all()->as_array('id', 'name');
+            $categories = Jelly::query('category')->where('parent_id', '=', 0)->order_by('sort')->select_all()->as_array('id', 'title');
 
             $category = Jelly::factory('category', $this->request->param('id'));
 
@@ -92,8 +94,10 @@ class Controller_Category extends Controller_Web {
                     try
                     {
                         $category->set(array(
-                            'name' => Arr::get($_POST, 'name'),
+                            'title' => Arr::get($_POST, 'title'),
                             'meta_title' => Arr::get($_POST, 'meta_title'),
+                            'mask_title' => Arr::get($_POST, 'mask_title'),
+                            'meta_desc' => Arr::get($_POST, 'meta_desc'),
                             'sort' => Arr::get($_POST, 'sort'),
                             'parent_id' => Arr::get($_POST, 'parent_id'),
                         ))->save();
@@ -128,16 +132,9 @@ class Controller_Category extends Controller_Web {
 
         if($category->loaded())
         {
-            if($category->meta_title)
-            {
-                $this->title($category->meta_title, FALSE);
-            }
-            else
-            {
-                $this->title($category->meta_title, FALSE);
-            }
+            $this->meta(Admin::set_meta($category));
 
-            $materials = $children = $child = $comments = $ids = array();
+            $materials = $parent = $children = $child = $comments = $cids = $mids = array();
 
             $sort = 'popular_category';
 
@@ -150,43 +147,71 @@ class Controller_Category extends Controller_Web {
                 $sort = 'commented_category';
             }
 
-            $materials = Jelly::query('material')->with('user')->where('category', '=', $category->id())->order_by($sort, 'DESC')->pagination()->select_all();
+            $materials = $category->get('materials')->order_by($sort, 'DESC')->pagination()->select_all();
 
-            $comments = Jelly::query('comment')->with('material')->where('category_id', '=', $category->id())->order_by('id', 'DESC')->select_all();
+            $flag_parent = ($category->parent_id ?  FALSE: TRUE);
 
-            if(sizeof($category->children))
+            if ( ! $flag_parent)
             {
-                foreach($category->children as $ch)
-                {
-                    $ids[] = $ch->id();
-                }
+                $parent = Jelly::factory('category', $category->parent_id);
 
-                $comments = Jelly::query('comment')->with('material')->where('category_id', 'IN', $ids)->order_by('date', 'DESC')->select_all();
-                $materials = Jelly::query('material')->with('user')->where('category', 'IN', $ids)->order_by($sort, 'DESC')->pagination()->select_all();
-                $children = $category->get('children')->order_by('sort')->order_by('id')->select()->as_array('id');
+                if(sizeof($category->materials))
+                {
+                    $mids = $category->materials->as_array('id', 'id');
+
+                    $comments = Jelly::query('comment')->where('material', 'IN', $mids)->select_all();
+                }
             }
 
-            if ($category->parent_id)
+            if($flag_parent OR ($parent AND !sizeof($comments)))
             {
+                $children = $category->get('children')->order_by('sort')->order_by('id')->select()->as_array('id');
 
-                $child = $category;
+                if($parent AND !sizeof($comments)) $category = $parent;
 
-                $category = Jelly::factory('category', $category->parent_id);
+                $cids = $category->children->as_array('id', 'id') + array($category->id());
 
-                if(!sizeof($comments))
+                $mids = DB::select('material_id')
+                    ->from('categories_materials')
+                    ->where('category_id', 'IN', DB::expr('('.implode(', ', $cids).')'))
+                    ->group_by('material_id')
+                    ->execute()->as_array('material_id', 'material_id');
+
+                if(sizeof($mids))
                 {
-                    foreach ($category->children as $c)
+                    if($flag_parent)
                     {
-                        $ids[] = $c->id();
+                        $materials = Jelly::query('material')->where('id', 'IN', $mids)->order_by($sort, 'DESC')->pagination()->select_all();
                     }
 
-                    $comments = Jelly::query('comment')->with('material')->where('category_id', 'IN', $ids)->order_by('date', 'DESC')->select_all();
-
+                    $comments = Jelly::query('comment')->where('material', 'IN', $mids)->select_all();
                 }
-
             }
+
+//            if(!sizeof($comments))
+//            {
+//
+//                if(sizeof($parent->children))
+//                {
+//                    $children = $parent->get('children')->order_by('sort')->order_by('id')->select()->as_array('id');
+//
+//                    $cids = $parent->children->as_array('id', 'id') + array($parent->id());
+//
+//                    $mids = DB::select('material_id')
+//                        ->from('categories_materials')
+//                        ->where('category_id', 'IN', DB::expr('('.implode(', ', $cids).')'))
+//                        ->group_by('material_id')
+//                        ->execute()->as_array('material_id', 'material_id');
+//
+//                    if(sizeof($mids))
+//                    {
+//                        $comments = Jelly::query('comment')->where('material', 'IN', $mids)->select_all();
+//                    }
+//                }
+//            }
+
             $holder = Jelly::query('holder')->where('category', '=', $id)->limit(1)->select();
-            $this->view(array('materials' => $materials, 'holder' => $holder, 'category' => $category, 'children' => $children, 'child' => $child, 'comments' => $comments));
+            $this->view(array('materials' => $materials, 'holder' => $holder, 'category' => $category, 'children' => $children, 'parent' => $parent, 'comments' => $comments));
 
         }
         else
@@ -198,7 +223,6 @@ class Controller_Category extends Controller_Web {
 //            $this->error('global.no_exists')->redirect(Route::url('default', array('controller' => 'category')));
         }
     }
-
 
     public function action_delete()
     {
@@ -230,11 +254,11 @@ class Controller_Category extends Controller_Web {
         {
             if ($c->parent_id)
             {
-                $struct[$c->parent_id]['children'][$c->id()] = $c->name;
+                $struct[$c->parent_id]['children'][$c->id()] = $c->title;
             }
             else
             {
-                $struct[$c->id()] = array('name' => $c->name, 'children' => array());
+                $struct[$c->id()] = array('name' => $c->title, 'children' => array());
             }
         }
         $this->view()->categories = $struct;

@@ -25,7 +25,7 @@
                     <?endif;?>
                     </td>
                     <td><?=($h->activity ? '<i class="icon-ok"></i>' : '<i class="icon-off"></i>')?></td>
-                    <td><?=$h->category->name?></td>
+                    <td><?=$h->category->title?></td>
                     <td>
                         <a class="btn btn-warning btn-mini" href="<?=Route::url('default', array('controller' => 'holder', 'action' => 'edit', 'id' => $h->id()))?>"><?=__('global.edit')?></a >
 

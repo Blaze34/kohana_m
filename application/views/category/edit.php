@@ -3,15 +3,27 @@
 <div class="form_add">
     <?=Form::open(NULL, array('class' => 'form-horizontal'))?>
     <div class="control-group">
-        <label class="control-label"><?=__('category.field.name')?></label>
+        <label class="control-label"><?=__('category.field.title')?></label>
         <div class="controls">
-            <input type="text" name="name" value="<?=$category->name?>">
+            <input type="text" name="title" value="<?=$category->title?>">
         </div>
     </div>
     <div class="control-group">
         <label class="control-label"><?=__('category.field.meta_title')?></label>
         <div class="controls">
             <input type="text" name="meta_title" value="<?=$category->meta_title?>">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label"><?=__('category.field.mask_title')?></label>
+        <div class="controls">
+            <input type="text" name="mask_title" value="<?=$category->mask_title?>">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label"><?=__('category.field.meta_desc')?></label>
+        <div class="controls">
+            <textarea name="meta_desc" ><?=$category->meta_desc?></textarea>
         </div>
     </div>
     <div class="control-group">

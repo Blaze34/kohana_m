@@ -9,7 +9,7 @@
     });
 </script>
 <div class="add_layout">
-    <div class="add_block edit_wrapper">
+    <div class="add_block edit_wrapper admin material">
         <div class="wrapper player" style="text-align: center">
             <?if($material->video):?>
                 <div id="player"></div>
@@ -37,13 +37,30 @@
                 <div class="control-group">
                     <label class="control-label">Выбрать категорию<sup>*</sup></label>
                     <div class="controls">
-                        <?=Form::select('category', array(0 => 'Не выбрана') + $category_options, $material->category->id())?>
+                        <select name="categories[]" multiple="multiple">
+                            <option value="0">Не выбрана</option>
+                            <?foreach ($categories['parent'] as $sid => $s):?>
+                                <option value="<?=$sid?>" <?=(in_array($sid, $categories['current']) ? 'selected="selected"' : '')?>><?=$s?></option>
+                                <?if(sizeof($categories['children'][$s])):?>
+                                    <?foreach ($categories['children'][$s] as $cid =>  $ch):?>
+                                        <option value="<?=$cid?>" <?=(in_array($cid, $categories['current']) ? 'selected="selected"' : '')?>>&nbsp;&nbsp;&nbsp;<?=$ch?></option>
+                                    <?endforeach;?>
+                                <?endif;?>
+                            <?endforeach;?>
+                        </select>
+<!--                        --><?//=Form::select('category', array(0 => 'Не выбрана') + $category_options, $material->category->id(), array('multiple'))?>
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label">Добавить описание</label>
                     <div class="controls">
                         <textarea name="description" rows="3"><?=$material->description?></textarea>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">meta-description</label>
+                    <div class="controls">
+                        <textarea class="meta_desc" name="meta_desc" rows="3"><?=$material->meta_desc?></textarea>
                     </div>
                 </div>
                 <div class="control-group">

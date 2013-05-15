@@ -310,7 +310,9 @@ abstract class Layout_Core {
 
         if ( ! $meta['title']) $meta['title'] = $this->title;
 
-        $meta['title'] = ($meta['title'] ? $meta['title'].' - ' : '') . $this->config['title'];
+//        $meta['title'] = ($meta['title'] ? $meta['title'].' - ' : '') . $this->config['title'];
+        
+        $meta['title'] = ($meta['title'] ? $meta['title'] : $this->config['title']);
 
         $this->layout->meta = $meta;
         $this->layout->title = $this->title;

@@ -29,6 +29,20 @@
 
         $('.search-query').tagit({tagSource: autocomplete_tags, minLength: 1, allowNewTags: true, maxTags: 8});
 
+        $('.main_tabs input[type="radio"]').change(function(){
+            var tags = $('.search-tags'),
+                words = $('.search-words');
+
+            if($(this).val() == 'by-tags'){
+                tags.show();
+                words.hide();
+            }
+            else if($(this).val() == 'by-words'){
+                tags.hide();
+                words.show();
+            }
+         });
+
     });
 </script>
 
@@ -42,9 +56,25 @@
     <div class="tab-content">
         <div class="tab-pane active" id="find_video">
             <div class="form-search">
-                <div class="input-append">
+                <div class="input-append search-tags">
                     <ul class="search-query"></ul>
                     <button type="submit" class="btn btn-large search_on_tags">Искать</button>
+                </div>
+                <div class="input-append search-words">
+                    <form action="<?=Route::url('default', array('controller' => 'index', 'action' => 'search'))?>" method="post">
+                        <input type="text" name="words" class="span2 search-query" />
+                        <button type="submit" class="btn btn-large ">Искать</button>
+                    </form>
+                </div>
+                <div class="input-append radio-row">
+                    <label class="radio">
+                        <input type="radio" name="search" value="by-tags" checked>
+                        По тегам
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="search" value="by-words">
+                        По словам
+                    </label>
                 </div>
             </div>
         </div>

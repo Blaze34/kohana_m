@@ -47,6 +47,7 @@ return array(
 	'title.user.edit' => 'Редактирование профиля',
 	'title.user.recover' => 'Восстановление пароля',
 	'title.admin.index' => 'Админка',
+	'title.admin.edit' => 'Редактирование',
     'title.static.index' => 'Публикации',
     'title.menu.index' => 'Меню',
     'title.menu.add_menu' => 'Добавление меню',
@@ -88,6 +89,7 @@ return array(
     'menu.btn.add_menu' => 'Добавить меню',
     'menu.btn.add_link' => 'Добавить пункт меню',
 
+    'adm.index' => 'Админка',
     'adm.users' => 'Пользователи',
     'adm.holder' => 'Включаемые области',
     'adm.comments' => 'Комментарии',
@@ -101,7 +103,7 @@ return array(
 
     'material.field.title' => 'Название',
     'material.field.meta_title' => 'Мета заголовок',
-    'material.field.category' => 'Категория',
+    'material.field.categories' => 'Категория',
     'material.parse.error' => 'Ошибка, видео не найдено',
     'material.upload.error' => 'Ошибка при добавлении материала',
 
@@ -115,8 +117,10 @@ return array(
     'formula.field.name' => 'Название',
 
     'category.field.id' => 'ID',
-    'category.field.name' => 'Название',
-    'category.field.meta_title' => 'Мета заголовок',
+    'category.field.title' => 'Название',
+    'category.field.meta_title' => 'Мета-заголовок',
+    'category.field.mask_title' => 'Маска для мета-заголовока',
+    'category.field.meta_desc' => 'Мета описание',
     'category.field.sort' => 'Сортировка',
     'category.field.parent' => 'Родитель',
     'category.field.subcategory' => 'Подкатегория',

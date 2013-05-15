@@ -21,12 +21,10 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
                 'label' => 'material.field.meta_title'
             )),
 
-			'category' => Jelly::field('belongsto', array(
-				'rules' => array(
-					array('not_zero'),
-				),
-				'label' => 'material.field.category'
-			)),
+            'meta_desc' => Jelly::field('string', array(
+                'default' => NULL,
+                'label' => 'material.field.meta_desc'
+            )),
 
 			'description' => Jelly::field('text', array(
 				'label' => 'material.field.description'
@@ -73,6 +71,13 @@ class Model_Material extends Jelly_Model implements Acl_Resource_Interface {
             )),
 
 			'tags' => Jelly::field('manytomany'),
+
+            'categories' => Jelly::field('manytomany', array(
+                'rules' => array(
+                    array('not_empty')
+                ),
+                'label' => 'material.field.categories'
+            )),
 
             'date' => Jelly::field('timestamp', array(
                 'auto_now_create' => TRUE,

@@ -21,7 +21,7 @@ class Controller_Admin extends Controller_Web {
 
                 foreach ($settings as $s)
                 {
-                    $s->set(array('status' => ($_POST[$s->title] ? 1 : 0)))->save();
+                    $s->set(array('status' => (Arr::get($_POST[$s->title], 'status') ? 1 : 0)))->save();
                 }
             }
 
@@ -34,4 +34,40 @@ class Controller_Admin extends Controller_Web {
 			$this->redirect('/');
 		}
 	}
+
+    public function action_edit()
+    {
+        if($this->allowed())
+        {
+            if($id = $this->request->param('id'))
+            {
+                $setting = Jelly::factory('setting', $id);
+
+                if($setting->loaded())
+                {
+                    if($_POST)
+                    {
+						$setting->set(array('value' => Arr::get($_POST, $setting->title)))->save();
+
+						if($setting->saved())
+						{
+							$this->errors('Сохранено')->redirect();
+						}
+                    }
+
+                    $this->view()->setting = $setting;
+                }
+                else
+                {
+                    $this->redirect();
+                }
+
+            }
+        }
+        else
+        {
+            $this->redirect('/');
+        }
+
+    }
 } // End Welcome

@@ -19,7 +19,7 @@
 				<div class="wrapper player" style="margin-left: -179px">
 					<div id="player"></div>
 				</div>
-				<div class="wrapper">
+				<div class="wrapper admin material">
 					<form action="" class="form-horizontal" method="post">
 						<input name="start" type="hidden" id="video_start" value>
 						<input name="end" type="hidden" id="video_end" value>
@@ -39,7 +39,17 @@
 						<div class="control-group">
 							<label class="control-label">Выбрать категорию<sup>*</sup></label>
 							<div class="controls">
-								<?=Form::select('category', array(0 => 'Не выбрана') + $category_options, Arr::get($_POST, 'category'))?>
+                                <select name="categories[]" multiple="multiple">
+                                    <option value="0">Не выбрана</option>
+                                    <?foreach ($categories['parent'] as $sid => $s):?>
+                                        <option value="<?=$sid?>" <?=(in_array($sid, $_POST['categories'])? 'selected="selected"' : '')?>><?=$s?></option>
+                                        <?if(sizeof($categories['children'][$s])):?>
+                                            <?foreach ($categories['children'][$s] as $cid =>  $ch):?>
+                                                <option value="<?=$cid?>" <?=(in_array($cid, $_POST['categories']) ? 'selected="selected"' : '')?>>&nbsp;&nbsp;&nbsp;<?=$ch?></option>
+                                            <?endforeach;?>
+                                        <?endif;?>
+                                    <?endforeach;?>
+                                </select>
 							</div>
 						</div>
 						<div class="control-group">

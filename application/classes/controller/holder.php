@@ -142,13 +142,13 @@ class Controller_Holder extends Controller_Web {
             {
                 if ($optgroup = Arr::get($sections, $c->parent_id))
                 {
-                    $options[$optgroup][$c->id()] = $c->name;
+                    $options[$optgroup][$c->id()] = $c->title;
                 }
             }
             else
             {
-                $sections[$c->id()] = $c->name;
-                $options[$c->name] = array();
+                $sections[$c->id()] = $c->title;
+                $options[$c->title] = array();
             }
         }
         $output = array('parent' => $sections, 'children' => $options);

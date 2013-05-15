@@ -6,15 +6,29 @@
         });
     });
 </script>
-<?$parent = Jelly::query('category')->select_column(array('name', 'id'))->where('id', '=', $material->category->parent_id)->limit(1)->select()?>
-<ul class="breadcrumb">
-    <li><a href="/">Главная</a> <span class="divider">/</span></li>
-    <li><a href="<?=Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $parent->id()))?>"><?=$parent->name?></a> <span class="divider">/</span></li>
-    <li><a href="<?=Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $material->category->id()))?>"><?=$material->category->name?></a> <span class="divider">/</span></li>
-    <li class="active"><?=$material->title?></li>
-</ul>
+<div class="sections">
+    <ul class="breadcrumb">
+        <li><a href="/">Главная</a> <span class="divider">/</span></li>
+        <li><a href="<?=Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $categories[0]['id']))?>"><?=$categories[0]['title']?></a> <span class="divider">/</span></li>
+        <li class="active"><?=$material->title?></li>
+    </ul>
+
+    <?if(sizeof($material->categories) > 1):?>
+    <div class="also_refer">
+        <h5>Также относится к:</h5>
+        <ul class="subcategories">
+            <?foreach ($material->categories as $k => $c):?>
+                <?if($k != 0):?>
+                    <li><a href="<?=Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $c->id()))?>"><?=$c->title?></a></li>
+                <?endif;?>
+            <?endforeach;?>
+        </ul>
+    </div>
+    <?endif;?>
+</div>
 
 <?$user = A2::instance()->get_user();?>
+<?if($user AND $user->is_admin()) $admin = TRUE?>
 
 <div class="row-fluid">
     <div class="item_layout">
@@ -95,8 +109,6 @@
                 <?endif;?>
                 <div class="pluso pull-right" data-options="medium,round,line,horizontal,counter,theme=01" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email,yandex,yazakladki" data-background="transparent"></div>
             </div>
-            <?
-            if($user AND $user->is_admin()) $admin = TRUE?>
             <div class="comments">
                 <h4><?=__('comments.title')?></h4>
                 <?if(! $lock_guest_cmnt OR ($lock_guest_cmnt AND $user)):?>

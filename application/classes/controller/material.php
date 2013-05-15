@@ -39,6 +39,7 @@ class Controller_Material extends Controller_Web {
                     'description' => $video->description,
                     'user' => $this->user ? $this->user->id() : NULL
                 ));
+
                 $category_options = $this->get_category_options();
 
                 $thumb = NULL;
@@ -57,11 +58,25 @@ class Controller_Material extends Controller_Web {
 
                 if ($_POST)
                 {
+                    $ids = Arr::get($_POST, 'categories');
+
+                    if(sizeof($ids))
+                    {
+                        foreach ($ids as $k => $id)
+                        {
+                            if($id == 0) unset ($ids[$k]);
+                        }
+
+                        if(! in_array('0', $ids))
+                        {
+                            $material->categories = $ids;
+                        }
+                    }
+
                     $material->set(array(
                         'title' => Arr::get($_POST, 'title'),
                         'meta_title' => Arr::get($_POST, 'meta_title'),
                         'description' => ($this->user AND $this->user->is_admin()) ? htmlspecialchars_decode(Arr::get($_POST, 'description')) : Arr::get($_POST, 'description'),
-                        'category' => $this->get_selected_category($category_options),
                         'start' => Arr::get($_POST, 'start'),
                         'end' => Arr::get($_POST, 'end')
                     ));
@@ -96,7 +111,7 @@ class Controller_Material extends Controller_Web {
                 }
 
                 $this->view()->material = $material;
-                $this->view()->category_options = $category_options;
+                $this->view()->categories = $category_options;
             }
             else
             {
@@ -128,6 +143,7 @@ class Controller_Material extends Controller_Web {
 
     public function action_add_gif()
     {
+
         if($this->user)
         {
             $config = Kohana::$config->load('material.gif');
@@ -139,12 +155,25 @@ class Controller_Material extends Controller_Web {
             {
                 $url = Arr::get($_POST, 'url');
                 $file = Arr::get($_FILES, 'gif');
+                $ids = Arr::get($_POST, 'categories');
+
+                if(sizeof($ids))
+                {
+                    foreach ($ids as $k => $id)
+                    {
+                        if($id == 0) unset ($ids[$k]);
+                    }
+
+                    if(! in_array('0', $ids))
+                    {
+                        $material->categories = $ids;
+                    }
+                }
 
                 $material->set(array(
                     'title' => Arr::get($_POST, 'title'),
                     'meta_title' => Arr::get($_POST, 'meta_title'),
                     'description' => ($this->user AND $this->user->is_admin()) ? htmlspecialchars_decode(Arr::get($_POST, 'description')) : Arr::get($_POST, 'description'),
-                    'category' => $this->get_selected_category($category_options),
                     'url' => $url,
                     'user' => $this->user ? $this->user->id() : NULL
                 ));
@@ -214,7 +243,7 @@ class Controller_Material extends Controller_Web {
                 }
             }
 
-            $this->view()->category_options = $category_options;
+            $this->view()->categories = $category_options;
         }
         else
         {
@@ -320,19 +349,14 @@ class Controller_Material extends Controller_Web {
 	{
 		if ($id = $this->request->param())
 		{
-			$material = Jelly::query('material')->with('category')->where('id', '=', $id)->limit(1)->select();
+			$material = Jelly::query('material')->with('categories')->where('id', '=', $id)->limit(1)->select();
+
+            $categories = $material->categories->as_array();
 
 			if ($material->loaded())
 			{
 
-                if($material->meta_title)
-                {
-                    $this->title($material->meta_title, FALSE);
-                }
-                else
-                {
-                    $this->title($material->title, FALSE);
-                }
+                $this->meta(Admin::set_meta($material));
 
                 $comments = $material->get('comments')->with('user')->order_by('date', 'DESC')->pagination('comments')->select_all();
 
@@ -344,6 +368,7 @@ class Controller_Material extends Controller_Web {
 
                 $this->view(array(
                     'material' => $material,
+                    'categories' => $categories,
                     'comments' => $comments,
                     'similar' => $this->get_similar($material),
                     'mpoll' => $mpoll,
@@ -543,19 +568,25 @@ class Controller_Material extends Controller_Web {
 
         if (sizeof($similar_materials_by_tags))
         {
-//            $similar = Jelly::query('material')
-//                ->where('id', 'IN', $similar_ids)
-//                ->select_all();
-
             $similar = $similar_materials_by_tags;
         }
         else
         {
+
+            $similar_category_ids = implode(', ', $material->categories->as_array('id', 'id'));
+
+            $similar_material_ids = DB::select('material_id')
+                ->from('categories_materials')
+                ->where('category_id', 'IN', DB::expr('('.$similar_category_ids.')'))
+                ->group_by('material_id')
+                ->execute()->as_array('material_id', 'material_id');
+
             $similar = Jelly::query('material')
-                ->where('category', '=', $material->category->id())
                 ->where('id', '!=', $material->id())
+                ->where('id', 'IN', $similar_material_ids)
                 ->order_by('date', 'DESC')
                 ->limit(5)->select_all();
+
 
             if (! sizeof($similar))
             {
@@ -635,28 +666,28 @@ class Controller_Material extends Controller_Web {
 		return FALSE;
 	}
 
-	protected function get_selected_category($category_options)
-	{
-		$category = NULL;
-		if ($_cat = Arr::get($_POST, 'category'))
-		{
-			foreach($category_options as $ggroup => $options)
-			{
-				foreach ($options as $k => $v)
-				{
-					if ($k == $_cat)
-					{
-						$category = $k;
-						break 2;
-					}
-				}
-			}
-		}
+//	protected function get_selected_category($category_options)
+//	{
+//		$category = NULL;
+//		if ($_cat = Arr::get($_POST, 'category'))
+//		{
+//			foreach($category_options as $ggroup => $options)
+//			{
+//				foreach ($options as $k => $v)
+//				{
+//					if ($k == $_cat)
+//					{
+//						$category = $k;
+//						break 2;
+//					}
+//				}
+//			}
+//		}
+//
+//		return $category;
+//	}
 
-		return $category;
-	}
-
-	protected function get_category_options()
+	/*protected function get_category_options()
 	{
 		$categories = Jelly::query('category')->order_by('parent_id')->order_by('sort')->select_all();
 		$options = $sections = array();
@@ -667,18 +698,41 @@ class Controller_Material extends Controller_Web {
 			{
 				if ($optgroup = Arr::get($sections, $c->parent_id))
 				{
-					$options[$optgroup][$c->id()] = $c->name;
+					$options[$optgroup][$c->id()] = $c->title;
 				}
 			}
 			else
 			{
-				$sections[$c->id()] = $c->name;
-				$options[$c->name] = array();
+				$sections[$c->id()] = $c->title;
+				$options[$c->title] = array();
 			}
 		}
 
 		return $options;
-	}
+	}*/
+
+    protected function get_category_options()
+    {
+        $categories = Jelly::query('category')->order_by('parent_id')->order_by('sort')->select_all();
+        $options = $sections = $output = array();
+        foreach ($categories as $c)
+        {
+            if ($c->parent_id)
+            {
+                if ($optgroup = Arr::get($sections, $c->parent_id))
+                {
+                    $options[$optgroup][$c->id()] = $c->title;
+                }
+            }
+            else
+            {
+                $sections[$c->id()] = $c->title;
+                $options[$c->title] = array();
+            }
+        }
+        $output = array('parent' => $sections, 'children' => $options);
+        return $output;
+    }
 
     public function action_edit()
     {
@@ -687,13 +741,29 @@ class Controller_Material extends Controller_Web {
             if($id = $this->request->param('id'))
             {
                 $material = Jelly::factory('material', $id);
-                $category_options = $this->get_category_options();
+                $categories = $this->get_category_options();
 
                 if ($material->loaded())
                 {
                     if ($_POST)
                     {
-                        $material->set(Arr::extract($_POST, array('title', 'meta_title', 'on_index', 'description', 'start', 'end')) + array('category' => $this->get_selected_category($category_options)));
+                        $ids = Arr::get($_POST, 'categories');
+
+                        if(sizeof($ids))
+                        {
+                            foreach ($ids as $k => $id)
+                            {
+                                if($id == 0) unset ($ids[$k]);
+                            }
+
+                            if(! in_array('0', $ids))
+                            {
+                                $material->categories = $ids;
+                            }
+                        }
+
+                        $material->set(Arr::extract($_POST,
+                            array('title', 'meta_title', 'meta_desc', 'on_index', 'description', 'start', 'end')));
 
                         if($this->user AND $this->user->is_admin())
                         {
@@ -715,11 +785,11 @@ class Controller_Material extends Controller_Web {
 
                             $this->redirect(Route::url('default', array('controller' => 'material', 'action' => 'show', 'id' => $material->id())));
                         }
-
                     }
 
-                    $this->view()->material = $material;
-                    $this->view()->category_options = $category_options;
+                    $categories = $this->get_category_options() + array('current' => $material->categories->as_array('id', 'id'));
+
+                    $this->view(array('material' => $material, 'categories' => $categories));
                 }
                 else
                 {
@@ -744,19 +814,25 @@ class Controller_Material extends Controller_Web {
             if ($id = $this->request->param('id'))
             {
                 $material = Jelly::factory('material', $id);
+
                 if($material->loaded())
                 {
-                    $category_id = $material->category->id();
+                    $category = $material->get('categories')->limit(1)->select();
+
                     $comments_id = Jelly::query('comment')->select_column('id')->where('material_id', '=', $material->id())->select_all()->as_array('id', 'id');
+
                     if(sizeof($comments_id))
                     {
                         Jelly::query('poll')->where('type_id', 'IN', $comments_id)->where('type', '=', 'comment')->delete();
                     }
+
                     Jelly::query('poll')->where('type_id', '=', $material->id())->where('type', '=', 'material')->delete();
-                    Tags::delete($material);
+
                     $material->get('comments')->delete();
+
                     $material->delete();
-                    $this->redirect(Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $category_id)));
+
+                    $this->redirect(Route::url('default', array('controller' => 'category', 'action' => 'show', 'id' => $category->id())));
 
                 }
                 else
